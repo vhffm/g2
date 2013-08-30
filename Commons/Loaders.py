@@ -1,4 +1,5 @@
 from Structs import Snapshot, Particle
+import numpy as np
 
 class Loader():
     def __init__(self, nstep, fname, ellipses):
@@ -57,7 +58,7 @@ class SSAscii(Loader):
             for line in lines:
                 line = line.strip().split(" ")
                 if first:
-                    self.snapshot.tout = float(line[0]) / 2. / pi       # TU -> yr
+                    self.snapshot.tout = float(line[0]) / 2. / np.pi    # TU -> yr
                     first = False
                 particle = Particle()
                 particle.id = float(line[1])
