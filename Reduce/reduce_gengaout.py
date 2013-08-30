@@ -5,7 +5,7 @@ import argparse
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("--run_name", default='Outgasrun', \
+parser.add_argument("--run_name", default='gasrun', \
                     help='Name of Simulation Run.')
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--all', action='store_true', \
@@ -17,7 +17,7 @@ args = parser.parse_args()
 # Full Set
 if args.all:
     nsteps = []
-    globs = glob("%s_*.dat" % args.run_name)
+    globs = glob("Out%s_*.dat" % args.run_name)
     for g in globs:
         nstep = int(g.split(".")[1])
         nsteps.append(nstep)
