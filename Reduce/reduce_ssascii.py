@@ -7,6 +7,8 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--run_name", default='Out', \
                     help='Name of Simulation Run.')
+parser.add_argument("--ellipses", action='store_true', \
+                    help='Compute & Store Orbit Ellipses for Particles.')
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--all', action='store_true', \
                    help="Reduce Full Set of Snapshots.")
@@ -29,6 +31,6 @@ if args.test:
 # Load, Reduce, Save
 for istep, nstep in enumerate(nsteps):
     print "Reducing %i/%i." % (istep+1, len(nsteps))
-    loader = Loaders.SSAscii(nstep)
+    loader = Loaders.SSAscii(nstep, args.ellipses)
     loader.load()
     np.savez('Snapshot_%012d.npz' % nstep, snapshot=loader.snapshot)

@@ -34,6 +34,8 @@ for istep, nstep in enumerate(nsteps):
     ax = fig.add_subplot(1,1,1)
     for particle in snapshot.particles:
         ax.plot(particle.x, particle.y, 'b.')
+        if not snapshot.ellipses:
+            particle.compute_ellipse()
         ax.plot(particle.xell, particle.yell, 'b-')
         ax.grid(True)
     ax.set_title('t=%.2e / nstep=%010d / nparticles=%i' % \

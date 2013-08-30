@@ -1,19 +1,20 @@
 from Structs import Snapshot, Particle
 
 class Loader():
-    def __init__(self, nstep, fname):
+    def __init__(self, nstep, fname, ellipses):
         self.nstep = nstep
         self.fname = fname
         self.snapshot = Snapshot()
         self.snapshot.nstep = nstep
+        self.snapshot.ellipses = ellipses
 
 class GengaIC(Loader):
     pass
 
 class GengaOut(Loader):
-    def __init__(self, nstep=1):
+    def __init__(self, nstep=1, ellipses=False):
         fname = "Outgasrun_%012d.dat" % nstep
-        Loader.__init__(self, nstep, fname)
+        Loader.__init__(self, nstep, fname, ellipses)
 
     def load(self):
         with open(self.fname, 'r') as f:
@@ -37,14 +38,15 @@ class GengaOut(Loader):
                 particle.vy = float(line[8])
                 particle.vz = float(line[9])
                 particle.cart2kep()
-                particle.compute_ellipse()
+                if self.snapshot.ellipses:
+                    particle.compute_ellipse()
                 particles.append(particle)
             self.snapshot.particles = particles
 
 class SSAscii(Loader):
-    def __init__(self, nstep=1):
+    def __init__(self, nstep=1, ellipses=False):
         fname = "Out.%010d.dat" % nstep
-        Loader.__init__(self, nstep, fname)
+        Loader.__init__(self, nstep, fname, ellipses)
 
     def load(self):
         with open(self.fname, 'r') as f:
@@ -68,7 +70,8 @@ class SSAscii(Loader):
                 particle.vy = float(line[8])
                 particle.vz = float(line[9])
                 particle.cart2kep()
-                particle.compute_ellipse()
+                if self.snapshot.ellipses:
+                    particle.compute_ellipse()
                 particles.append(particle)
             self.snapshot.particles = particles
 

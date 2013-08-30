@@ -49,3 +49,4 @@ class Snapshot():
         self.tout = None
         self.nstep = None
         self.nparticles = None
+        self.ellipses = None
