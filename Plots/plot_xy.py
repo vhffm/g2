@@ -16,9 +16,9 @@ args = parser.parse_args()
 # Full Set
 if args.all:
     nsteps = []
-    globs = glob("Snapshot_*.dat")
+    globs = glob("Snapshot_*.npz")
     for g in globs:
-        nstep = int(g.split("_")[1])
+        nstep = int(g.split("_")[1].split(".")[0])
         nsteps.append(nstep)
 
 # Test Set
