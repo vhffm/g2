@@ -46,7 +46,7 @@ class GengaOut(Loader):
 
 class SSAscii(Loader):
     def __init__(self, nstep=1, ellipses=False):
-        fname = "Out.%010d.dat" % nstep
+        fname = "Out.%012d.dat" % nstep
         Loader.__init__(self, nstep, fname, ellipses)
 
     def load(self):
