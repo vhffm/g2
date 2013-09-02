@@ -17,6 +17,7 @@ args = parser.parse_args()
 if args.all:
     nsteps = []
     globs = glob("Snapshot_*.npz")
+    globs = sorted(globs)
     for g in globs:
         nstep = int(g.split("_")[1].split(".")[0])
         nsteps.append(nstep)
