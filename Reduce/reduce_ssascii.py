@@ -20,6 +20,7 @@ args = parser.parse_args()
 if args.all:
     nsteps = []
     globs = glob("%s.*.dat" % args.run_name)
+    globs = sorted(globs)
     for g in globs:
         nstep = int(g.split(".")[1])
         nsteps.append(nstep)
