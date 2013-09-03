@@ -22,7 +22,7 @@ if args.all:
     globs = glob("Out%s_*.dat" % args.run_name)
     globs = sorted(globs)
     for g in globs:
-        nstep = int(g.split(".")[1])
+        nstep = int(g.split(".")[0].split("_")[1])
         nsteps.append(nstep)
 
 # Test Set
