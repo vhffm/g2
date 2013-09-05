@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 parser = argparse.ArgumentParser()
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--all', action='store_true', \
-                   help="Reduce Full Set of Snapshots.")
+                   help="Plot Full Set of Snapshots.")
 group.add_argument('--test', action='store_true', \
-                   help="Reduce Test Set of Snapshots.")
+                   help="Plot Test Set of Snapshots.")
 args = parser.parse_args()
 
 # Full Set
