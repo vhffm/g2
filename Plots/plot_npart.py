@@ -105,6 +105,7 @@ elif run_type == 'double':
 ax.grid(True)
 ax.set_xlabel('t [Myr]', size='small')
 ax.set_ylabel('N [-]', rotation='horizontal', size='small')
+ax.set_title('Remaining Number of Particles')
 fig.savefig('npart.pdf')
 plt.close()
 plt.clf()
