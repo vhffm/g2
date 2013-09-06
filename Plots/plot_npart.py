@@ -23,7 +23,7 @@ args = parser.parse_args()
 
 # Sanity Check
 if (args.d1 and not args.d2) or (not args.d1 and args.d2):
-    raise Exception("Must Pass 2 Directories or None.")
+    raise Exception("Must Pass Two Directories or None.")
 
 # Single or Dual Run?
 if args.d1 and args.d2:
@@ -54,11 +54,9 @@ if args.all:
         globs1 = sorted(globs1)
         globs2 = sorted(globs2)
         for g in globs1:
-            # nstep = int(g.split("_")[1].split(".")[0])
             nstep = int(g.split('.npz')[0].split('/')[-1].split('_')[1])
             nsteps1.append(nstep)
         for g in globs2:
-            # nstep = int(g.split("_")[1].split(".")[0])
             nstep = int(g.split('.npz')[0].split('/')[-1].split('_')[1])
             nsteps2.append(nstep)
 
@@ -103,10 +101,10 @@ if run_type == 'single':
 elif run_type == 'double':
     ax.plot(tout1/1.0e6, npart1, 'b', label=args.d1)
     ax.plot(tout2/1.0e6, npart2, 'r', label=args.d2)
-    ax.legend()
+    ax.legend(loc='best', prop={'size':'small'})
 ax.grid(True)
-ax.set_xlabel('t [Myr]')
-ax.set_ylabel('N [-]')
-fig.savefig('nparticles.pdf')
+ax.set_xlabel('t [Myr]', size='small')
+ax.set_ylabel('N [-]', rotation='horizontal', size='small')
+fig.savefig('npart.pdf')
 plt.close()
 plt.clf()
