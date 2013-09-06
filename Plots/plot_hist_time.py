@@ -14,12 +14,20 @@ from g2_helpers import twopi
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
+parser.add_argument('--weights', default='mass', choices=[ 'mass', 'npart' ], \
+                    help="Histogram Weight Variable.")
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--all', action='store_true', \
                    help="Plot Full Set of Snapshots.")
 group.add_argument('--test', action='store_true', \
                    help="Plot Test Set of Snapshots.")
 args = parser.parse_args()
+
+# Some Info
+if args.weights == 'mass':
+    print "// Generating Mass Weighted Histograms"
+elif args.weights == 'npart':
+    print "// Generating Particle Number Histograms"
 
 # Full Set
 if args.all:
@@ -36,7 +44,7 @@ if args.test:
     # nsteps = np.mgrid[3600000000:3630000000:1000000]
 
 # Scan Limits
-print "Scanning Limits..."
+print "// Scanning Limits"
 first = True
 for istep, nstep in enumerate(nsteps):
     # print "Scanning %i/%i" % (istep+1, len(nsteps))
@@ -70,31 +78,30 @@ myhist_a = np.zeros([bin_edges_a.shape[0]-1, len(nsteps)])
 myhist_ecc = np.zeros([bin_edges_ecc.shape[0]-1, len(nsteps)])
 myhist_inc = np.zeros([bin_edges_inc.shape[0]-1, len(nsteps)])
 tout = np.zeros(len(nsteps))
-print "Computing Histograms..."
+print "// Computing Histograms"
 for istep, nstep in enumerate(nsteps):
     npz = np.load('Snapshot_%012d.npz' % nstep)
     snapshot = npz['snapshot'][()]
     tout[istep] = snapshot.tout
-    pa = []; pecc = []; pinc = []
-    for particle in snapshot.particles:
+    pa = []; pecc = []; pinc = []; pmass = np.zeros(snapshot.nparticles)
+    for ii, particle in enumerate(snapshot.particles):
         pa.append(particle.a)
         pecc.append(particle.ecc)
         pinc.append(particle.inc * 360.0/twopi)
-    hist_a, bin_edges_a = \
-        np.histogram(pa, bin_edges_a, \
-                     weights=np.repeat(1./snapshot.nparticles, len(pa)))
-    hist_ecc, bin_edges_ecc = \
-        np.histogram(pecc, bin_edges_ecc, \
-                     weights=np.repeat(1./snapshot.nparticles, len(pecc)))
-    hist_inc, bin_edges_inc = \
-        np.histogram(pinc, bin_edges_inc, \
-                     weights=np.repeat(1./snapshot.nparticles, len(pinc)))
+        pmass[ii] = particle.m
+    if args.weights == 'mass':
+        weights = pmass / float(np.sum(pmass))
+    elif args.weights == 'npart':
+        weights = np.repeat(1.0 / snapshot.nparticles, snapshot.nparticles)
+    hist_a, bin_edges_a = np.histogram(pa, bin_edges_a, weights = weights)
+    hist_ecc, bin_edges_ecc = np.histogram(pecc, bin_edges_ecc, weights = weights)
+    hist_inc, bin_edges_inc = np.histogram(pinc, bin_edges_inc, weights = weights)
     myhist_a[:,istep] = hist_a
     myhist_ecc[:,istep] = hist_ecc
     myhist_inc[:,istep] = hist_inc
 
 # Make Figure
-print "Generating Figures..."
+print "// Generating Figures"
 
 #
 # Semi-Major Axis
@@ -105,11 +112,20 @@ im = ax.imshow(np.rot90(myhist_a), cmap='hot', \
                extent=[bin_edges_a[0], bin_edges_a[-1], tout[0]/1.0e6, tout[-1]/1.0e6])
 ax.set_aspect('auto')
 ax.grid(True)
-ax.set_ylabel('t [Myr]')
-ax.set_xlabel('a [AU]')
-simpath = os.getcwd().split("/")[-4:]; ax.set_title("/".join(simpath))
+ax.set_ylabel('t [Myr]', rotation='horizontal', size='small')
+ax.set_xlabel('a [AU]', size='small')
+simpath = os.getcwd().split("/")[-4:]
+title = "/".join(simpath)
+if args.weights == 'mass':
+    title += ' -- (Mass Weighted)'
+elif args.weights == 'npart':
+    title += ' -- (Particle Number Weighted)'
+ax.set_title(title, size='small')
 plt.colorbar(im)
-fig.savefig('hist_a.pdf')
+if args.weights == 'mass':
+    fig.savefig('hist_a_mass.pdf')
+elif args.weights == 'npart':
+    fig.savefig('hist_a_npart.pdf')
 plt.close()
 plt.clf()
 
@@ -123,11 +139,20 @@ im = ax.imshow(np.rot90(myhist_ecc), cmap='hot', \
                        tout[0]/1.0e6, tout[-1]/1.0e6])
 ax.set_aspect('auto')
 ax.grid(True)
-ax.set_ylabel('t [Myr]')
-ax.set_xlabel('ecc [-]')
-simpath = os.getcwd().split("/")[-4:]; ax.set_title("/".join(simpath))
+ax.set_ylabel('t [Myr]', rotation='horizontal', size='small')
+ax.set_xlabel('ecc [-]', size='small')
+simpath = os.getcwd().split("/")[-4:]
+title = "/".join(simpath)
+if args.weights == 'mass':
+    title += ' -- (Mass Weighted)'
+elif args.weights == 'npart':
+    title += ' -- (Particle Number Weighted)'
+ax.set_title(title, size='small')
 plt.colorbar(im)
-fig.savefig('hist_ecc.pdf')
+if args.weights == 'mass':
+    fig.savefig('hist_ecc_mass.pdf')
+elif args.weights == 'npart':
+    fig.savefig('hist_ecc_npart.pdf')
 plt.close()
 plt.clf()
 
@@ -141,10 +166,19 @@ im = ax.imshow(np.rot90(myhist_inc), cmap='hot', \
                        tout[0]/1.0e6, tout[-1]/1.0e6])
 ax.set_aspect('auto')
 ax.grid(True)
-ax.set_ylabel('t [Myr]')
-ax.set_xlabel('i [deg]')
-simpath = os.getcwd().split("/")[-4:]; ax.set_title("/".join(simpath))
+ax.set_ylabel('t [Myr]', rotation='horizontal', size='small')
+ax.set_xlabel('i [deg]', size='small')
+simpath = os.getcwd().split("/")[-4:]
+title = "/".join(simpath)
+if args.weights == 'mass':
+    title += ' -- (Mass Weighted)'
+elif args.weights == 'npart':
+    title += ' -- (Particle Number Weighted)'
+ax.set_title(title, size='small')
 plt.colorbar(im)
-fig.savefig('hist_inc.pdf')
+if args.weights == 'mass':
+    fig.savefig('hist_inc_mass.pdf')
+elif args.weights == 'npart':
+    fig.savefig('hist_inc_npart.pdf')
 plt.close()
 plt.clf()
