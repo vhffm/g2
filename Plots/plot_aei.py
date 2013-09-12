@@ -111,7 +111,7 @@ for istep, nstep in enumerate(nsteps):
     # 
     plt.suptitle('t=%.2e yr / nstep=%012d / nparticles=%05d / Mmax=%.2e Me' %  \
                  (snapshot.tout, snapshot.nstep, \
-                  snapshot.nparticles, mmax / MEarth) )
+                  snapshot.nparticles, mmax_snap / MEarth) )
     fig.savefig('aei_%012d.png' % snapshot.nstep)
     plt.close()
     plt.clf()
