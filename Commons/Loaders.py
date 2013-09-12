@@ -13,8 +13,8 @@ class GengaIC(Loader):
     pass
 
 class GengaOut(Loader):
-    def __init__(self, nstep=1, ellipses=False):
-        fname = "Outgasrun_%012d.dat" % nstep
+    def __init__(self, nstep=1, ellipses=False, run_name="gasrun"):
+        fname = "Out%s_%012d.dat" % (run_name, nstep)
         Loader.__init__(self, nstep, fname, ellipses)
 
     def load(self):
