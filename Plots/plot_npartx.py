@@ -12,6 +12,7 @@ from g2_helpers import twopi
 import os
 from scipy import stats as sps
 import sys
+from copy import copy
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
@@ -33,6 +34,9 @@ else:
     for line in lines:
         dirs.append(line)
     print "// Reading %i Directories" % len(dirs)
+
+# Keep Relative Paths for Legend
+dirs_rel = copy(dirs)
 
 # Build Absolute Paths
 for ii, dd in enumerate(dirs):
@@ -105,6 +109,7 @@ ax.set_xlabel('t [Myr]')
 ax.set_ylabel('N', rotation='horizontal')
 ax.set_ylim([0, np.nanmax(npart)])
 ax.set_title('Remaining Number of Particles')
+ax.legend(dirs_rel, prop={'size':'x-small'})
 fig.savefig('npartx_all.pdf')
 plt.close()
 plt.clf()
