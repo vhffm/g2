@@ -1,7 +1,9 @@
 from glob import glob
 import numpy as np
 import argparse
-import matplotlib as mpl; mpl.rcParams['lines.linewidth'] = 0.5
+import matplotlib as mpl
+mpl.use('agg')
+mpl.rcParams['lines.linewidth'] = 0.5
 import matplotlib.pyplot as plt
 
 # Parse Arguments

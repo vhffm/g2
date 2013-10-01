@@ -6,7 +6,9 @@ Also Compute Mean, and Standard Deviation at Snapshots.
 from glob import glob
 import numpy as np
 import argparse
-import matplotlib as mpl; mpl.rcParams['lines.linewidth'] = 1.0
+import matplotlib as mpl
+mpl.use('agg')
+mpl.rcParams['lines.linewidth'] = 1.0
 import matplotlib.pyplot as plt
 from g2_helpers import twopi
 import os

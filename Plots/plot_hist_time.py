@@ -6,6 +6,7 @@ from glob import glob
 import numpy as np
 import argparse
 import matplotlib as mpl
+mpl.use('agg')
 mpl.rcParams['lines.linewidth'] = 0.5
 mpl.rcParams['image.interpolation'] = 'nearest'
 import matplotlib.pyplot as plt
