@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
+parser.add_argument("--ellipses", action='store_true', \
+                    help='Plot Orbit Ellipses for Particles.')
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--all', action='store_true', \
                    help="Plot Full Set of Snapshots.")
@@ -43,9 +45,10 @@ for istep, nstep in enumerate(nsteps):
     ax = fig.add_subplot(1,1,1)
     for particle in snapshot.particles:
         ax.plot(particle.x, particle.y, 'b.')
-        if not snapshot.ellipses:
-            particle.compute_ellipse()
-        ax.plot(particle.xell, particle.yell, 'b-')
+        if args.ellipses:
+            if not snapshot.ellipses:
+                particle.compute_ellipse()
+            ax.plot(particle.xell, particle.yell, 'b-')
         ax.grid(True)
     ax.set_title('t=%.2e / nstep=%010d / nparticles=%i' % \
                  (snapshot.tout, snapshot.nstep, snapshot.nparticles))
