@@ -19,8 +19,15 @@ group.add_argument('--t0', action='store_true', \
                    help="Plot First Snapshot.")
 args = parser.parse_args()
 
+# Debug Info
+if args.ellipses:
+    print "// Plotting XY Positions With Orbital Ellipses"
+else:
+    print "// Plotting XY Positions Without Orbital Ellipses"
+
 # Full Set
 if args.all:
+    print "// Scanning Snapshots"
     nsteps = []
     globs = glob("Snapshot_*.npz")
     globs = sorted(globs)
@@ -38,7 +45,7 @@ if args.t0:
     nsteps = np.array([0])
 
 for istep, nstep in enumerate(nsteps):
-    print "Plotting %i/%i" % (istep+1, len(nsteps))
+    print "// Plotting %i/%i" % (istep+1, len(nsteps))
     npz = np.load('Snapshot_%012d.npz' % nstep)
     snapshot = npz['snapshot'][()]
     fig = plt.figure()
@@ -57,7 +64,5 @@ for istep, nstep in enumerate(nsteps):
     ax.set_aspect('equal', 'datalim')
     ax.set_xlabel('X [AU]')
     ax.set_ylabel('Y [AU]')
-    fig.savefig('XY_%012d.png' % snapshot.nstep)
-    # fig.savefig('XY_%010d.pdf' % snapshot.nstep)
     plt.close()
     plt.clf()
