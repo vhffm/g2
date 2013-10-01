@@ -64,5 +64,9 @@ for istep, nstep in enumerate(nsteps):
     ax.set_aspect('equal', 'datalim')
     ax.set_xlabel('X [AU]')
     ax.set_ylabel('Y [AU]')
+    if args.ellipses:
+        fig.savefig('XY_ell_%012d.png' % snapshot.nstep)
+    else:
+        fig.savefig('XY_%012d.png' % snapshot.nstep)
     plt.close()
     plt.clf()
