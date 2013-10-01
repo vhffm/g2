@@ -124,9 +124,9 @@ for nstep in nsteps:
                 pinc[ipart] = particle.inc * r2d
             # Plot Snapshot
             ax1.plot(pa, pecc, snap_c[idir] + snap_s[idir], \
-                     label=dirs_rel[idir])
+                     label=dirs_rel[idir], alpha=0.5, markersize=3)
             ax2.plot(pa, pinc, snap_c[idir] + snap_s[idir], \
-                     label=dirs_rel[idir])
+                     label=dirs_rel[idir], alpha=0.5, markersize=3)
         except IOError:
             print "!! Could Not Open %s/Snapshot_%012d.npz" % \
                   (dirs_rel[idir], nstep)
