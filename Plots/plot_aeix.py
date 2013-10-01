@@ -22,6 +22,8 @@ group.add_argument('--all', action='store_true', \
                    help="Plot Full Set of Snapshots.")
 group.add_argument('--test', action='store_true', \
                    help="Plot Test Set of Snapshots.")
+group.add_argument('--custom', type=int, \
+                   help="Plot Custom Snapshot.")
 args = parser.parse_args()
 
 # Style Dictionary
@@ -74,6 +76,8 @@ if args.all:
         nsteps[ii] = int(gg.split('.npz')[0].split('/')[-1].split('_')[1])
 if args.test:
     nsteps = np.mgrid[3600000000:3630000000:1000000]
+else:
+    nsteps = np.array([args.custom])
 print "// Found %i Snapshots" % len(nsteps)
 
 # Scan Limits
