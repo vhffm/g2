@@ -11,6 +11,8 @@ group.add_argument('--all', action='store_true', \
                    help="Plot Full Set of Snapshots.")
 group.add_argument('--test', action='store_true', \
                    help="Plot Test Set of Snapshots.")
+group.add_argument('--t0', action='store_true', \
+                   help="Plot First Snapshot.")
 args = parser.parse_args()
 
 # Full Set
@@ -26,6 +28,10 @@ if args.all:
 if args.test:
     nsteps = np.mgrid[70000000:73000000:100000]
     # nsteps = np.mgrid[3600000000:3630000000:1000000]
+
+# Initial Conditions
+if args.t0:
+    nsteps = np.array([0])
 
 for istep, nstep in enumerate(nsteps):
     print "Plotting %i/%i" % (istep+1, len(nsteps))
