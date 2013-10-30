@@ -10,7 +10,7 @@ import matplotlib as mpl
 mpl.use('agg')
 mpl.rcParams['lines.linewidth'] = 1.0
 import matplotlib.pyplot as plt
-from g2_helpers import twopi, r2d
+from g2_helpers import twopi, r2d, mkline
 import os
 import sys
 from copy import copy
@@ -24,6 +24,8 @@ group.add_argument('--test', action='store_true', \
                    help="Plot Test Set of Snapshots.")
 group.add_argument('--custom', type=int, \
                    help="Plot Custom Snapshot.")
+parser.add_argument('--scale', action='store_true', \
+                    help="Scale Marker Size with Particle Mass")
 args = parser.parse_args()
 
 # Style Dictionary
@@ -86,6 +88,7 @@ for nstep in nsteps:
                     amax = particle.a; amin = particle.a
                     eccmax = particle.ecc; eccmin = particle.ecc
                     incmax = particle.inc; incmin = particle.inc
+                    mmax = particle.m; mmin = particle.m
                     first = False
                 else:
                     if particle.a > amax: amax = particle.a
@@ -94,9 +97,14 @@ for nstep in nsteps:
                     if particle.ecc < eccmin: eccmin = particle.ecc
                     if particle.inc > incmax: incmax = particle.inc
                     if particle.inc < incmin: incmin = particle.inc
+                    if particle.m > mmax: mmax = particle.m
+                    if particle.m < mmin: mmin = particle.m
         except IOError:
             print "!! Could Not Open %s/Snapshot_%012d.npz" % \
                   (dirs[idir], nstep)
+
+# Compute Line for Marker Size(Mass)
+m, n = mkline(mmin, 1.0, mmax, 36.0)
 
 # Loop Snapshots, Draw Figures
 for nstep in nsteps:
@@ -111,16 +119,22 @@ for nstep in nsteps:
             pa = np.zeros(snapshot.nparticles)
             pecc = np.zeros(snapshot.nparticles)
             pinc = np.zeros(snapshot.nparticles)
+            pm = np.zeros(snapshot.nparticles)
             for ipart, particle in enumerate(snapshot.particles):
                 pa[ipart] = particle.a
                 pecc[ipart] = particle.ecc
                 pinc[ipart] = particle.inc * r2d
+                pm[ipart] = particle.m
             # Plot Snapshot
             # http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter
-            ax1.scatter(pa, pecc, s=9, \
+            if args.scale:
+                s = pm * m + n
+            else:
+                s = 3
+            ax1.scatter(pa, pecc, s=s**2., \
                         c=snap_c[idir], marker=snap_s[idir], \
                         alpha=0.5, label=dirs[idir])
-            ax2.scatter(pa, pinc, s=9, \
+            ax2.scatter(pa, pinc, s=s**2., \
                         c=snap_c[idir], marker=snap_s[idir], \
                         alpha=0.5, label=dirs[idir])
         except IOError:
@@ -136,8 +150,8 @@ for nstep in nsteps:
     ax2.set_ylabel('inc [deg]', rotation='horizontal', size='small')
     ax1.set_title('t=%.2e yr / nstep=%012d' % (snapshot.tout, snapshot.nstep))
     ax2.set_title('t=%.2e yr / nstep=%012d' % (snapshot.tout, snapshot.nstep))
-    ax1.legend(prop={'size':'xx-small'}, loc='best')
-    ax2.legend(prop={'size':'xx-small'}, loc='best')
+    ax1.legend(prop={'size':'xx-small'}, loc='best', scatterpoints=1)
+    ax2.legend(prop={'size':'xx-small'}, loc='best', scatterpoints=1)
     # Save Figures
     fig1.savefig('aex_%012d.png' % snapshot.nstep)
     fig2.savefig('aix_%012d.png' % snapshot.nstep)
