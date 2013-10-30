@@ -37,13 +37,6 @@ else:
         dirs.append(line)
     print "// Reading %i Directories" % len(dirs)
 
-# Keep Relative Paths for Legend
-dirs_rel = copy(dirs)
-
-# Build Absolute Paths
-for ii, dd in enumerate(dirs):
-    dirs[ii] = os.getcwd() + "/" + dd
-
 #
 # BIG WARNING
 #
@@ -111,7 +104,7 @@ ax.set_xlabel('t [Myr]')
 ax.set_ylabel('N', rotation='horizontal')
 ax.set_ylim([0, np.nanmax([np.nanmax(npart), 2000])])
 ax.set_title('Remaining Number of Particles')
-ax.legend(dirs_rel, prop={'size':'x-small'}, loc='best')
+ax.legend(dirs, prop={'size':'x-small'}, loc='best')
 fig.savefig('npartx_all.pdf')
 plt.close()
 plt.clf()

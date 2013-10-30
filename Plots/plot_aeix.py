@@ -52,13 +52,6 @@ else:
         dirs.append(line)
     print "// Reading %i Directories" % len(dirs)
 
-# Keep Relative Paths for Legend
-dirs_rel = copy(dirs)
-
-# Build Absolute Paths
-for ii, dd in enumerate(dirs):
-    dirs[ii] = os.getcwd() + "/" + dd
-
 #
 # BIG WARNING
 #
@@ -103,7 +96,7 @@ for nstep in nsteps:
                     if particle.inc < incmin: incmin = particle.inc
         except IOError:
             print "!! Could Not Open %s/Snapshot_%012d.npz" % \
-                  (dirs_rel[idir], nstep)
+                  (dirs[idir], nstep)
 
 # Loop Snapshots, Draw Figures
 for nstep in nsteps:
@@ -124,12 +117,12 @@ for nstep in nsteps:
                 pinc[ipart] = particle.inc * r2d
             # Plot Snapshot
             ax1.plot(pa, pecc, snap_c[idir] + snap_s[idir], \
-                     label=dirs_rel[idir], alpha=0.5, markersize=3)
+                     label=dirs[idir], alpha=0.5, markersize=3)
             ax2.plot(pa, pinc, snap_c[idir] + snap_s[idir], \
-                     label=dirs_rel[idir], alpha=0.5, markersize=3)
+                     label=dirs[idir], alpha=0.5, markersize=3)
         except IOError:
             print "!! Could Not Open %s/Snapshot_%012d.npz" % \
-                  (dirs_rel[idir], nstep)
+                  (dirs[idir], nstep)
     # Style Figures
     ax1.grid(True); ax2.grid(True)
     ax1.set_xlim([0,amax]); ax2.set_xlim([0,amax]); 
