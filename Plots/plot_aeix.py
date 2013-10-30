@@ -116,10 +116,13 @@ for nstep in nsteps:
                 pecc[ipart] = particle.ecc
                 pinc[ipart] = particle.inc * r2d
             # Plot Snapshot
-            ax1.plot(pa, pecc, snap_c[idir] + snap_s[idir], \
-                     label=dirs[idir], alpha=0.5, markersize=3)
-            ax2.plot(pa, pinc, snap_c[idir] + snap_s[idir], \
-                     label=dirs[idir], alpha=0.5, markersize=3)
+            # http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter
+            ax1.scatter(pa, pecc, s=9, \
+                        c=snap_c[idir], marker=snap_s[idir], \
+                        alpha=0.5, label=dirs[idir])
+            ax2.scatter(pa, pinc, s=9, \
+                        c=snap_c[idir], marker=snap_s[idir], \
+                        alpha=0.5, label=dirs[idir])
         except IOError:
             print "!! Could Not Open %s/Snapshot_%012d.npz" % \
                   (dirs[idir], nstep)
