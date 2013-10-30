@@ -69,7 +69,7 @@ if args.all:
         nsteps[ii] = int(gg.split('.npz')[0].split('/')[-1].split('_')[1])
 if args.test:
     nsteps = np.mgrid[3600000000:3630000000:1000000]
-else:
+if args.custom:
     nsteps = np.array([args.custom])
 print "// Found %i Snapshots" % len(nsteps)
 
