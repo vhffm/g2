@@ -133,9 +133,11 @@ for nstep in nsteps:
                 s = 3
             ax1.scatter(pa, pecc, s=s**2., \
                         c=snap_c[idir], marker=snap_s[idir], \
+                        edgecolors=snap_c[idir], \
                         alpha=0.5, label=dirs[idir])
             ax2.scatter(pa, pinc, s=s**2., \
                         c=snap_c[idir], marker=snap_s[idir], \
+                        edgecolors=snap_c[idir], \
                         alpha=0.5, label=dirs[idir])
         except IOError:
             print "!! Could Not Open %s/Snapshot_%012d.npz" % \
