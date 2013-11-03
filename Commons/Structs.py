@@ -2,6 +2,17 @@ from kepler_helpers import cart2kep, kep2cart, compute_ellipse
 import numpy as np
 
 class Particle():
+    """
+    Semi-Major Axis               - a           - [AU]
+    Eccentricity                  - ecc         - []
+    Inclination                   - inc         - [rad]
+    Longitude of Ascending Node   - Omega       - [rad]
+    Argument of Perigee           - omega       - [rad]
+    Orbital Phase (Mean Anomaly)  - M0          - [rad]
+    XYZ-Position                  - x, y, z     - [AU]
+    XYZ-Velocity                  - vx, vy, vz  - [AU/yr]
+    Particle Mass                 - m           - [Msun]
+    """
     def __init__(self):
         # Cartesian
         self.x, self.y, self.z = None, None, None
