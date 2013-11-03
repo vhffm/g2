@@ -120,10 +120,15 @@ for nstep in nsteps:
                 if icol == 2: jj = irow*2 + icol - 1
                 # print "%i,%i,%i,%i" % (irow, icol, ii, jj)
 
+                # Always Generate Subplots
+                # Can Be Empty
+                ax1 = fig1.add_subplot(4,2,jj)
+                ax2 = fig2.add_subplot(4,2,jj)
+
                 # Directory Index
                 idir = ii + nsweep * 8 - 1
 
-                # Load Snapshot Data
+                # Load, Plot Snapshot Data
                 if idir < len(dirs):
                     try:
                         npz = np.load('%s/Snapshot_%012d.npz' % (dirs[idir], nstep))
@@ -150,25 +155,27 @@ for nstep in nsteps:
                                     c=snap_c[nsweep+1], marker=snap_s[nsweep+1], \
                                     edgecolors='none', \
                                     alpha=0.5, label=dirs[idir])
+                        ax1.legend(prop={'size':'x-small'}, loc='best', scatterpoints=1)
+                        ax2.legend(prop={'size':'x-small'}, loc='best', scatterpoints=1)
                     except IOError:
                         print "!! Could Not Open %s/Snapshot_%012d.npz" % \
                               (dirs[idir], nstep)
-                    # Style Subplots
-                    ax1.grid(True); ax2.grid(True)
-                    ax1.set_xlim([0,5]); ax2.set_xlim([0,5])
-                    ax1.set_ylim([0,0.2]); ax2.set_ylim([0,incmax*r2d])
-                    ax1.legend(prop={'size':'x-small'}, loc='best', scatterpoints=1)
-                    ax2.legend(prop={'size':'x-small'}, loc='best', scatterpoints=1)
-                    ax1.xaxis.set_major_locator(MaxNLocator(prune='both', nbins='5'))
-                    ax2.xaxis.set_major_locator(MaxNLocator(prune='both', nbins='5'))
-                    ax1.yaxis.set_major_locator(MaxNLocator(prune='both', nbins='5'))
-                    ax2.yaxis.set_major_locator(MaxNLocator(prune='both', nbins='5'))
-                    if irow == 3:
-                        ax1.set_xlabel('a [au]')
-                        ax2.set_xlabel('a [au]')
-                    if icol == 2:
-                        ax1.set_ylabel('ecc [-]', labelpad=20)
-                        ax2.set_ylabel('inc [deg]', labelpad=20)
+
+                # Style Subplots
+                # Can Be Empty
+                ax1.grid(True); ax2.grid(True)
+                ax1.set_xlim([0,5]); ax2.set_xlim([0,5])
+                ax1.set_ylim([0,0.2]); ax2.set_ylim([0,incmax*r2d])
+                ax1.xaxis.set_major_locator(MaxNLocator(prune='both', nbins='5'))
+                ax2.xaxis.set_major_locator(MaxNLocator(prune='both', nbins='5'))
+                ax1.yaxis.set_major_locator(MaxNLocator(prune='both', nbins='5'))
+                ax2.yaxis.set_major_locator(MaxNLocator(prune='both', nbins='5'))
+                if irow == 3:
+                    ax1.set_xlabel('a [au]')
+                    ax2.set_xlabel('a [au]')
+                if icol == 2:
+                    ax1.set_ylabel('ecc [-]', labelpad=20)
+                    ax2.set_ylabel('inc [deg]', labelpad=20)
 
     fig1.subplots_adjust(hspace=0,wspace=0)
     fig2.subplots_adjust(hspace=0,wspace=0)
