@@ -25,6 +25,8 @@ group.add_argument('--test', action='store_true', \
                    help="Plot Test Set of Snapshots.")
 parser.add_argument('--chopchop', action='store_true', \
                     help='Only Show Last 2 Dirs of Path in Legend')
+parser.add_argument('--ncol', type=int, default=1, \
+                    help='Number of Columns in Legend')
 args = parser.parse_args()
 
 # List of Directories
@@ -112,7 +114,7 @@ ax.set_xlabel('t [Myr]')
 ax.set_ylabel('N', rotation='horizontal')
 ax.set_ylim([0, np.nanmax([np.nanmax(npart), 2000])])
 ax.set_title('Remaining Number of Particles')
-ax.legend(dirs_leg, prop={'size':'x-small'}, loc='best')
+ax.legend(dirs_leg, prop={'size':'x-small'}, loc='best', ncol=args.ncol)
 fig.savefig('npartx_all.pdf')
 plt.close()
 plt.clf()
