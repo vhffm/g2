@@ -23,6 +23,8 @@ group.add_argument('--all', action='store_true', \
                    help="Plot Full Set of Snapshots.")
 group.add_argument('--test', action='store_true', \
                    help="Plot Test Set of Snapshots.")
+parser.add_argument('--chopchop', action='store_true', \
+                    help='Only Show Last 2 Dirs of Path in Legend')
 args = parser.parse_args()
 
 # List of Directories
@@ -36,6 +38,12 @@ else:
     for line in lines:
         dirs.append(line)
     print "// Reading %i Directories" % len(dirs)
+
+# Tweak Dirs For Legend
+dirs_leg = copy(dirs)
+if args.chopchop:
+    for idir, dirchar in enumerate(dirs_leg):
+        dirs_leg[idir] = "/".join(dirchar.split("/")[-2:])
 
 #
 # BIG WARNING
@@ -104,7 +112,7 @@ ax.set_xlabel('t [Myr]')
 ax.set_ylabel('N', rotation='horizontal')
 ax.set_ylim([0, np.nanmax([np.nanmax(npart), 2000])])
 ax.set_title('Remaining Number of Particles')
-ax.legend(dirs, prop={'size':'x-small'}, loc='best')
+ax.legend(dirs_leg, prop={'size':'x-small'}, loc='best')
 fig.savefig('npartx_all.pdf')
 plt.close()
 plt.clf()
