@@ -114,9 +114,10 @@ for istep, nstep in enumerate(nsteps):
     ax.azim -= 20
     txtime = "t=%.2e yr" % snapshot.tout
     txnstp = "nstep=%012d" % snapshot.nstep
+    txnprt = "npart=%04d" % snapshot.nparticles
     txmdsk = "mdisk=%.2e [M_Earth]" % (mdisk / MEarth)
     txmmax = "mmax=%.2e [M_Earth]" % (mmax_loc / MEarth)
-    lftext = txtime + " / " + txnstp + " / " + txmdsk + " / " + txmmax
+    lftext = txtime + " / " + txnstp + " / " + txnprt + " / " + txmdsk + " / " + txmmax
     ax.text2D(0.02, 0.95, lftext, transform=ax.transAxes, \
               color=(0.0,0.5,1.0,0.7), size='x-small')
     ax.grid(False)
