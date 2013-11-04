@@ -161,7 +161,7 @@ def compute_ellipse(a, ecc, inc, Omega, omega):
     """
 
     # Eccentric Anomaly
-    E = np.linspace(0.0, 2.*np.pi, 512)
+    E = np.linspace(0.0, 2.*np.pi, 128)
 
     # Allocate
     x = np.zeros_like(E)
