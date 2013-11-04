@@ -27,7 +27,7 @@ mpl.rcParams['figure.edgecolor'] = 'black'
 # mpl.rcParams['savefig.facecolor'] = 'black'
 # mpl.rcParams['savefig.edgecolor'] = 'black'
 mpl.rcParams['axes3d.grid'] = True
-mpl.rcParams['grid.alpha'] = 0.5
+# mpl.rcParams['grid.alpha'] = 0.5
 mpl.rcParams['grid.color'] = 'black'
 
 # Parse Arguments
