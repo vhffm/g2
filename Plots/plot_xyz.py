@@ -129,6 +129,6 @@ for istep, nstep in enumerate(nsteps):
     txmmax = "mmax=%.2e [M_Earth]" % (mmax_loc / MEarth)
     lftext = txtime + " / " + txnstp + " / " + txnprt + " / " + txmdsk + " / " + txmmax
     ax.text2D(0.02, 0.95, lftext, transform=ax.transAxes, \
-              color=(0.0,0.5,1.0,1.0), size='x-small')
+              color=(0.85,0.5,0.85,0.5), size='x-small')
     ax.grid(False)
     fig.savefig('OrbitsXYZ_%012d.png' % nstep, dpi=160)
