@@ -32,6 +32,8 @@ mpl.rcParams['grid.color'] = 'black'
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
+parser.add_argument('--log', action='store_true', \
+                    help="Scale Colors as Log10 .")
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--all', action='store_true', \
                    help="Plot Full Set of Snapshots.")
@@ -107,7 +109,11 @@ for istep, nstep in enumerate(nsteps):
     for particle in snapshot.particles:
         mdisk += particle.m
         if particle.m > mmax_loc: mmax_loc = particle.m
-        pm = (particle.m - mmin) / (mmax - mmin)
+        if args.log:
+            pm = (np.log10(particle.m) - np.log10(mmin)) / \
+                 (np.log10(mmax) - np.log10(mmin))
+        else:
+            pm = (particle.m - mmin) / (mmax - mmin)
         # Color Floor (If Cmap is Black at 0)
         # cm = cmap(np.max([0.025,pm]))
         cm = cmap(pm)
