@@ -73,7 +73,11 @@ for istep, nstep in enumerate(nsteps):
             if particle.m < mmin: mmin = particle.m
 
 # Set Colormap
-cmap = cm.get_cmap('Blues_r')
+# cmap = cm.get_cmap('Blues_r')
+# cmap = cm.get_cmap('OrRd_r')
+# cmap = cm.get_cmap('PuRd_r')
+# cmap = cm.get_cmap('Purples_r')
+cmap = cm.get_cmap('RdPu_r')
 
 # Draw Snapshots
 for istep, nstep in enumerate(nsteps):
@@ -119,6 +123,6 @@ for istep, nstep in enumerate(nsteps):
     txmmax = "mmax=%.2e [M_Earth]" % (mmax_loc / MEarth)
     lftext = txtime + " / " + txnstp + " / " + txnprt + " / " + txmdsk + " / " + txmmax
     ax.text2D(0.02, 0.95, lftext, transform=ax.transAxes, \
-              color=(0.0,0.5,1.0,0.7), size='x-small')
+              color=(0.0,0.5,1.0,1.0), size='x-small')
     ax.grid(False)
     fig.savefig('OrbitsXYZ_%012d.png' % nstep, dpi=160)
