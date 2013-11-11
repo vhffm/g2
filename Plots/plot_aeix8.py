@@ -29,6 +29,12 @@ parser.add_argument('--scale', action='store_true', \
                     help="Scale Marker Size with Particle Mass")
 args = parser.parse_args()
 
+# Throw NoScale Warning
+if not args.scale:
+    print "!!"
+    print "!! NOTICE - NOT SCALING MARKERS WITH MASS !!"
+    print "!!"
+
 # Style Dictionary
 # http://matplotlib.org/api/markers_api.html#module-matplotlib.markers
 snap_c = [ 'r', 'g', 'b', 'm', 'k', \
