@@ -145,9 +145,9 @@ for istep, nstep in enumerate(nsteps):
                        )
             if ds[istep-1,c1pid[c1idx[ii]]] == 0 and ds[istep,c1pid[c1idx[ii]]] > 0:
                 istep0[c1pid[c1idx[ii]]] = istep
-        # Copy current particle IDs to old particle IDs
-        o1pid = copy(c1pid)
-        o2pid = copy(c2pid)
+        # Copy current particle IDs to old particle IDs; dito for masses
+        o1pid = copy(c1pid); o1m = copy(c1m)
+        o2pid = copy(c2pid); o2m = copy(c2m)
 
 # Compute Lyapuynov Exponents
 print "// Computing LCEs"
