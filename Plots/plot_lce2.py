@@ -154,6 +154,11 @@ print "// Computing LCEs"
 tout = 6.0 * nsteps / 365.25
 lce = compute_lyapunov(ds, istep0, nsteps, tout)
 
+# Save Relevant Arrays
+print "// Saving Data"
+np.savez('Chaos.npz', \
+    lce=lce, ds=ds, istep0=istep0, nsteps=nsteps, tout=tout)
+
 # Plot
 print "// Generating Plots"
 fig = plt.figure()
