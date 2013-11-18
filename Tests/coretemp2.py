@@ -18,6 +18,8 @@ parser.add_argument('--nsteps', type=int, default=10000, \
                     help="Number of Steps.")
 parser.add_argument('--fout', type=int, default=1000, \
                     help="Output Frequency.")
+parser.add_argument('--save', action='store_true', \
+                    help='Save Output')
 args = parser.parse_args()
 
 # Set Orbit
@@ -101,6 +103,14 @@ for nstep in range(nsteps):
         print "// Evolved %i/%i Steps" % (nstep, nsteps)
         print "// Evolved %.2f Days" % (dt*nstep/3600./24.) 
         print "// Current Orbital Distance %.2f AU" % (ke.radius(dt*nstep)/au)
+        if args.save:
+            print "// Saving Output CoreTemp_%012d.npz" % (nstep)
+            np.savez('CoreTemp_%012d.npz' % nstep, \
+                     T = T, \
+                     r = r, \
+                     tout = (dt*nstep/3600./24.), \
+                     nstep = nstep, \
+                     r_orbit = (ke.radius(dt*nstep)/au))
         print "// Current Profile"
         print T
 
@@ -109,6 +119,14 @@ print ""
 print "// Evolved %i Steps" % nsteps
 print "// Evolved %.2f Days" % (dt*nsteps/3600./24.) 
 print "// Final Orbital Distance %.2f AU" % (ke.radius(dt*nstep)/au)
+if args.save:
+    print "// Saving Output CoreTemp_%012d.npz" % (nstep)
+    np.savez('CoreTemp_%012d.npz' % nsteps, \
+             T = T, \
+             r = r, \
+             tout = (dt*nsteps/3600./24.), \
+             nstep = nstep, \
+             r_orbit = (ke.radius(dt*nsteps)/au))
 print "// Final Profile"
 print T
 print ""
