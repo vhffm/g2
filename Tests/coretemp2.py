@@ -125,7 +125,7 @@ if args.save:
              T = T, \
              r = r, \
              tout = (dt*nsteps/3600./24.), \
-             nstep = nstep, \
+             nstep = nsteps, \
              r_orbit = (ke.radius(dt*nsteps)/au))
 print "// Final Profile"
 print T
