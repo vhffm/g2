@@ -1,7 +1,19 @@
 """
 Core Temperature During Arbitrary Orbit.
 
-Numerical Stability and Convergence Requires dt/dx**2 < 0.5
+Numerical Stability and Convergence Requires dt/dx**2 < 0.5.
+
+Dependencies:
+- https://github.com/sczesla/PyAstronomy
+
+Also see:
+- http://www.hs.uni-hamburg.de/DE/Ins/Per/Czesla/PyA/PyA/pyaslDoc/aslDoc/keplerOrbit.html
+- http://www.ewp.rpi.edu/hartford/~ernesto/S2004/CHT/Notes/s06.pdf
+- http://www.ewp.rpi.edu/hartford/~ernesto/S2006/CHT/Notes/ch03.pdf
+- https://www.amherst.edu/media/view/103447/original/Diffusion%20part%201%20PDF.pdf
+- http://www.math.ubc.ca/~feldman/m267/heatSln.pdf
+- http://www.timteatro.net/2010/10/29/performance-python-solving-the-2d-diffusion-equation-with-numpy/
+- http://en.wikipedia.org/wiki/Finite_difference_method#Explicit_method
 """
 
 import numpy as np
