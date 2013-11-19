@@ -24,6 +24,7 @@ for istep, nstep in enumerate(nsteps):
     if first:
         Tmax = np.nanmax(T); rmax = np.nanmax(npz["r"])
         Tmin = np.nanmin(T); rmin = np.nanmin(npz["r"])
+        first = False
     else:
         if np.nanmax(T) > Tmax: Tmax = np.nanmax(T)
         if np.nanmin(T) < Tmin: Tmin = np.nanmin(T)
