@@ -43,5 +43,5 @@ for istep, nstep in enumerate(nsteps):
     fig.suptitle('t=%i days / nstep=%012d / r_orbit=%.2f au' % \
                 (npz["tout"], npz["nstep"], npz["r_orbit"]))
     fig.savefig('T_%012d.png' % nstep)
-    plt.close()
     fig.clf()
+    plt.close()
