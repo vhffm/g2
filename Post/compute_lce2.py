@@ -1,12 +1,7 @@
 """
-Compute Lyapuynov Characteristic Exponents.
-Compare Particles In Two Sims.
+Compute Particle Spacing, Lyapuynov Characteristic Exponents.
 """
 
-import matplotlib as mpl
-mpl.use('agg')
-mpl.rcParams['lines.linewidth'] = 2.0
-import matplotlib.pyplot as plt
 from glob import glob
 import numpy as np
 from Structs import Particle
@@ -159,16 +154,5 @@ print "// Saving Data"
 np.savez('Chaos.npz', \
     lce=lce, ds=ds, istep0=istep0, nsteps=nsteps, tout=tout)
 
-# Plot
-print "// Generating Plots"
-fig = plt.figure()
-ax = fig.add_subplot(1,1,1)
-ax.plot(tout,lce[:,40])
-ax.plot(tout,lce[:,100])
-ax.plot(tout,lce[:,200])
-ax.grid(True)
-ax.set_xscale('log')
-ax.set_yscale('log')
-ax.set_xlabel('t [yr]')
-ax.set_ylabel('LCE')
-fig.savefig('lce.pdf')
+# Done
+print "// Done"
