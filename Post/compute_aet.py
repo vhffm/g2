@@ -16,8 +16,6 @@ group.add_argument('--test', action='store_true', \
                    help="Plot Test Set of Snapshots.")
 group.add_argument('--custom', type=int, \
                    help="Plot Custom Snapshot.")
-parser.add_argument('--scale', action='store_true', \
-                    help="Scale Marker Size with Particle Mass")
 args = parser.parse_args()
 
 # Build Snapshot Number Array (From First Dir)
