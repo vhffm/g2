@@ -31,7 +31,7 @@ if args.test:
 
 # Load, Reduce, Save
 for istep, nstep in enumerate(nsteps):
-    print "Reducing %i/%i." % (istep+1, len(nsteps))
+    print "// Processing Snapshot %012d/%012d" % (nstep, nsteps[-1])
     loader = Loaders.GengaOut(nstep, args.ellipses, args.run_name)
     loader.load()
     np.savez('Snapshot_%012d.npz' % nstep, snapshot=loader.snapshot)
