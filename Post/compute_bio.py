@@ -42,12 +42,12 @@ print "// Found %i Particles" % npartmax
 a = np.ones([nsteps.shape[0], npartmax]) * np.nan
 e = np.ones([nsteps.shape[0], npartmax]) * np.nan
 m = np.ones([nsteps.shape[0], npartmax]) * np.nan
-tout = np.zeros(nsteps.shape[0])
+t = np.zeros(nsteps.shape[0])
 for istep, nstep in enumerate(nsteps):
     print "// Processing Snapshot %012d/%012d" % (nstep, nsteps[-1])
     npz = np.load('Snapshot_%012d.npz' % nstep)
     snapshot = npz['snapshot'][()]
-    tout[istep] = snapshot.tout
+    t[istep] = snapshot.tout
     for p in snapshot.particles:
         a[istep,p.id] = p.a
         e[istep,p.id] = p.ecc
@@ -55,7 +55,7 @@ for istep, nstep in enumerate(nsteps):
 
 print "// Saving Data"
 np.savez('XBio.npz', \
-    tout = tout, \
+    t = t, \
     a = a, \
     e = e, \
     m = m )
