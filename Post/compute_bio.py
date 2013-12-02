@@ -54,7 +54,7 @@ for istep, nstep in enumerate(nsteps):
         m[istep,p.id] = p.m
 
 print "// Saving Data"
-np.savez('Aet.npz', \
+np.savez('XBio.npz', \
     tout = tout, \
     a = a, \
     e = e, \

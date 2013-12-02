@@ -151,7 +151,7 @@ lce = compute_lyapunov(ds, istep0, nsteps, tout)
 
 # Save Relevant Arrays
 print "// Saving Data"
-np.savez('Chaos.npz', \
+np.savez('XChaos.npz', \
     lce=lce, ds=ds, istep0=istep0, nsteps=nsteps, tout=tout)
 
 # Done
