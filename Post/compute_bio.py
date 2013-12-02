@@ -52,12 +52,17 @@ for istep, nstep in enumerate(nsteps):
         a[istep,p.id] = p.a
         e[istep,p.id] = p.ecc
         m[istep,p.id] = p.m
+    # Compute Apoapsis & Periapsis
+    rp = (1.0 - e) * a
+    ra = (1.0 + e) * a 
 
 print "// Saving Data"
 np.savez('XBio.npz', \
     t = t, \
     a = a, \
     e = e, \
+    rp = rp, \
+    ra = ra, \
     m = m )
 
 print "// Done"
