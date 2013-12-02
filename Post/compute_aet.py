@@ -41,6 +41,7 @@ print "// Found %i Particles" % npartmax
 # Loop Snapshots
 a = np.ones([nsteps.shape[0], npartmax]) * np.nan
 e = np.ones([nsteps.shape[0], npartmax]) * np.nan
+m = np.ones([nsteps.shape[0], npartmax]) * np.nan
 tout = np.zeros(nsteps.shape[0])
 for istep, nstep in enumerate(nsteps):
     print "// Processing Snapshot %012d/%012d" % (nstep, nsteps[-1])
@@ -50,11 +51,13 @@ for istep, nstep in enumerate(nsteps):
     for p in snapshot.particles:
         a[istep,p.id] = p.a
         e[istep,p.id] = p.ecc
+        m[istep,p.id] = p.m
 
 print "// Saving Data"
 np.savez('Aet.npz', \
     tout = tout, \
     a = a, \
-    e = e )
+    e = e, \
+    m = m )
 
 print "// Done"
