@@ -33,7 +33,8 @@ if args.test:
 # Load, Reduce, Save
 print "// Starting -- %s UTC" % strftime("%H:%M:%S", gmtime())
 for istep, nstep in enumerate(nsteps):
-    print "// Reducing Snapshot %012d/%012d" % (nstep, nsteps[-1])
+    print "// (%s UTC) Processing Snapshot %012d/%012d" % \
+        (strftime("%H:%M:%S", gmtime()) nstep, nsteps[-1])
     loader = Loaders.SSAscii(nstep, args.ellipses)
     loader.load()
     np.savez('Snapshot_%012d.npz' % nstep, snapshot=loader.snapshot)

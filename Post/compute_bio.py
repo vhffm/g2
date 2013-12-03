@@ -46,7 +46,8 @@ m = np.ones([nsteps.shape[0], npartmax]) * np.nan
 t = np.zeros(nsteps.shape[0])
 print "// Starting -- %s UTC" % strftime("%H:%M:%S", gmtime())
 for istep, nstep in enumerate(nsteps):
-    print "// Processing Snapshot %012d/%012d" % (nstep, nsteps[-1])
+    print "// (%s UTC) Processing Snapshot %012d/%012d" % \
+        (strftime("%H:%M:%S", gmtime()) nstep, nsteps[-1])
     npz = np.load('Snapshot_%012d.npz' % nstep)
     snapshot = npz['snapshot'][()]
     t[istep] = snapshot.tout

@@ -86,7 +86,8 @@ istep0 = np.zeros(npartmax, dtype=int)
 print "// Starting -- %s UTC" % strftime("%H:%M:%S", gmtime())
 for istep, nstep in enumerate(nsteps):
     # Status
-    print "// Processing Snapshot %012d/%012d" % (nstep, nsteps[-1])
+    print "// (%s UTC) Processing Snapshot %012d/%012d" % \
+        (strftime("%H:%M:%S", gmtime()) nstep, nsteps[-1])
     # Load Snapshots
     npz1 = np.load('%s/Snapshot_%012d.npz' % (dirs[0], nstep))
     npz2 = np.load('%s/Snapshot_%012d.npz' % (dirs[1], nstep))
