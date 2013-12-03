@@ -34,7 +34,7 @@ if args.test:
 print "// Starting -- %s UTC" % strftime("%H:%M:%S", gmtime())
 for istep, nstep in enumerate(nsteps):
     print "// (%s UTC) Processing Snapshot %012d/%012d" % \
-        (strftime("%H:%M:%S", gmtime()) nstep, nsteps[-1])
+        (strftime("%H:%M:%S", gmtime()), nstep, nsteps[-1])
     loader = Loaders.GengaOut(nstep, args.ellipses, args.run_name)
     loader.load()
     np.savez('Snapshot_%012d.npz' % nstep, snapshot=loader.snapshot)
