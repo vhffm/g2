@@ -6,6 +6,7 @@ from glob import glob
 import numpy as np
 from Structs import Particle
 import argparse
+from time import gmtime, strftime
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
@@ -43,6 +44,7 @@ a = np.ones([nsteps.shape[0], npartmax]) * np.nan
 e = np.ones([nsteps.shape[0], npartmax]) * np.nan
 m = np.ones([nsteps.shape[0], npartmax]) * np.nan
 t = np.zeros(nsteps.shape[0])
+print "// Starting -- %s UTC" % strftime("%H:%M:%S", gmtime())
 for istep, nstep in enumerate(nsteps):
     print "// Processing Snapshot %012d/%012d" % (nstep, nsteps[-1])
     npz = np.load('Snapshot_%012d.npz' % nstep)
@@ -55,6 +57,7 @@ for istep, nstep in enumerate(nsteps):
     # Compute Apoapsis & Periapsis
     rp = (1.0 - e) * a
     ra = (1.0 + e) * a
+print "// Done -- %s UTC" % strftime("%H:%M:%S", gmtime())
 
 print "// Saving Data"
 np.savez('XBio.npz', \

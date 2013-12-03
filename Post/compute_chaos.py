@@ -9,6 +9,7 @@ import sys
 from copy import copy
 from chaos_helpers import co_intersection, compute_lyapunov
 import argparse
+from time import gmtime, strftime
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
@@ -82,6 +83,7 @@ print "// Found %i Particles." % npartmax
 first = True
 ds = np.zeros([nsteps.shape[0], npartmax])
 istep0 = np.zeros(npartmax, dtype=int)
+print "// Starting -- %s UTC" % strftime("%H:%M:%S", gmtime())
 for istep, nstep in enumerate(nsteps):
     # Status
     print "// Processing Snapshot %012d/%012d" % (nstep, nsteps[-1])
@@ -143,6 +145,7 @@ for istep, nstep in enumerate(nsteps):
         # Copy current particle IDs to old particle IDs; dito for masses
         o1pid = copy(c1pid); o1m = copy(c1m)
         o2pid = copy(c2pid); o2m = copy(c2m)
+print "// Done -- %s UTC" % strftime("%H:%M:%S", gmtime())
 
 # Compute Lyapuynov Exponents
 print "// Computing LCEs"
