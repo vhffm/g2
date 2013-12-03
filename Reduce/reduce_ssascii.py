@@ -2,6 +2,7 @@ import Loaders
 from glob import glob
 import numpy as np
 import argparse
+from time import gmtime, strftime
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
@@ -30,8 +31,10 @@ if args.test:
     nsteps = np.mgrid[70000000:73000000:100000]
 
 # Load, Reduce, Save
+print "// Starting -- %s UTC" % strftime("%H:%M:%S", gmtime())
 for istep, nstep in enumerate(nsteps):
     print "// Reducing Snapshot %012d/%012d" % (nstep, nsteps[-1])
     loader = Loaders.SSAscii(nstep, args.ellipses)
     loader.load()
     np.savez('Snapshot_%012d.npz' % nstep, snapshot=loader.snapshot)
+print "// Done -- %s UTC" % strftime("%H:%M:%S", gmtime())
