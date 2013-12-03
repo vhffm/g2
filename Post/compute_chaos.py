@@ -135,14 +135,14 @@ for istep, nstep in enumerate(nsteps):
             c2idx[ii] = int(np.where(c2pid == pid_relevant[ii])[0])
         # Compute ds
         for ii in range(pid_relevant.shape[0]):
-            ds[istep,c1pid[c1idx[ii]]] = \
+            ds[istep,c1idx[ii]] = \
                 np.sqrt( \
                          (c1x[c1idx[ii]] - c2x[c2idx[ii]])**2. + \
                          (c1y[c1idx[ii]] - c2y[c2idx[ii]])**2. + \
                          (c1z[c1idx[ii]] - c2z[c2idx[ii]])**2. \
                        )
-            if ds[istep-1,c1pid[c1idx[ii]]] == 0 and ds[istep,c1pid[c1idx[ii]]] > 0:
-                istep0[c1pid[c1idx[ii]]] = istep
+            if ds[istep-1,c1idx[ii]] == 0 and ds[istep,c1idx[ii]] > 0:
+                istep0[c1idx[ii]] = istep
         # Copy current particle IDs to old particle IDs; dito for masses
         o1pid = copy(c1pid); o1m = copy(c1m)
         o2pid = copy(c2pid); o2m = copy(c2m)
