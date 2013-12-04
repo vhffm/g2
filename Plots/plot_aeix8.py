@@ -15,6 +15,7 @@ from matplotlib.ticker import MaxNLocator
 import sys
 import argparse
 from g2_helpers import r2d, mkline
+from time import gmtime, strftime
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
@@ -84,8 +85,11 @@ print "// Found %i Snapshots" % len(nsteps)
 
 # Scan Limits
 print "// Scanning Limits"
+print "// (%s UTC) Start Scanning Limits" % strftime("%H:%M:%S", gmtime())
 first = True
 for nstep in nsteps:
+    print "// (%s UTC) Scanning Snapshot %012d/%012d" % \
+        (strftime("%H:%M:%S", gmtime()), nstep, nsteps[-1])
     for idir, dirchar in enumerate(dirs):
         try:
             npz = np.load('%s/Snapshot_%012d.npz' % (dirchar, nstep))
@@ -109,12 +113,15 @@ for nstep in nsteps:
         except IOError:
             print "!! Could Not Open %s/Snapshot_%012d.npz" % \
                   (dirs[idir], nstep)
+print "// (%s UTC) Done Scanning Limits" % strftime("%H:%M:%S", gmtime())
 
 # Compute Line for Marker Size(Mass)
 m, n = mkline(mmin, 1.0, mmax, 36.0)
 
+print "// (%s UTC) Start Processing Snapshots" % strftime("%H:%M:%S", gmtime())
 for nstep in nsteps:
-    print "// Processing Snapshot %012d/%012d" % (nstep, nsteps[-1])
+    print "// (%s UTC) Processing Snapshot %012d/%012d" % \
+        (strftime("%H:%M:%S", gmtime()), nstep, nsteps[-1])
     fig1 = plt.figure(figsize=(16.0, 12.0)); fig2 = plt.figure(figsize=(16.0, 12.0))
     # Sweep Subplots in Steps of 8
     nsweeps = (len(dirs) - 1) / 8 + 1
@@ -190,3 +197,4 @@ for nstep in nsteps:
     fig1.savefig('aex_%012d.png' % snapshot.nstep)
     fig2.savefig('aix_%012d.png' % snapshot.nstep)
     plt.close(fig1); plt.close(fig2)
+print "// (%s UTC) Done Processing Snapshots" % strftime("%H:%M:%S", gmtime())
