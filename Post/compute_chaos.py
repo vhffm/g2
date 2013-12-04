@@ -104,14 +104,30 @@ for istep, nstep in enumerate(nsteps):
     c2y = np.zeros(snap2.nparticles)
     c2z = np.zeros(snap2.nparticles)
 
+    # Allocate arrays for initial particle IDs
+    if first:
+        c1pid0 = np.zeros(snap1.nparticles, dtype='int')
+        c2pid0 = np.zeros(snap1.nparticles, dtype='int')
+
+    # Allocate arrays for initial semi-major axes
+    if first:
+        c1a0 = np.zeros(snap1.nparticles)
+        c2a0 = np.zeros(snap1.nparticles)
+
     # Fill particle IDs from snapshots
     for ip, p in enumerate(snap1.particles):
         c1pid[ip] = p.id; c1x[ip] = p.x; c1y[ip] = p.y; c1z[ip] = p.z; c1m[ip] = p.m
+        if first:
+            c1a0[ip] = p.a
     for ip, p in enumerate(snap2.particles):
         c2pid[ip] = p.id; c2x[ip] = p.x; c2y[ip] = p.y; c2z[ip] = p.z; c2m[ip] = p.m
+        if first:
+            c2a0[ip] = p.a
     if first:
         o1pid = copy(c1pid); o1m = copy(c1m)
         o2pid = copy(c2pid); o2m = copy(c2m)
+        c1pid0 = c1pid.copy()
+        c2pid0 = c2pid.copy()
         ds[0,:] = np.zeros(npartmax)
         first = False
     else:
@@ -156,7 +172,8 @@ lce = compute_lyapunov(ds, istep0, nsteps, tout)
 # Save Relevant Arrays
 print "// Saving Data"
 np.savez('XChaos.npz', \
-    lce=lce, ds=ds, istep0=istep0, nsteps=nsteps, tout=tout)
+    lce = lce, ds = ds, istep0 = istep0, nsteps = nsteps, tout = tout, \
+    c1pid0 = c1pid0, c2pid0 = c2pid0, c1a0 = c1a0, c2a0 = c2a0)
 
 # Done
 print "// Done"
