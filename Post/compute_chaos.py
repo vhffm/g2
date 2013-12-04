@@ -75,7 +75,7 @@ for idir, dirchar in enumerate(dirs):
                 npartmax = snapshot.nparticles
     except IOError:
         print "!! Could Not Open %s/Snapshot_%012d.npz" % \
-              (dirs[idir], nstep)
+              (dirs[idir], nsteps[0])
 
 print "// Found %i Particles." % npartmax 
 
