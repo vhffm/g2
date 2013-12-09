@@ -1,6 +1,6 @@
 """
 Remove Moons from ICs.
-python nomoons.py --icold XXX --icnew YYY --outfile ZZZ.
+python nomoons.py --ic_old XXX --ic_new YYY --output_file ZZZ.
 """
 
 import numpy as np
