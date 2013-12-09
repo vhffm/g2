@@ -25,8 +25,8 @@ with open(args.output_file, "r") as f:
     for line in lines:
         line = line.strip().split()
         # Column 19 counts number of close encounters (CEs)
-        # If at step 1000 we had 1000 CEs, we probably have a moon
-        if int(line[19]) == 1000:
+        # If at step 1000 we >985 CEs, we probably have a moon
+        if int(line[19]) > 985:
             pids_to_remove.append(int(line[1]))
 
 # Read initial conditions file
