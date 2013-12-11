@@ -62,9 +62,9 @@ with open(args.filename, 'r') as f:
     # Indices that sort the arrays
     if args.idonly:
         # Cf. http://stackoverflow.com/questions/5284646/rank-items-in-an-array-using-python-numpy
-        iisorted = np.argsort(d2).argsort()
+        iisorted = d2.argsort().argsort()
     else:
-        iisorted = np.argsort(d2)
+        iisorted = d2.argsort()
 
     # Sort arrays
     pid = pid[iisorted]
