@@ -57,7 +57,7 @@ with open(args.filename, 'r') as f:
         Sz[iline] = float(line[12])
 
     # Compute (squared) current orbital distance
-    d2 = np.sqrt(x**2. + y**2. + z**2.)
+    d2 = x**2. + y**2. + z**2.
 
     # Indices that sort the arrays
     if args.idonly:
