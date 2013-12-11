@@ -13,6 +13,8 @@ parser.add_argument('--filename', type=str, \
                     help="Input Filename.", required=True)
 parser.add_argument('--blocklen', type=int, default=100000, \
                     help="Block Length.")
+parser.add_argument('--idonly', action='store_true', \
+                    help="Only sort particle IDs.")
 args = parser.parse_args()
 
 # Read test particles
@@ -58,22 +60,27 @@ with open(args.filename, 'r') as f:
     d2 = np.sqrt(x**2. + y**2. + z**2.)
 
     # Indices that sort the arrays
-    iisorted = np.argsort(d2)
+    if args.idonly:
+        # Cf. http://stackoverflow.com/questions/5284646/rank-items-in-an-array-using-python-numpy
+        iisorted = np.argsort(d2).argsort()
+    else:
+        iisorted = np.argsort(d2)
 
     # Sort arrays
-    t = t[iisorted]
     pid = pid[iisorted]
-    m = m[iisorted]
-    r = r[iisorted]
-    x = x[iisorted]
-    y = y[iisorted]
-    z = z[iisorted]
-    vx = vx[iisorted]
-    vy = vy[iisorted]
-    vz = vz[iisorted]
-    Sx = Sx[iisorted]
-    Sy = Sy[iisorted]
-    Sz = Sz[iisorted]
+    if not args.idonly:
+        t = t[iisorted]
+        m = m[iisorted]
+        r = r[iisorted]
+        x = x[iisorted]
+        y = y[iisorted]
+        z = z[iisorted]
+        vx = vx[iisorted]
+        vy = vy[iisorted]
+        vz = vz[iisorted]
+        Sx = Sx[iisorted]
+        Sy = Sy[iisorted]
+        Sz = Sz[iisorted]
 
 # Write output files
 iline = 0; iblock = 1; blocklen = args.blocklen
