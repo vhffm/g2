@@ -56,7 +56,9 @@ for idir, dirchar in enumerate(dirs):
                 tout[istep] = snapshot.tout
             npart[idir, istep] = snapshot.nparticles
             for particle in snapshot.particles:
-                mass[idir,istep] += particle.m
+                # Do not count Jupiter and Saturn
+                if particle.id != 2000 and particle.id != 2001:
+                    mass[idir,istep] += particle.m
         except IOError:
             mass[idir,istep] = np.nan
 
