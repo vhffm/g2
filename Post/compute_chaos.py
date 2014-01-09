@@ -171,11 +171,7 @@ lce = compute_lyapunov(ds, istep0, nsteps, tout)
 
 # Save Relevant Arrays
 print "// Saving Data"
-<<<<<<< HEAD
-np.savez("%s" $ args.outfile, \
-=======
 np.savez("%s" % args.outfile, \
->>>>>>> 885f23fe0a55faddf5cf69e98f85b7ab4cd6e07e
     lce = lce, ds = ds, istep0 = istep0, nsteps = nsteps, tout = tout, \
     c1pid0 = c1pid0, c2pid0 = c2pid0, c1a0 = c1a0, c2a0 = c2a0)
 
