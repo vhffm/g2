@@ -57,7 +57,7 @@ if args.all:
     for ii, gg in enumerate(globs):
         nsteps[ii] = int(gg.split('.npz')[0].split('/')[-1].split('_')[1])
 if args.test:
-    nsteps = np.mgrid[2000000000:2000000100:10
+    nsteps = np.mgrid[2000000000:2000000100:10]
 if args.custom:
     nsteps = np.array([args.custom])
 print "// Found %i Snapshots" % len(nsteps)
