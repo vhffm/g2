@@ -20,6 +20,8 @@ group.add_argument('--test', action='store_true', \
                    help="Plot Test Set of Snapshots.")
 group.add_argument('--custom', type=int, \
                    help="Plot Custom Snapshot.")
+group.add_argument('--outfile', default='XChaos.npz', \
+                    help="Output File Name.")
 args = parser.parse_args()
 
 # List of Directories
@@ -169,7 +171,7 @@ lce = compute_lyapunov(ds, istep0, nsteps, tout)
 
 # Save Relevant Arrays
 print "// Saving Data"
-np.savez('XChaos.npz', \
+np.savez("%s" $ args.outfile, \
     lce = lce, ds = ds, istep0 = istep0, nsteps = nsteps, tout = tout, \
     c1pid0 = c1pid0, c2pid0 = c2pid0, c1a0 = c1a0, c2a0 = c2a0)
 
