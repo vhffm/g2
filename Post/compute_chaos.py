@@ -20,7 +20,7 @@ group.add_argument('--test', action='store_true', \
                    help="Plot Test Set of Snapshots.")
 group.add_argument('--custom', type=int, \
                    help="Plot Custom Snapshot.")
-group.add_argument('--outfile', default='XChaos.npz', \
+parser.add_argument('--outfile', default='XChaos.npz', \
                     help="Output File Name.")
 args = parser.parse_args()
 
@@ -57,7 +57,7 @@ if args.all:
     for ii, gg in enumerate(globs):
         nsteps[ii] = int(gg.split('.npz')[0].split('/')[-1].split('_')[1])
 if args.test:
-    nsteps = np.mgrid[3600000000:3630000000:1000000]
+    nsteps = np.mgrid[2000000000:2000000100:10
 if args.custom:
     nsteps = np.array([args.custom])
 print "// Found %i Snapshots" % len(nsteps)
@@ -171,7 +171,11 @@ lce = compute_lyapunov(ds, istep0, nsteps, tout)
 
 # Save Relevant Arrays
 print "// Saving Data"
+<<<<<<< HEAD
 np.savez("%s" $ args.outfile, \
+=======
+np.savez("%s" % args.outfile, \
+>>>>>>> 885f23fe0a55faddf5cf69e98f85b7ab4cd6e07e
     lce = lce, ds = ds, istep0 = istep0, nsteps = nsteps, tout = tout, \
     c1pid0 = c1pid0, c2pid0 = c2pid0, c1a0 = c1a0, c2a0 = c2a0)
 
