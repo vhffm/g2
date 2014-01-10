@@ -173,11 +173,17 @@ lce = compute_lyapunov(ds, istep0, nsteps, tout)
 print "// (%s UTC) Binning LCEs" % strftime("%H:%M:%S", gmtime())
 lce_mean, lce_median, lce_std, a0_bin_mids = bin_lyapunov(c1a0, lce)
 
+# Bin Lyapunov Times
+print "// (%s UTC) Binning Lyapunov Times" % strftime("%H:%M:%S", gmtime())
+ltime_mean, ltime_median, ltime_std, a0_bin_mids = bin_lyapunov(c1a0, 1.0/lce)
+
 # Save Relevant Arrays
 print "// Saving Data"
 np.savez("%s" % args.outfile, \
     lce = lce, ds = ds, istep0 = istep0, nsteps = nsteps, tout = tout, \
     lce_mean = lce_mean, lce_median = lce_median, lce_std = lce_std, \
+    ltime_mean = ltime_mean, ltime_median = ltime_median, \
+    ltime_std = ltime_std, \
     a0_bin_mids = a0_bin_mids, \
     c1pid0 = c1pid0, c2pid0 = c2pid0, c1a0 = c1a0, c2a0 = c2a0)
 
