@@ -51,3 +51,58 @@ def compute_lyapunov(ds, istep0, nsteps, tout):
                 # ...
 
     return lce
+
+def bin_lyapunov(a0, lce):
+    """
+    Create bins in semi-major axis.
+    Then sort Lyapunov Characteristics Exponent (LCE) into bins.
+    Per bin, compute median, mean, and standard deviation of LCE.
+    Save.
+
+    @parameters - lce - LCE(a0,t)
+                - a0  - Initial semi-major axes of particles
+    @return     - lce_med       - Mean value per bin ~ lce(a0i,t)
+                - lce_median    - Median per bin
+                - lce_std       - Standard deviation per bin
+                - a0_bin_mids   - Bin midpoints
+    """
+
+    # Set up bins
+    nbins = 32; a0_lo = 0.0; a0_hi = 5.5
+
+    # Create bins
+    a0_bin_edges = np.linspace(a0_lo, a0_hi, nbins+1)           # len=nbins+1
+    a0_bin_mids = (a0_bin_edges[1:] + a0_bin_edges[:-1]) / 2.0  # len=nbins
+
+    # Digitize
+    # Cf. http://docs.scipy.org/doc/numpy/reference/generated/numpy.digitize.html#numpy.digitize
+    digitalism = np.digitize(a0, a0_bin_edges)
+    digitalism -= 1
+
+    #   - Some Error Checking
+    if len(a0_bin_edges)-1 in digitalism:
+        raise Exception("Particle Outside Binning Range (a0 > a_hi). Adjust Limits!")
+
+    # Allocate target arrays
+    lce_mean = np.zeros([lce.shape[0], a0_bin_mids.shape[0]])
+    lce_median = np.zeros_like(lce_mean)
+    lce_std = np.zeros_like(lce_mean)
+
+    # Sweep arrays first by time, then by particle
+    # Compute mean/median/std and write back
+    for itslice in range(0,lce.shape[0]):
+        lce_binned = [[] for _ in range(0,nbins)]
+        for ipslice in range(0,lce.shape[1]):
+            lce_binned[digitalism[ipslice]].append(lce[itslice,ipslice])
+        for ibin in range(0,nbins):
+            if len(lce_binned[ibin]) == 0:
+                lce_mean[itslice,ibin] = np.nan
+                lce_median[itslice,ibin]= np.nan
+                lce_std[itslice,ibin] = np.nan
+            else:
+                lce_mean[itslice,ibin] = np.mean(lce_binned[ibin])
+                lce_median[itslice,ibin] = np.median(lce_binned[ibin])
+                lce_std[itslice,ibin] = np.std(lce_binned[ibin])
+
+    # Return values
+    return lce_mean, lce_median, lce_std, a0_bin_mids
