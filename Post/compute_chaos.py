@@ -7,7 +7,7 @@ import numpy as np
 from Structs import Particle
 import sys
 from copy import copy
-from chaos_helpers import co_intersection, compute_lyapunov
+from chaos_helpers import co_intersection, compute_lyapunov, bin_lyapunov
 import argparse
 from time import gmtime, strftime
 
@@ -169,10 +169,16 @@ print "// Computing LCEs"
 tout = 6.0 * nsteps / 365.25
 lce = compute_lyapunov(ds, istep0, nsteps, tout)
 
+# Bin Lyapunov Exponents
+print "// (%s UTC) Binning LCEs" % strftime("%H:%M:%S", gmtime())
+lce_mean, lce_median, lce_std, a0_bin_mids = bin_lyapunov(c1a0, lce)
+
 # Save Relevant Arrays
 print "// Saving Data"
 np.savez("%s" % args.outfile, \
     lce = lce, ds = ds, istep0 = istep0, nsteps = nsteps, tout = tout, \
+    lce_mean = lce_mean, lce_median = lce_median, lce_std = lce_std, \
+    a0_bin_mids = a0_bin_mids, \
     c1pid0 = c1pid0, c2pid0 = c2pid0, c1a0 = c1a0, c2a0 = c2a0)
 
 # Done
