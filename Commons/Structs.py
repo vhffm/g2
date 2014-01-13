@@ -12,8 +12,11 @@ class Particle():
     XYZ-Position                  - x, y, z     - [AU]
     XYZ-Velocity                  - vx, vy, vz  - [AU/yr]
     Particle Mass                 - m           - [Msun]
+    Particle ID                   - id          - []
     """
     def __init__(self):
+        # General
+        self.id = None
         # Cartesian
         self.x, self.y, self.z = None, None, None
         self.vx, self.vy, self.vz = None, None, None
