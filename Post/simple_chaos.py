@@ -11,6 +11,7 @@ import numpy as np
 import argparse
 import sys
 from time import gmtime, strftime
+from glob import glob
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
