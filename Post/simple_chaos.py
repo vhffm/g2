@@ -179,7 +179,6 @@ ds_q3 = np.zeros_like(ds_mean)
 for istep, nstep in enumerate(nsteps):
     # in each bin, allocate empty lists to store all values in this list
     ds_binned = [[] for _ in range(0,len(bin_cents))]
-    ltime_binned = [[] for _ in range(0,len(bin_cents))]
     # 1 - inner loop over all particles per timestep
     for ipart in range(0,nparts):
         # for relevant particle @ timestep
