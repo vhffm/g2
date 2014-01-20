@@ -25,7 +25,7 @@ for line in lines_in:
     line = line.split()
     if int(line[1]) == args.pid:
         line[2] = str(float(line[2])*1.01)
-    line = " ".join(line)
+    line = " ".join(line) + " "
     lines_out.append(line)
 
 # Dump to stdout
