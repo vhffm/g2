@@ -65,8 +65,19 @@ if args.custom:
 
 # Scan number of particles
 npz0 = np.load('%s/Snapshot_%012d.npz' % (dirs[0], nsteps[0]))
+snap0 = npz0['snapshot'][()]
+found_saturn = False
+found_jupiter = False
+for particle in snap0.particles:
+    if particle.id == 2000:
+        found_jupiter = True
+    if particle.id == 2001:
+        found_saturn = True
 nparts = npz0['snapshot'][()].nparticles
 print "// %i Particles Found" % nparts
+if found_saturn and found_jupiter:
+    print "// Found Jupiter and Saturn"
+    nparts -= 2
 
 # Compute time array
 dt = 6.0
@@ -111,20 +122,32 @@ for istep, nstep in enumerate(nsteps):
     m2_loc = np.zeros_like(x1_loc)
     a1_loc = np.zeros_like(x1_loc)
     a2_loc = np.zeros_like(x1_loc)
+    ireduce = 0
     for iparticle, particle in enumerate(snap1.particles):
-        i1_loc[iparticle] = int(particle.id)
-        x1_loc[iparticle] = particle.x
-        y1_loc[iparticle] = particle.y
-        z1_loc[iparticle] = particle.z
-        m1_loc[iparticle] = particle.m
-        a1_loc[iparticle] = particle.a
+        iparticle -= ireduce
+        # Skip Jupiter and Saturn (ID 2000 and 2001)
+        if int(particle.id) < 2000:
+            i1_loc[iparticle] = int(particle.id)
+            x1_loc[iparticle] = particle.x
+            y1_loc[iparticle] = particle.y
+            z1_loc[iparticle] = particle.z
+            m1_loc[iparticle] = particle.m
+            a1_loc[iparticle] = particle.a
+        else:
+            ireduce += 1
+    ireduce = 0
     for iparticle, particle in enumerate(snap2.particles):
-        i2_loc[iparticle] = int(particle.id)
-        x2_loc[iparticle] = particle.x
-        y2_loc[iparticle] = particle.y
-        z2_loc[iparticle] = particle.z
-        m2_loc[iparticle] = particle.m
-        a2_loc[iparticle] = particle.a
+        iparticle -= ireduce
+        # Skip Jupiter and Saturn (ID 2000 and 2001)
+        if int(particle.id) < 2000:
+            i2_loc[iparticle] = int(particle.id)
+            x2_loc[iparticle] = particle.x
+            y2_loc[iparticle] = particle.y
+            z2_loc[iparticle] = particle.z
+            m2_loc[iparticle] = particle.m
+            a2_loc[iparticle] = particle.a
+        else:
+            ireduce += 1
     # Safeguards
     for iidx, idx in enumerate(i1_loc):
         if i1_loc[iidx] != i2_loc[iidx]:
