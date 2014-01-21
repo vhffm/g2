@@ -67,19 +67,25 @@ print "// Computing Mass Stats"
 mass_avg = np.mean(mass, axis=0)
 mass_med = np.median(mass, axis=0)
 mass_std = np.std(mass, axis=0)
+mass_q25 = np.percentile(mass, 25, axis=0)
+mass_q75 = np.percentile(mass, 25, axis=0)
 
 # Process Particle Number
 print "// Computing Particle Number Stats"
 npart_avg = np.mean(npart, axis=0)
 npart_med = np.median(npart, axis=0)
 npart_std = np.std(npart, axis=0)
+npart_q25 = np.percentile(npart, 25, axis=0)
+npart_q75 = np.percentile(npart, 75, axis=0)
 
 # Store
 print "// Saving"
 np.savez("Stats.npz", \
     mass = mass, npart = npart, tout = tout, \
     mass_avg = mass_avg, mass_med = mass_med, mass_std = mass_std, \
-    npart_avg = npart_avg, npart_med = npart_med, npart_std = npart_std \
+    npart_avg = npart_avg, npart_med = npart_med, npart_std = npart_std, \
+    mass_q25 = mass_q25, mass_75 = mass_q75, \
+    npart_q25 = npart_q25, npart_q75 = npart_q75 \
     )
 
 # Done
