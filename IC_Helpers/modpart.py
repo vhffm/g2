@@ -4,7 +4,7 @@ Modifies one particle.
 Writes new output file (>stdout).
 
 Usage:
-python modpart.py --pid 123 < $infile > $outfile
+python modpart.py --pid 123 --factor 1.1 < $infile > $outfile
 """
 
 import sys
@@ -14,6 +14,8 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--pid', type=int, \
                     help="Particle ID.", required=True)
+parser.add_argument('--factor', type=float, \
+                    help="Mass Adjustment Factor.", required=True)
 args = parser.parse_args()
 
 # Read lines from stdin
@@ -24,7 +26,7 @@ lines_out = []
 for line in lines_in:
     line = line.split()
     if int(line[1]) == args.pid:
-        line[2] = str(float(line[2])*1.01)
+        line[2] = str(float(line[2]) * args.factor)
     line = " ".join(line) + " "
     lines_out.append(line)
 
