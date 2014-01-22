@@ -173,7 +173,7 @@ ds=np.sqrt(ds2)
 
 # Compute Lyapunov time
 print "// Computing Lyapunov Times"
-alpha=np.sqrt(ds2[1:,:]/ds2[1,:])
+alpha=ds[1:,:]/ds[1,:]
 # lce=1.0/tt[1:,:]*np.log(alpha)
 lce=1.0/tt[2:,:]*np.log(alpha[1:])
 ltime=1.0/lce
@@ -206,7 +206,7 @@ for istep, nstep in enumerate(nsteps):
     for ipart in range(0,nparts):
         # for relevant particle @ timestep
         # identify bin, append value to array above
-        ds_binned[digitalism[istep,ipart]].append(np.sqrt(ds2[istep,ipart]))
+        ds_binned[digitalism[istep,ipart]].append(ds[istep,ipart])
     # compute mean/med/std for each bin
     for ibin in range(0,len(bin_cents)):
         if len(ds_binned[ibin]) > 0:
@@ -246,7 +246,7 @@ for istep, nstep in enumerate(nsteps):
         for ipart in range(0,nparts):
             # for relevant particle @ timestep
             # identify bin, append value to array above
-            ltime_binned[digitalism[istep,ipart]].append(1.0/lce[istep-2,ipart])
+            ltime_binned[digitalism[istep,ipart]].append(ltime[istep-2,ipart])
         # compute mean/med/std for each bin
         for ibin in range(0,len(bin_cents)):
             if len(ltime_binned[ibin]) > 0:
