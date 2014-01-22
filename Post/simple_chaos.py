@@ -124,8 +124,8 @@ for istep, nstep in enumerate(nsteps):
     y2_loc = np.zeros_like(x1_loc)
     z1_loc = np.zeros_like(x1_loc)
     z2_loc = np.zeros_like(x1_loc)
-    i1_loc = np.zeros_like(x1_loc, dtype=int)
-    i2_loc = np.zeros_like(x1_loc, dtype=int)
+    i1_loc = np.ones_like(x1_loc, dtype=int) * -1
+    i2_loc = np.ones_like(x1_loc, dtype=int) * -1
     m1_loc = np.zeros_like(x1_loc)
     m2_loc = np.zeros_like(x1_loc)
     a1_loc = np.zeros_like(x1_loc)
@@ -158,10 +158,32 @@ for istep, nstep in enumerate(nsteps):
             a2_loc[iparticle] = particle.a
         else:
             ireduce += 1
-    # Safeguards
+    # Fix Order 01
+    x1_loc = x1_loc[i1_loc.argsort()]
+    y1_loc = y1_loc[i1_loc.argsort()]
+    z1_loc = z1_loc[i1_loc.argsort()]
+    m1_loc = m1_loc[i1_loc.argsort()]
+    a1_loc = a1_loc[i1_loc.argsort()]
+    i1_loc = i1_loc[i1_loc.argsort()]
+    # Fix Order 02
+    x2_loc = x2_loc[i2_loc.argsort()]
+    y2_loc = y2_loc[i2_loc.argsort()]
+    z2_loc = z2_loc[i2_loc.argsort()]
+    m2_loc = m2_loc[i2_loc.argsort()]
+    a2_loc = a2_loc[i2_loc.argsort()]
+    i2_loc = i2_loc[i2_loc.argsort()]
+    # Safeguard 01
+    if (i1_loc==-1).any() or (i2_loc==-1).any():
+        print "!! Lost Particles"
+        i1_in_i2 = np.in1d(i1_loc[i1_loc != -1], i2_loc[i2_loc != -1])
+        i2_in_i1 = np.in1d(i2_loc[i2_loc != -1], i1_loc[i1_loc != -1])
+        print "!! IDs in Snap01, Not in Snap 02 -- %s" % i1_loc[~i1_in_i2]
+        print "!! IDs in Snap02, Not in Snap 01 -- %s"  % i2_loc[~i2_in_i1]
+        sys.exit()
+    # Safeguard 02
     for iidx, idx in enumerate(i1_loc):
         if i1_loc[iidx] != i2_loc[iidx]:
-            print "!! Particle ID Mismatch (%i != %i)" % \
+            print "!! Particle IDs Unaligned (%i != %i)" % \
                 (i1_loc[iidx], i2_loc[iidx])
             sys.exit()
     # Append
