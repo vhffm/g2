@@ -5,6 +5,9 @@ Writes new output file (>stdout).
 
 Usage:
 python modpart.py --pid 123 --factor 1.1 < $infile > $outfile
+
+Note:
+If --pid < 0, all particles are modified.
 """
 
 import sys
@@ -25,7 +28,10 @@ lines_in = sys.stdin.read().rstrip("\n").split("\n")
 lines_out = []
 for line in lines_in:
     line = line.split()
-    if int(line[1]) == args.pid:
+    if args.pid >= 0:
+        if int(line[1]) == args.pid:
+            line[2] = str(float(line[2]) * args.factor)
+    else:
         line[2] = str(float(line[2]) * args.factor)
     line = " ".join(line) + " "
     lines_out.append(line)
