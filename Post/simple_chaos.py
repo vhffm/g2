@@ -22,6 +22,8 @@ group.add_argument('--custom', type=int, nargs='+', \
                    help="Plot Custom Snapshot.")
 parser.add_argument('--outfile', default='XChaos.npz', \
                     help="Output File Name.")
+parser.add_argument('--ignore', type=int, nargs='+', \
+                    help="Particle IDs to Ignore.")
 args = parser.parse_args()
 
 # Sanity Check
@@ -78,6 +80,12 @@ print "// %i Particles Found" % nparts
 if found_saturn and found_jupiter:
     print "// Found Jupiter and Saturn"
     nparts -= 2
+if args.ignore:
+    print "// Ignoring %i Particles" % len(args.ignore)
+    nparts -= len(args.ignore)
+else:
+    print "// No Particles to Ignore"
+    args.ignore = []
 
 # Compute time array
 dt = 6.0
@@ -126,7 +134,8 @@ for istep, nstep in enumerate(nsteps):
     for iparticle, particle in enumerate(snap1.particles):
         iparticle -= ireduce
         # Skip Jupiter and Saturn (ID 2000 and 2001)
-        if int(particle.id) < 2000:
+        # Skip Particles in Ignore List
+        if int(particle.id) < 2000 and not int(particle.id) in args.ignore:
             i1_loc[iparticle] = int(particle.id)
             x1_loc[iparticle] = particle.x
             y1_loc[iparticle] = particle.y
@@ -139,7 +148,8 @@ for istep, nstep in enumerate(nsteps):
     for iparticle, particle in enumerate(snap2.particles):
         iparticle -= ireduce
         # Skip Jupiter and Saturn (ID 2000 and 2001)
-        if int(particle.id) < 2000:
+        # Skip Particles in Ignore List
+        if int(particle.id) < 2000 and not int(particle.id) in args.ignore:
             i2_loc[iparticle] = int(particle.id)
             x2_loc[iparticle] = particle.x
             y2_loc[iparticle] = particle.y
