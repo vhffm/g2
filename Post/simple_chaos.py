@@ -81,7 +81,7 @@ if found_saturn and found_jupiter:
     print "// Found Jupiter and Saturn"
     nparts -= 2
 if args.ignore:
-    print "// Ignoring %i Particles" % len(args.ignore)
+    print "// Ignoring %i Particle(s) -- %s" % (len(args.ignore), args.ignore)
     nparts -= len(args.ignore)
 else:
     print "// No Particles to Ignore"
