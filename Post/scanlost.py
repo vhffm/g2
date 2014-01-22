@@ -6,6 +6,7 @@ import numpy as np
 import argparse
 import sys
 from glob import glob
+from copy import copy
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
@@ -40,24 +41,38 @@ for istep, nstep in enumerate(nsteps):
     npz = np.load('Snapshot_%012d.npz' % nstep)
     snap = npz['snapshot'][()]
     npart = snap.nparticles
-    
-    # Write particles IDs, then sort
-    pid = np.zeros(npart, dtype=int)
-    for iparticle, particle in enumerate(snap.particles):
-        pid[iparticle] = particle.id
 
-    # Compare
+    # Skip if first
     if not first:
+
+        # Precheck if npart matches
+        if npart < npart_last:
+        
+            # Load particles IDs
+            pid = np.zeros(npart, dtype=int)
+            for iparticle, particle in enumerate(snap.particles):
+                pid[iparticle] = particle.id
+
+        # Compare
         last_in_now = np.in1d(pid_last, pid)
         # Print if we lost particles
         if (~last_in_now).any():
             print "// Step %i / Lost IDs %s" % (nstep, pid_last[~last_in_now])
 
-    # Prepare next iteration
-    pid_last = pid.copy()
+        # Prepare next iteration
+        pid_last = pid.copy()
+        npart_last = copy(npart)
 
-    # Unset first
+    # First run
     if first:
+        # Load particles IDs
+        pid = np.zeros(npart, dtype=int)
+        for iparticle, particle in enumerate(snap.particles):
+            pid[iparticle] = particle.id
+        # Copy stuff
+        pid_last = pid.copy()
+        npart_last = copy(npart)
         first = False
+
 
 print "// Done"
