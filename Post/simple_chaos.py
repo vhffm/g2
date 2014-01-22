@@ -161,7 +161,8 @@ for istep, nstep in enumerate(nsteps):
     # Safeguards
     for iidx, idx in enumerate(i1_loc):
         if i1_loc[iidx] != i2_loc[iidx]:
-            print "!! Particle ID Mismatch"
+            print "!! Particle ID Mismatch (%i != %i)" % \
+                (i1_loc[iidx], i2_loc[iidx])
             sys.exit()
     # Append
     x1[istep,:] = x1_loc; y1[istep,:] = y1_loc; z1[istep,:] = z1_loc; m1[istep,:] = m1_loc
