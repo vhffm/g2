@@ -68,9 +68,9 @@ for istep, nstep in enumerate(nsteps):
     snap = npz['snapshot'][()]
     for iparticle, particle in enumerate(snap.particles):
         if int(particle.id) == args.pid:
-            x = particle.x
-            y = particle.y
-            z = particle.z
+            x[istep] = particle.x
+            y[istep] = particle.y
+            z[istep] = particle.z
             break
 print "// Done -- %s UTC" % strftime("%H:%M:%S", gmtime())
 
