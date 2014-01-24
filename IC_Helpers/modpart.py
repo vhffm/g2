@@ -23,6 +23,8 @@ parser.add_argument('--factor', type=float, \
                     help="Mass Adjustment Factor.", required=True)
 parser.add_argument('--milkshake', action='store_true', \
                     help="Shake It, Baby! Requires --pid < 0.")
+parser.add_argument('--ic', action='store_true', \
+                    help="Initial Conditions?")
 args = parser.parse_args()
 
 # Read lines from stdin
@@ -52,7 +54,10 @@ for line in lines_in:
             line[9] = str(float(line[9]) * factor[6])
         else:
             line[2] = str(float(line[2]) * args.factor)
-    line = " ".join(line) + " "
+    line = " ".join(line)
+    # Append space for outputs.
+    if not args.ic:
+        line = line + " "
     lines_out.append(line)
 
 # Dump to stdout
