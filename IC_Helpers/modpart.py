@@ -44,14 +44,16 @@ for line in lines_in:
             # Values is between factor and 1-(1-factor).
             # Factor must be > 1.
             # E.g. - Factor = 1.1, 2 - Factor = 2 - 1.1 = 0.9
-            factor = np.random.uniform(args.factor, 2-args.factor, 7)
-            line[2] = str(float(line[2]) * factor[0])
-            line[4] = str(float(line[4]) * factor[1])
-            line[5] = str(float(line[5]) * factor[2])
-            line[6] = str(float(line[6]) * factor[3])
-            line[7] = str(float(line[7]) * factor[4])
-            line[8] = str(float(line[8]) * factor[5])
-            line[9] = str(float(line[9]) * factor[6])
+            # Don't Shake Jupiter/Saturn [PID 2000, 2001]
+            if int(line[1]) < 2000:
+                factor = np.random.uniform(args.factor, 2-args.factor, 7)
+                line[2] = str(float(line[2]) * factor[0])
+                line[4] = str(float(line[4]) * factor[1])
+                line[5] = str(float(line[5]) * factor[2])
+                line[6] = str(float(line[6]) * factor[3])
+                line[7] = str(float(line[7]) * factor[4])
+                line[8] = str(float(line[8]) * factor[5])
+                line[9] = str(float(line[9]) * factor[6])
         else:
             line[2] = str(float(line[2]) * args.factor)
     line = " ".join(line)
