@@ -28,7 +28,7 @@ if args.all:
         nsteps[ii] = int(gg.split('.npz')[0].split('/')[-1].split('_')[1])
     print "// Found %i Snapshots" % len(nsteps)
 if args.custom:
-    # Build Snapshot Number Array (Form Input)
+    # Build Snapshot Number Array (From Input)
     nsteps = \
         np.mgrid[args.custom[0]:args.custom[1]+args.custom[2]:args.custom[2]]
     print "// Using Snapshots %012d:%012d:%012d" % \
