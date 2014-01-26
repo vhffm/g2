@@ -300,7 +300,9 @@ np.savez(args.outfile, \
     lce = lce, \
     ltime = ltime, \
     x1 = x1, y1 = y1, z1 = z1, \
+    x2 = x2, y2 = y2, z2 = z2, \
     a1 = a1, m1 = m1, i1_loc = i1_loc, \
+    a2 = a2, m2 = m2, i2_loc = i2_loc, \
     a0_bin_edges = bin_edges, \
     a0_bin_cents = bin_cents, \
     ds_mean = ds_mean, ds_std = ds_std, \
