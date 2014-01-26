@@ -49,10 +49,10 @@ for iparticle, particle in enumerate(snap_last.particles):
     pids_last[iparticle] = particle.id
 
 # Compare 
-last_in_first = np.in1d(pids_last, pids_first)
+first_in_last = np.in1d(pids_first, pids_last)
 # Print if we lost particles
 if (~last_in_first).any():
-    print "// Lost particles %s" % pid_last[~last_in_first]
+    print "// Lost particles %s" % pids_first[~first_in_last]
 else:
     print "// No particles lost"
 
