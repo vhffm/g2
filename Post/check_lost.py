@@ -1,5 +1,5 @@
 """
-Scan which particles are lost between two given outputs.
+Check which particles are lost between two given outputs.
 """
 
 import numpy as np
