@@ -12,9 +12,9 @@ from copy import copy
 parser = argparse.ArgumentParser()
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--all', action='store_true', \
-                   help="Plot Full Set of Snapshots.")
+                   help="Full Snapshot Range.")
 group.add_argument('--custom', type=int, nargs='+', \
-                   help="Plot Custom Snapshot.")
+                   help="Custom Snapshot Range.")
 args = parser.parse_args()
 
 # Generate Snapshot Array
