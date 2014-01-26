@@ -1,5 +1,5 @@
 """
-Scan which particles are lost from successive outputs.
+Scan which particles are lost between two given outputs.
 """
 
 import numpy as np
@@ -34,45 +34,26 @@ if args.custom:
     print "// Using Snapshots %012d:%012d:%012d" % \
         ( args.custom[0], args.custom[1], args.custom[2] )
 
-# Loop snapshots
-first = True
-for istep, nstep in enumerate(nsteps):
-    # Load Snapshot
-    npz = np.load('Snapshot_%012d.npz' % nstep)
-    snap = npz['snapshot'][()]
-    npart = snap.nparticles
+# Load particle IDs for first snapshot
+npz_first = np.load('Snapshot_%012d.npz' % nsteps[0])
+snap_first = npz_first['snapshot'][()]
+pids_first = np.zeros(snap_first.nparticles, dtype=int)
+for iparticle, particle in enumerate(snap_first.particles):
+    pids_first[iparticle] = particle.id
 
-    # Skip if first
-    if not first:
+# Load particle IDs for last snapshot
+npz_last = np.load('Snapshot_%012d.npz' % nsteps[-1])
+snap_last = npz_last['snapshot'][()]
+pids_last = np.zeros(snap_last.nparticles, dtype=int)
+for iparticle, particle in enumerate(snap_last.particles):
+    pids_last[iparticle] = particle.id
 
-        # Precheck if npart matches
-        if npart < npart_last:
-        
-            # Load particles IDs
-            pid = np.zeros(npart, dtype=int)
-            for iparticle, particle in enumerate(snap.particles):
-                pid[iparticle] = particle.id
-
-        # Compare
-        last_in_now = np.in1d(pid_last, pid)
-        # Print if we lost particles
-        if (~last_in_now).any():
-            print "// Step %i / Lost IDs %s" % (nstep, pid_last[~last_in_now])
-
-        # Prepare next iteration
-        pid_last = pid.copy()
-        npart_last = copy(npart)
-
-    # First run
-    if first:
-        # Load particles IDs
-        pid = np.zeros(npart, dtype=int)
-        for iparticle, particle in enumerate(snap.particles):
-            pid[iparticle] = particle.id
-        # Copy stuff
-        pid_last = pid.copy()
-        npart_last = copy(npart)
-        first = False
-
+# Compare 
+last_in_first = np.in1d(pids_last, pids_first)
+# Print if we lost particles
+if (~last_in_first).any():
+    print "// Lost particles %s" % pid_last[~last_in_first]
+else:
+    print "// No particles lost"
 
 print "// Done"
