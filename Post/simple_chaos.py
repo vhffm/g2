@@ -108,6 +108,21 @@ m2 = np.zeros_like(x1)
 a1 = np.zeros_like(x1)
 a2 = np.zeros_like(x1)
 
+phase1 = np.zeros_like(x1)
+phase2 = np.zeros_like(x2)
+
+eccen1 = np.zeros_like(x1)
+eccen2 = np.zeros_like(x1)
+
+Omega1 = np.zeros_like(x1)
+Omega2 = np.zeros_like(x1)
+
+omega1 = np.zeros_like(x1)
+omega2 = np.zeros_like(x1)
+
+incli1 = np.zeros_like(x1)
+incli2 = np.zeros_like(x1)
+
 print "// Starting -- %s UTC" % strftime("%H:%M:%S", gmtime())
 for istep, nstep in enumerate(nsteps):
     # Status
@@ -130,6 +145,16 @@ for istep, nstep in enumerate(nsteps):
     m2_loc = np.zeros_like(x1_loc)
     a1_loc = np.zeros_like(x1_loc)
     a2_loc = np.zeros_like(x1_loc)
+    phase1_loc = np.zeros_like(x1_loc)
+    phase2_loc = np.zeros_like(x1_loc)
+    eccen1_loc = np.zeros_like(x1_loc)
+    eccen2_loc = np.zeros_like(x1_loc)
+    Omega1_loc = np.zeros_like(x1_loc)
+    Omega2_loc = np.zeros_like(x1_loc)
+    omega1_loc = np.zeros_like(x1_loc)
+    omega2_loc = np.zeros_like(x1_loc)
+    incli1_loc = np.zeros_like(x1_loc)
+    incli2_loc = np.zeros_like(x1_loc)
     ireduce = 0
     for iparticle, particle in enumerate(snap1.particles):
         iparticle -= ireduce
@@ -142,6 +167,11 @@ for istep, nstep in enumerate(nsteps):
             z1_loc[iparticle] = particle.z
             m1_loc[iparticle] = particle.m
             a1_loc[iparticle] = particle.a
+            phase1_loc[iparticle] = particle.M0
+            eccen1_loc[iparticle] = particle.ecc
+            Omega1_loc[iparticle] = particle.Omega
+            omega1_loc[iparticle] = particle.omega
+            incli1_loc[iparticle] = particle.inc
         else:
             ireduce += 1
     ireduce = 0
@@ -156,6 +186,11 @@ for istep, nstep in enumerate(nsteps):
             z2_loc[iparticle] = particle.z
             m2_loc[iparticle] = particle.m
             a2_loc[iparticle] = particle.a
+            phase2_loc[iparticle] = particle.M0
+            eccen2_loc[iparticle] = particle.ecc
+            Omega2_loc[iparticle] = particle.Omega
+            omega2_loc[iparticle] = particle.omega
+            incli2_loc[iparticle] = particle.inc
         else:
             ireduce += 1
     # Fix Order 01
@@ -164,6 +199,11 @@ for istep, nstep in enumerate(nsteps):
     z1_loc = z1_loc[i1_loc.argsort()]
     m1_loc = m1_loc[i1_loc.argsort()]
     a1_loc = a1_loc[i1_loc.argsort()]
+    phase1_loc = phase1_loc[i1_loc.argsort()]
+    eccen1_loc = eccen1_loc[i1_loc.argsort()]
+    Omega1_loc = Omega1_loc[i1_loc.argsort()]
+    omega1_loc = omega1_loc[i1_loc.argsort()]
+    incli1_loc = incli1_loc[i1_loc.argsort()]
     i1_loc = i1_loc[i1_loc.argsort()]
     # Fix Order 02
     x2_loc = x2_loc[i2_loc.argsort()]
@@ -171,6 +211,11 @@ for istep, nstep in enumerate(nsteps):
     z2_loc = z2_loc[i2_loc.argsort()]
     m2_loc = m2_loc[i2_loc.argsort()]
     a2_loc = a2_loc[i2_loc.argsort()]
+    phase2_loc = phase2_loc[i2_loc.argsort()]
+    eccen2_loc = eccen2_loc[i2_loc.argsort()]
+    Omega2_loc = Omega2_loc[i2_loc.argsort()]
+    omega2_loc = omega2_loc[i2_loc.argsort()]
+    incli2_loc = incli2_loc[i2_loc.argsort()]
     i2_loc = i2_loc[i2_loc.argsort()]
     # Safeguard 01
     if (i1_loc==-1).any() or (i2_loc==-1).any():
@@ -188,7 +233,17 @@ for istep, nstep in enumerate(nsteps):
             sys.exit()
     # Append
     x1[istep,:] = x1_loc; y1[istep,:] = y1_loc; z1[istep,:] = z1_loc; m1[istep,:] = m1_loc
+    phase1[istep,:] = phase1_loc
+    eccen1[istep,:] = eccen1_loc
+    Omega1[istep,:] = Omega1_loc
+    omega1[istep,:] = omega1_loc
+    incli1[istep,:] = incli1_loc
     x2[istep,:] = x2_loc; y2[istep,:] = y2_loc; z2[istep,:] = z2_loc; m2[istep,:] = m2_loc
+    phase2[istep,:] = phase2_loc
+    eccen2[istep,:] = eccen2_loc
+    Omega2[istep,:] = Omega2_loc
+    omega2[istep,:] = omega2_loc
+    incli2[istep,:] = incli2_loc
     a1[istep,:] = a1_loc; a2[istep,:] = a2_loc
 print "// Done -- %s UTC" % strftime("%H:%M:%S", gmtime())
 
@@ -303,6 +358,10 @@ np.savez(args.outfile, \
     x2 = x2, y2 = y2, z2 = z2, \
     a1 = a1, m1 = m1, i1_loc = i1_loc, \
     a2 = a2, m2 = m2, i2_loc = i2_loc, \
+    phase1 = phase1, ecc1 = eccen1, inc1 = incli1, \
+    phase2 = phase2, ecc2 = eccen2, inc2 = incli2, \
+    Omega1 = Omega1, omega1 = omega1, \
+    Omega2 = Omega2, omega2 = omega2, \
     a0_bin_edges = bin_edges, \
     a0_bin_cents = bin_cents, \
     ds_mean = ds_mean, ds_std = ds_std, \
