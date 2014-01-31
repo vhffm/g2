@@ -33,17 +33,20 @@ int main(int argc, char*argv[]){
 
     // Open input file
     if (ssioOpen(inputfilename, &ssio_in, SSIO_READ)) {
-        printf("Could not open InFile:%s\n", inputfilename);
+        printf("Could not open input file: %s\n", inputfilename);
+        exit(1);
     }
 
     // Open output file
     if (ssioOpen(outputfilename, &ssio_out, SSIO_WRITE)) {
-        printf("Could not open InFile:%s\n", outputfilename);
+        printf("Could not open output file: %s\n", outputfilename);
+        exit(1);
     }
 
     // Open header from input
     if (ssioHead(&ssio_in, &head)) {
-        printf("Could not read header of InFile:%s\n", inputfilename);
+        printf("Could not read header of input file: %s\n", inputfilename);
+        exit(1);
     }
 
     // Write header for output
@@ -56,7 +59,8 @@ int main(int argc, char*argv[]){
     for (i = 0; i < head.n_data; ++i){
         // Load input data
         if (ssioData(&ssio_in, &data)) {
-            printf("Could not read data of InFile:%s\n", inputfilename);
+            printf("Could not read data of input file: %s\n", inputfilename);
+            exit(1);
         }
 
         // Print data before shifting
