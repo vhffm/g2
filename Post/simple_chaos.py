@@ -24,7 +24,18 @@ parser.add_argument('--outfile', default='XChaos.npz', \
                     help="Output File Name.")
 parser.add_argument('--ignore', type=int, nargs='+', \
                     help="Particle IDs to Ignore.")
+group2 = parser.add_mutually_exclusive_group(required=True)
+group2.add_argument('--genga', action='store_true', \
+                    help="Genga Outputs.")
+group2.add_argument('--pkd', action='store_true', \
+                    help="Pkdgrav_Planet Outputs.")
 args = parser.parse_args()
+
+# Info On Output
+if args.genga:
+    print "// Assuming Genga Output"
+elif args.pkd:
+    print "// Assuming Pkdgrav_Planet Output"
 
 # Sanity Check
 if args.custom:
@@ -70,11 +81,12 @@ npz0 = np.load('%s/Snapshot_%012d.npz' % (dirs[0], nsteps[0]))
 snap0 = npz0['snapshot'][()]
 found_saturn = False
 found_jupiter = False
-for particle in snap0.particles:
-    if particle.id == 2000:
-        found_jupiter = True
-    if particle.id == 2001:
-        found_saturn = True
+if args.genga:
+    for particle in snap0.particles:
+        if particle.id == 2000:
+            found_jupiter = True
+        if particle.id == 2001:
+            found_saturn = True
 nparts = npz0['snapshot'][()].nparticles
 print "// %i Particles Found" % nparts
 if found_saturn and found_jupiter:
