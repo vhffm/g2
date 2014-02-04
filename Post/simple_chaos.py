@@ -89,9 +89,12 @@ if args.genga:
             found_saturn = True
 nparts = npz0['snapshot'][()].nparticles
 print "// %i Particles Found" % nparts
+if not args.ignore:
+    args.ignore = []
 if found_saturn and found_jupiter:
     print "// Found Jupiter and Saturn"
-    nparts -= 2
+    args.ignore.append(2000)
+    args.ignore.append(2001)
 if args.ignore:
     print "// Ignoring %i Particle(s) -- %s" % (len(args.ignore), args.ignore)
     nparts -= len(args.ignore)
@@ -170,9 +173,8 @@ for istep, nstep in enumerate(nsteps):
     ireduce = 0
     for iparticle, particle in enumerate(snap1.particles):
         iparticle -= ireduce
-        # Skip Jupiter and Saturn (ID 2000 and 2001)
         # Skip Particles in Ignore List
-        if int(particle.id) < 2000 and not int(particle.id) in args.ignore:
+        if not int(particle.id) in args.ignore:
             i1_loc[iparticle] = int(particle.id)
             x1_loc[iparticle] = particle.x
             y1_loc[iparticle] = particle.y
@@ -189,9 +191,8 @@ for istep, nstep in enumerate(nsteps):
     ireduce = 0
     for iparticle, particle in enumerate(snap2.particles):
         iparticle -= ireduce
-        # Skip Jupiter and Saturn (ID 2000 and 2001)
         # Skip Particles in Ignore List
-        if int(particle.id) < 2000 and not int(particle.id) in args.ignore:
+        if not int(particle.id) in args.ignore:
             i2_loc[iparticle] = int(particle.id)
             x2_loc[iparticle] = particle.x
             y2_loc[iparticle] = particle.y
