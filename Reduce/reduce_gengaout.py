@@ -13,9 +13,15 @@ parser.add_argument("--ellipses", action='store_true', \
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--all', action='store_true', \
                    help="Reduce Full Set of Snapshots.")
-group.add_argument('--test', action='store_true', \
-                   help="Reduce Test Set of Snapshots.")
+group.add_argument('--custom', type=int, nargs='+', \
+                   help="Plot Custom Snapshot.")
 args = parser.parse_args()
+
+# Sanity Check
+if args.custom:
+    if not len(args.custom) == 3:
+        print "!! Output set must be defined by three numbers."
+        sys.exit()
 
 # Full Set
 if args.all:
@@ -26,9 +32,13 @@ if args.all:
         nstep = int(g.split(".")[0].split("_")[-1])
         nsteps.append(nstep)
 
-# Test Set
-if args.test:
-    nsteps = np.mgrid[3600000000:3630000000:1000000]
+# Custom Set
+if args.custom:
+    # Build Output Number Array (From Input)
+    nsteps = \
+        np.mgrid[args.custom[0]:args.custom[1]+args.custom[2]:args.custom[2]]
+    print "// Using Outputs %012d:%012d:%012d" % \
+        ( args.custom[0], args.custom[1], args.custom[2] )
 
 # Load, Reduce, Save
 print "// Starting -- %s UTC" % strftime("%H:%M:%S", gmtime())
