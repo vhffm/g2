@@ -3,7 +3,7 @@ CC=gcc -Wall -ansi -pedantic
 all: modpart_ssic
 
 modpart_ssic: modpart_ssic.o ssio.o
-	$(CC) -o modpart_ssic modpart_ssic.o ssio.o 
+	$(CC) -o modpart_ssic modpart_ssic.o ssio.o -lm
 
 ssio.o: ssio.c
 	$(CC) -c ssio.c
