@@ -1,5 +1,5 @@
 /*
- ** modpart_ssic.c -- VH 30-01-2014
+ ** modpart_ssic.c -- VH 05-02-2014
  ** =====
  ** Shifts all coordinates in pkdgrav_planet IC file by a random amount.
  */
@@ -7,6 +7,8 @@
 #include "ssio.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <math.h>
 
 int main(int argc, char*argv[]){
 
@@ -24,6 +26,9 @@ int main(int argc, char*argv[]){
     float shift_x;
     float shift_y;
     float shift_z;
+
+    // RNG seed 
+    srand(pow(time(NULL), 2));
 
     sprintf(inputfilename, "ssic.ss");
     sprintf(outputfilename, "ssic_shifted.ss");
