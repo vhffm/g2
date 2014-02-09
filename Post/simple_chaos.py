@@ -24,6 +24,8 @@ parser.add_argument('--outfile', default='XChaos.npz', \
                     help="Output File Name.")
 parser.add_argument('--ignore', type=int, nargs='+', \
                     help="Particle IDs to Ignore.")
+parser.add_argument('-v', '--verbose', action="store_true", \
+                    help="Show Verbose Output (Particle IDs).")
 group2 = parser.add_mutually_exclusive_group(required=True)
 group2.add_argument('--genga', action='store_true', \
                     help="Genga Outputs.")
@@ -120,15 +122,21 @@ first_in_last_mask_d1 = np.in1d(pids_d1_first, pids_d1_last)
 # Make list of detected particles to ignore
 ignore_auto = []
 if (~first_in_last_mask_d0).any():
-    print "// Lost %i Particles in Dir 00 -- %s" % \
-        ( len(pids_d0_first[~first_in_last_mask_d0]), \
-          pids_d0_first[~first_in_last_mask_d0] )
+    print "// Lost %i Particle(s) in Dir 00" % \
+        len(pids_d0_first[~first_in_last_mask_d0])
     ignore_auto.extend(pids_d0_first[~first_in_last_mask_d0])
+    if args.verbose:
+        print ""
+        print pids_d0_first[~first_in_last_mask_d0]
+        print ""
 if (~first_in_last_mask_d1).any():
     print "// Lost %i Particles in Dir 01 -- %s" % \
-        ( len(pids_d1_first[~first_in_last_mask_d1]), \
-          pids_d1_first[~first_in_last_mask_d1] )
+        len(pids_d1_first[~first_in_last_mask_d1])
     ignore_auto.extend(pids_d1_first[~first_in_last_mask_d1])
+    if args.verbose:
+        print ""
+        print pids_d1_first[~first_in_last_mask_d1]
+        print ""
 
 #
 # END IGNORE AUTO-DETECT
@@ -161,11 +169,21 @@ ignore = set(ignore)
 nparts -= len(ignore)
 
 # Some Info
-print "// Auto Ignoring %i Particle(s) -- %s" % \
-    (len(ignore_auto), ignore_auto)
-print "// Manually Ignoring %i Particle(s) -- %s" % \
-    (len(ignore_manual), ignore_manual)
-print "// Ignoring %i Particle(s) -- %s" % (len(ignore), ignore)
+print "// Auto Ignoring %i Particle(s)" % len(ignore_auto)
+if args.verbose:
+    print ""
+    print ignore_auto
+    print ""
+print "// Manually Ignoring %i Particle(s)" % len(ignore_manual)
+if args.verbose:
+    print ""
+    print ignore_manual
+    print ""
+print "// Ignoring %i Particle(s) in Total" % len(ignore)
+if args.verbose:
+    print ""
+    print ignore
+    print ""
 
 # Compute time array
 dt = 6.0
