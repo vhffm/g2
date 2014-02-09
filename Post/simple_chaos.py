@@ -130,7 +130,7 @@ if (~first_in_last_mask_d0).any():
         print pids_d0_first[~first_in_last_mask_d0]
         print ""
 if (~first_in_last_mask_d1).any():
-    print "// Lost %i Particles in Dir 01 -- %s" % \
+    print "// Lost %i Particle(s) in Dir 01" % \
         len(pids_d1_first[~first_in_last_mask_d1])
     ignore_auto.extend(pids_d1_first[~first_in_last_mask_d1])
     if args.verbose:
