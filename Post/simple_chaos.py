@@ -76,6 +76,64 @@ if args.custom:
     print "// Using Snapshots %012d:%012d:%012d" % \
         ( args.custom[0], args.custom[1], args.custom[2] )
 
+#
+# BEGIN IGNORE AUTO-DETECT
+# 
+# Detect particles we should ignore
+# Adapted from check_lost.py
+#
+
+# Load first snapshot in first dir
+npz_d0_first  = np.load('%s/Snapshot_%012d.npz' % (dirs[0], nsteps[0]))
+snap_d0_first = npz_d0_first['snapshot'][()]
+pids_d0_first = np.zeros(snap_d0_first.nparticles, dtype=int)
+for iparticle, particle in enumerate(snap_d0_first.particles):
+    pids_d0_first[iparticle] = particle.id
+
+# Load last snapshot in first dir
+npz_d0_last  = np.load('%s/Snapshot_%012d.npz' % (dirs[0], nsteps[-1]))
+snap_d0_last = npz_d0_last['snapshot'][()]
+pids_d0_last = np.zeros(snap_d0_last.nparticles, dtype=int)
+for iparticle, particle in enumerate(snap_d0_last.particles):
+    pids_d0_last[iparticle] = particle.id
+
+# Load first snapshot in second dir
+npz_d1_first  = np.load('%s/Snapshot_%012d.npz' % (dirs[1], nsteps[0]))
+snap_d1_first = npz_d1_first['snapshot'][()]
+pids_d1_first = np.zeros(snap_d1_first.nparticles, dtype=int)
+for iparticle, particle in enumerate(snap_d1_first.particles):
+    pids_d1_first[iparticle] = particle.id
+
+# Load last snapshot in second dir
+npz_d1_last  = np.load('%s/Snapshot_%012d.npz' % (dirs[1], nsteps[-1]))
+snap_d1_last = npz_d1_last['snapshot'][()]
+pids_d1_last = np.zeros(snap_d1_last.nparticles, dtype=int)
+for iparticle, particle in enumerate(snap_d1_last.particles):
+    pids_d1_last[iparticle] = particle.id
+
+# Compare first and last snapshot in first dir
+first_in_last_mask_d0 = np.in1d(pids_d0_first, pids_d0_last)
+
+# Compare first and last snapshot in second dir
+first_in_last_mask_d1 = np.in1d(pids_d1_first, pids_d1_last)
+
+# Make list of detected particles to ignore
+ignore_auto = []
+if (~first_in_last_mask_d0).any():
+    print "// Lost %i Particles in Dir 00 -- %s" % \
+        ( len(pids_d0_first[~first_in_last_mask_d0]), \
+          pids_d0_first[~first_in_last_mask_d0] )
+    ignore_auto.extend(pids_d0_first[~first_in_last_mask_d0])
+if (~first_in_last_mask_d1).any():
+    print "// Lost %i Particles in Dir 01 -- %s" % \
+        ( len(pids_d1_first[~first_in_last_mask_d1]), \
+          pids_d1_first[~first_in_last_mask_d1] )
+    ignore_auto.extend(pids_d1_first[~first_in_last_mask_d1])
+
+#
+# END IGNORE AUTO-DETECT
+# 
+
 # Scan number of particles
 npz0 = np.load('%s/Snapshot_%012d.npz' % (dirs[0], nsteps[0]))
 snap0 = npz0['snapshot'][()]
@@ -89,19 +147,25 @@ if args.genga:
             found_saturn = True
 nparts = npz0['snapshot'][()].nparticles
 print "// %i Particles Found" % nparts
-if not args.ignore:
-    args.ignore = []
+ignore_manual = []
 if found_saturn and found_jupiter:
     print "// Found Jupiter and Saturn"
-    args.ignore.append(2000)
-    args.ignore.append(2001)
+    ignore_manual.extend(2000)
+    ignore_manual.extend(2001)
 if args.ignore:
-    args.ignore = set(args.ignore)
-    print "// Ignoring %i Particle(s) -- %s" % (len(args.ignore), args.ignore)
-    nparts -= len(args.ignore)
-else:
-    print "// No Particles to Ignore"
-    args.ignore = []
+    ignore_manual.extend(args.ignore)
+
+# Build Master Ignore Set
+ignore = ignore_auto + ignore_manual
+ignore = set(ignore)
+nparts -= len(ignore)
+
+# Some Info
+print "// Auto Ignoring %i Particle(s) -- %s" % \
+    (len(ignore_auto), ignore_auto)
+print "// Manually Ignoring %i Particle(s) -- %s" % \
+    (len(ignore_manual), ignore_manual)
+print "// Ignoring %i Particle(s) -- %s" % (len(ignore), ignore)
 
 # Compute time array
 dt = 6.0
@@ -175,7 +239,7 @@ for istep, nstep in enumerate(nsteps):
     for iparticle, particle in enumerate(snap1.particles):
         iparticle -= ireduce
         # Skip Particles in Ignore List
-        if not int(particle.id) in args.ignore:
+        if not int(particle.id) in ignore:
             i1_loc[iparticle] = int(particle.id)
             x1_loc[iparticle] = particle.x
             y1_loc[iparticle] = particle.y
@@ -193,7 +257,7 @@ for istep, nstep in enumerate(nsteps):
     for iparticle, particle in enumerate(snap2.particles):
         iparticle -= ireduce
         # Skip Particles in Ignore List
-        if not int(particle.id) in args.ignore:
+        if not int(particle.id) in ignore:
             i2_loc[iparticle] = int(particle.id)
             x2_loc[iparticle] = particle.x
             y2_loc[iparticle] = particle.y
