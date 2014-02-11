@@ -158,8 +158,8 @@ print "// %i Particles Found" % nparts
 ignore_manual = []
 if found_saturn and found_jupiter:
     print "// Found Jupiter and Saturn"
-    ignore_manual.extend(2000)
-    ignore_manual.extend(2001)
+    ignore_manual.extend([2000])
+    ignore_manual.extend([2001])
 if args.ignore:
     ignore_manual.extend(args.ignore)
 
