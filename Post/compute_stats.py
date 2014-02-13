@@ -83,19 +83,19 @@ mass_avg = np.mean(mass, axis=0)
 mass_med = np.median(mass, axis=0)
 mass_std = np.std(mass, axis=0)
 mass_q25 = np.percentile(mass, 25, axis=0)
-mass_q75 = np.percentile(mass, 25, axis=0)
+mass_q75 = np.percentile(mass, 75, axis=0)
 
 mass_above_cutoff_avg = np.mean(mass_above_cutoff, axis=0)
 mass_above_cutoff_med = np.median(mass_above_cutoff, axis=0)
 mass_above_cutoff_std = np.std(mass_above_cutoff, axis=0)
 mass_above_cutoff_q25 = np.percentile(mass_above_cutoff, 25, axis=0)
-mass_above_cutoff_q75 = np.percentile(mass_above_cutoff, 25, axis=0)
+mass_above_cutoff_q75 = np.percentile(mass_above_cutoff, 75, axis=0)
 
 mass_below_cutoff_avg = np.mean(mass_below_cutoff, axis=0)
 mass_below_cutoff_med = np.median(mass_below_cutoff, axis=0)
 mass_below_cutoff_std = np.std(mass_below_cutoff, axis=0)
 mass_below_cutoff_q25 = np.percentile(mass_below_cutoff, 25, axis=0)
-mass_below_cutoff_q75 = np.percentile(mass_above_cutoff, 25, axis=0)
+mass_below_cutoff_q75 = np.percentile(mass_above_cutoff, 75, axis=0)
 
 # Process Particle Number
 print "// Computing Particle Number Stats"
