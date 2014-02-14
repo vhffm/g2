@@ -110,6 +110,8 @@ print "// Saving"
 np.savez("Stats.npz", \
     mass = mass, npart = npart, tout = tout, \
     mass_avg = mass_avg, mass_med = mass_med, mass_std = mass_std, \
+    mass_above_cutoff = mass_above_cutoff, \
+    mass_below_cutoff = mass_below_cutoff, \
     mass_above_cutoff_avg = mass_above_cutoff_avg, \
     mass_above_cutoff_med = mass_above_cutoff_med, \
     mass_above_cutoff_std = mass_above_cutoff_std, \
