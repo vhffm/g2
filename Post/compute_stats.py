@@ -95,7 +95,7 @@ mass_below_cutoff_avg = np.mean(mass_below_cutoff, axis=0)
 mass_below_cutoff_med = np.median(mass_below_cutoff, axis=0)
 mass_below_cutoff_std = np.std(mass_below_cutoff, axis=0)
 mass_below_cutoff_q25 = np.percentile(mass_below_cutoff, 25, axis=0)
-mass_below_cutoff_q75 = np.percentile(mass_above_cutoff, 75, axis=0)
+mass_below_cutoff_q75 = np.percentile(mass_below_cutoff, 75, axis=0)
 
 # Process Particle Number
 print "// Computing Particle Number Stats"
@@ -123,7 +123,7 @@ np.savez("Stats.npz", \
     mass_below_cutoff_q25 = mass_below_cutoff_q25, \
     mass_below_cutoff_q75 = mass_below_cutoff_q75, \
     npart_avg = npart_avg, npart_med = npart_med, npart_std = npart_std, \
-    mass_q25 = mass_q25, mass_75 = mass_q75, \
+    mass_q25 = mass_q25, mass_q75 = mass_q75, \
     npart_q25 = npart_q25, npart_q75 = npart_q75 \
     )
 
