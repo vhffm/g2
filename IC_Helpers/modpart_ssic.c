@@ -1,5 +1,5 @@
 /*
- ** modpart_ssic.c -- VH 17-02-2014
+ ** modpart_ssic.c -- VH 18-02-2014
  ** =====
  ** Shifts all coordinates in pkdgrav_planet IC file by a random amount.
  */
@@ -23,10 +23,10 @@ int main(int argc, char*argv[]){
 
     int i;
 
-    float factor;
-    float shift_x;
-    float shift_y;
-    float shift_z;
+    double factor;
+    double shift_x;
+    double shift_y;
+    double shift_z;
 
     /* RNG seed */
     srand(pow(time(NULL), 2));
@@ -73,10 +73,11 @@ int main(int argc, char*argv[]){
         /* printf("%.10g %d %.10g %.10g %.10g %.10g %.10g %.10g %.10g %.10g %.10g %.10g %.10g\n", head.time, data.org_idx, data.mass, data.radius, data.pos[0], data.pos[1], data.pos[2], data.vel[0], data.vel[1], data.vel[2], data.spin[0], data.spin[1], data.spin[2]); */
 
         /* Randomly shift coordinates */
+        /* With (double), the minimum factor is 1.0e-16; */
         factor = 1.0e-6;
-        shift_x = ((((float)rand()/(float)(RAND_MAX)) - 0.5) * factor) + 1;
-        shift_y = ((((float)rand()/(float)(RAND_MAX)) - 0.5) * factor) + 1;
-        shift_z = ((((float)rand()/(float)(RAND_MAX)) - 0.5) * factor) + 1;
+        shift_x = ((((double)rand()/(double)(RAND_MAX)) - 0.5) * factor) + 1;
+        shift_y = ((((double)rand()/(double)(RAND_MAX)) - 0.5) * factor) + 1;
+        shift_z = ((((double)rand()/(double)(RAND_MAX)) - 0.5) * factor) + 1;
         data.pos[0] *= shift_x;
         data.pos[1] *= shift_y;
         data.pos[2] *= shift_z;
