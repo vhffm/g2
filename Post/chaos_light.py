@@ -18,11 +18,12 @@ args = parser.parse_args()
 print "// Reading %s" % (args.infile,)
 npz_in = np.load(args.infile)
 ds = npz_in["ds"]
+a1 = npz_in["a1"]
 tt = npz_in["tt"]
 
 # Write
 print "// Writing %s" % (args.outfile,)
-np.savez(args.outfile, ds = ds, tt = tt[:,0])
+np.savez(args.outfile, ds = ds, tt = tt[:,0], a1 = a1[0,:])
 
 # Done
 print "// Done"
