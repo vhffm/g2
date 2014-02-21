@@ -22,7 +22,7 @@ tt = npz_in["tt"]
 
 # Write
 print "// Writing %s" % (args.outfile,)
-np.savez(args.outfile, ds = ds, tt = tt)
+np.savez(args.outfile, ds = ds, tt = tt[:,0])
 
 # Done
 print "// Done"
