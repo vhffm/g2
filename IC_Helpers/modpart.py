@@ -74,21 +74,21 @@ for line in lines_in:
             else:
                 line[2] = "%.16e" % (float(line[2]))
             if args.x:
-                line[4] = "% .16e" % (float(line[4]) * factor[1])
-                line[5] = "% .16e" % (float(line[5]) * factor[2])
-                line[6] = "% .16e" % (float(line[6]) * factor[3])
+                line[4] = "%+.16e" % (float(line[4]) * factor[1])
+                line[5] = "%+.16e" % (float(line[5]) * factor[2])
+                line[6] = "%+.16e" % (float(line[6]) * factor[3])
             else:
-                line[4] = "% .16e" % (float(line[4]))
-                line[5] = "% .16e" % (float(line[5]))
-                line[6] = "% .16e" % (float(line[6]))
+                line[4] = "%+.16e" % (float(line[4]))
+                line[5] = "%+.16e" % (float(line[5]))
+                line[6] = "%+.16e" % (float(line[6]))
             if args.v:
-                line[7] = "% .16e" % (float(line[7]) * factor[4])
-                line[8] = "% .16e" % (float(line[8]) * factor[5])
-                line[9] = "% .16e" % (float(line[9]) * factor[6])
+                line[7] = "%+.16e" % (float(line[7]) * factor[4])
+                line[8] = "%+.16e" % (float(line[8]) * factor[5])
+                line[9] = "%+.16e" % (float(line[9]) * factor[6])
             else:
-                line[7] = "% .16e" % (float(line[7]))
-                line[8] = "% .16e" % (float(line[8]))
-                line[9] = "% .16e" % (float(line[9]))
+                line[7] = "%+.16e" % (float(line[7]))
+                line[8] = "%+.16e" % (float(line[8]))
+                line[9] = "%+.16e" % (float(line[9]))
     else:
         if args.norand:
             factor = 1.0 + args.factor
@@ -100,21 +100,21 @@ for line in lines_in:
         else:
             line[2] = "%.16e" % (float(line[2]))
         if args.x:
-            line[4] = "% .16e" % (float(line[4]) * factor[1])
-            line[5] = "% .16e" % (float(line[5]) * factor[2])
-            line[6] = "% .16e" % (float(line[6]) * factor[3])
+            line[4] = "%+.16e" % (float(line[4]) * factor[1])
+            line[5] = "%+.16e" % (float(line[5]) * factor[2])
+            line[6] = "%+.16e" % (float(line[6]) * factor[3])
         else:
-            line[4] = "% .16e" % (float(line[4]))
-            line[5] = "% .16e" % (float(line[5]))
-            line[6] = "% .16e" % (float(line[6]))
+            line[4] = "%+.16e" % (float(line[4]))
+            line[5] = "%+.16e" % (float(line[5]))
+            line[6] = "%+.16e" % (float(line[6]))
         if args.v:
-            line[7] = "% .16e" % (float(line[7]) * factor[4])
-            line[8] = "% .16e" % (float(line[8]) * factor[5])
-            line[9] = "% .16e" % (float(line[9]) * factor[6])
+            line[7] = "%+.16e" % (float(line[7]) * factor[4])
+            line[8] = "%+.16e" % (float(line[8]) * factor[5])
+            line[9] = "%+.16e" % (float(line[9]) * factor[6])
         else:
-            line[7] = "% .16e" % (float(line[7]))
-            line[8] = "% .16e" % (float(line[8]))
-            line[9] = "% .16e" % (float(line[9]))
+            line[7] = "%+.16e" % (float(line[7]))
+            line[8] = "%+.16e" % (float(line[8]))
+            line[9] = "%+.16e" % (float(line[9]))
     line = " ".join(line)
     # Append space for outputs.
     if not args.ic:
