@@ -1,0 +1,73 @@
+*******************************************************************************
+Revised: Jul 31, 2013           Earth Barycenter                              3
+ 
+ Dynamical point:
+ ---------------
+ The common point about which the Earth and Moon revolve (center of mass). This
+ is approximately 4671 km from the center of the Earth, or about 3/4 of the way 
+ to the surface. See 399 for Earth center, or 301 for Moon center ephemeris.
+*******************************************************************************
+ 
+ 
+*******************************************************************************
+Ephemeris / WWW_USER Tue Mar 11 03:55:10 2014 Pasadena, USA      / Horizons    
+*******************************************************************************
+Target body name: Earth-Moon Barycenter (3)       {source: DE-0431LE-0431}
+Center body name: Sun (10)                        {source: DE-0431LE-0431}
+Center-site name: BODY CENTER
+*******************************************************************************
+Start time      : A.D. 2014-Jan-01 00:00:00.0000 CT 
+Stop  time      : A.D. 2014-Jan-02 00:00:00.0000 CT 
+Step-size       : 0 steps
+*******************************************************************************
+Center geodetic : 0.00000000,0.00000000,0.0000000 {E-lon(deg),Lat(deg),Alt(km)}
+Center cylindric: 0.00000000,0.00000000,0.0000000 {E-lon(deg),Dxy(km),Dz(km)}
+Center radii    : 696000.0 x 696000.0 x 696000.0 k{Equator, meridian, pole}    
+Output units    : AU-D                                                         
+Output format   : 02
+Reference frame : ICRF/J2000.0                                                 
+Output type     : GEOMETRIC cartesian states
+Coordinate systm: Ecliptic and Mean Equinox of Reference Epoch                 
+*******************************************************************************
+JDCT 
+   X     Y     Z
+   VX    VY    VZ
+*******************************************************************************
+$$SOE
+2456658.500000000 = A.D. 2014-Jan-01 00:00:00.0000 (CT)
+  -1.755892631180767E-01  9.675244647473001E-01 -2.982087484922890E-05
+  -1.720790967608183E-02 -3.136506579202296E-03  1.124453973959166E-07
+$$EOE
+*******************************************************************************
+Coordinate system description:
+
+  Ecliptic and Mean Equinox of Reference Epoch
+
+    Reference epoch: J2000.0
+    xy-plane: plane of the Earth's orbit at the reference epoch
+    x-axis  : out along ascending node of instantaneous plane of the Earth's
+              orbit and the Earth's mean equator at the reference epoch
+    z-axis  : perpendicular to the xy-plane in the directional (+ or -) sense
+              of Earth's north pole at the reference epoch.
+
+Symbol meaning [1 au=149597870.700 km, 1 day=86400.0 s]:
+
+    JDCT     Epoch Julian Date, Coordinate Time
+      X      x-component of position vector (AU)                               
+      Y      y-component of position vector (AU)                               
+      Z      z-component of position vector (AU)                               
+      VX     x-component of velocity vector (AU/day)                           
+      VY     y-component of velocity vector (AU/day)                           
+      VZ     z-component of velocity vector (AU/day)                           
+
+Geometric states/elements have no aberration corrections applied.
+
+ Computations by ...
+     Solar System Dynamics Group, Horizons On-Line Ephemeris System
+     4800 Oak Grove Drive, Jet Propulsion Laboratory
+     Pasadena, CA  91109   USA
+     Information: http://ssd.jpl.nasa.gov/
+     Connect    : telnet://ssd.jpl.nasa.gov:6775  (via browser)
+                  telnet ssd.jpl.nasa.gov 6775    (via command-line)
+     Author     : Jon.Giorgini@jpl.nasa.gov
+*******************************************************************************
