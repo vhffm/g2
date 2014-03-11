@@ -15,6 +15,9 @@ If --x, perturbs positions.
 If --v, perturbs velocities.
 If --pid < 0, all particles are modified.
 
+Note3:
+If --norand, the factor will be applied without randomizing the range.
+
 Format:
 line[0]        - t
 line[1]        - i
@@ -43,6 +46,8 @@ parser.add_argument("--x", action="store_true", \
                     help="Perturb Position")
 parser.add_argument("--v", action="store_true", \
                     help="Perturb Velocity")
+parser.add_argument('--norand', action='store_true', \
+                    help="No randomness. Just multiply by 1.0+factor.")
 args = parser.parse_args()
 
 # Sanity Check
@@ -59,7 +64,11 @@ for line in lines_in:
     line = line.split()
     if args.pid >= 0:
         if int(line[1]) == args.pid:
-            factor = np.random.uniform(1.0 - args.factor, 1.0 + args.factor, 7)
+            if args.norand:
+                factor = 1.0 + args.factor
+                factor = factor * np.ones(7, dtype='float64')
+            else:
+                factor = np.random.uniform(1.0 - args.factor, 1.0 + args.factor, 7)
             if args.m:
                 line[2] = str(float(line[2]) * factor[0])
             if args.x:
@@ -71,7 +80,11 @@ for line in lines_in:
                 line[8] = str(float(line[8]) * factor[5])
                 line[9] = str(float(line[9]) * factor[6])
     else:
-        factor = np.random.uniform(1.0 - args.factor, 1.0 + args.factor, 7)
+        if args.norand:
+            factor = 1.0 + args.factor
+            factor = factor * np.ones(7, dtype='float64')
+        else:
+            factor = np.random.uniform(1.0 - args.factor, 1.0 + args.factor, 7)
         if args.m:
             line[2] = str(float(line[2]) * factor[0])
         if args.x:
