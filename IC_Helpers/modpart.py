@@ -12,6 +12,9 @@ Perturbation factor is range (1.0 - args.factor, 1.0 + args.factor)
 Note2:
 If --m, perturbs mass.
 If --x, perturbs positions.
+If --xx, perturbs ONLY x position.
+   --xy,               y
+   --xz,               z
 If --v, perturbs velocities.
 If --pid < 0, all particles are modified.
 
@@ -44,6 +47,12 @@ parser.add_argument("--m", action="store_true", \
                     help="Perturb Mass")
 parser.add_argument("--x", action="store_true", \
                     help="Perturb Position")
+parser.add_argument("--xx", action="store_true", \
+                    help="Perturb X-Position")
+parser.add_argument("--xy", action="store_true", \
+                    help="Perturb Y-Position")
+parser.add_argument("--xz", action="store_true", \
+                    help="Perturb Z-Position")
 parser.add_argument("--v", action="store_true", \
                     help="Perturb Velocity")
 parser.add_argument('--norand', action='store_true', \
@@ -51,7 +60,7 @@ parser.add_argument('--norand', action='store_true', \
 args = parser.parse_args()
 
 # Sanity Check
-if not (args.m or args.x or args.v):
+if not (args.m or args.x or args.v or args.xx or args.xy or args.xz):
     raise Exception("Perturb what variable?")
 
 # Read lines from stdin
@@ -80,9 +89,11 @@ for line in lines_in:
                 factor = np.random.uniform(1.0 - args.factor, 1.0 + args.factor, 7)
             if args.m:
                 line[2] = "%.16e" % (float(line[2]) * factor[0])
-            if args.x:
+            if args.x or args.xx:
                 line[4] = "%+.16e" % (float(line[4]) * factor[1])
+            if args.x or args.xy:
                 line[5] = "%+.16e" % (float(line[5]) * factor[2])
+            if args.x or args.xz:
                 line[6] = "%+.16e" % (float(line[6]) * factor[3])
             if args.v:
                 line[7] = "%+.16e" % (float(line[7]) * factor[4])
@@ -96,9 +107,11 @@ for line in lines_in:
             factor = np.random.uniform(1.0 - args.factor, 1.0 + args.factor, 7)
         if args.m:
             line[2] = "%.16e" % (float(line[2]) * factor[0])
-        if args.x:
+        if args.x or args.xx:
             line[4] = "%+.16e" % (float(line[4]) * factor[1])
+        if args.x or args.xy:
             line[5] = "%+.16e" % (float(line[5]) * factor[2])
+        if args.x or args.xz:
             line[6] = "%+.16e" % (float(line[6]) * factor[3])
         if args.v:
             line[7] = "%+.16e" % (float(line[7]) * factor[4])
