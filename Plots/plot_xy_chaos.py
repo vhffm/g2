@@ -156,12 +156,12 @@ if args.custom:
 # ----------------------------------------------------------------------------
 # ----------------------------------------------------------------------------
 
-fig = plt.figure()
-
 # iparticle = np.array([1,6])
 iparticle = 2
 
 for istep in nsteps:
+    fig = plt.figure()
+    print "// Rendering Frame %06d/%06d" % (istep,nsteps[-1])
     for ii in [ 0, 1, 2 ]:
         ax = plt.subplot2grid((2,3), (0, ii))
         ax.set_aspect('equal')
@@ -220,3 +220,5 @@ for istep in nsteps:
     fig.suptitle("t=%.2f yr" % tt[0][istep,0], fontsize='small')
     fig.savefig("%06d.png" % istep)
     plt.close(fig)
+
+print "// Done"
