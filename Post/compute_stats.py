@@ -35,13 +35,6 @@ else:
         dirs.append(line)
     print "// Reading %i Directories" % len(dirs)
 
-#
-# BIG WARNING
-#
-# We assume that all directories have the same snapshot numbers sitting around.
-# The timestep of the simulations is also equal.
-#
-
 # Build Snapshot Number Array (From First Dir)
 print "// Building Snapshot Array"
 if args.all:
@@ -50,6 +43,19 @@ if args.all:
     nsteps = np.zeros(len(globs))
     for ii, gg in enumerate(globs):
         nsteps[ii] = int(gg.split('.npz')[0].split('/')[-1].split('_')[1])
+        globs[ii] = gg.split("/")[-1]
+
+print "// Verifying Snapshots"
+if args.all:
+    for dir_loc in dirs:
+        globs_loc = glob(dir_loc + "/" + "Snapshot_*.npz")
+        globs_loc = sorted(globs_loc)
+        for ii, gg in enumerate(globs_loc):
+            globs_loc[ii] = gg.split("/")[-1]
+        if not (globs == globs_loc):
+            print "!! Snapshots Differ. Terminating."
+            print "!! %s" % dir_loc
+            sys.exit(0)
 
 # Loop Dirs, Snaps, Particles
 tout = np.zeros_like(nsteps)
