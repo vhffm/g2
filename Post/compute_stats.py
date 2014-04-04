@@ -6,6 +6,7 @@ import numpy as np
 import argparse
 import sys
 from glob import glob
+from time import gmtime, strftime
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
@@ -64,7 +65,8 @@ mass_above_cutoff = np.zeros_like(mass)
 mass_below_cutoff = np.zeros_like(mass)
 npart = np.zeros([len(dirs),nsteps.shape[0]])
 for idir, dirchar in enumerate(dirs):
-    print "// Processing Directory %s [%i/%i]" % (dirchar, idir+1, len(dirs))
+    print "// (%s UTC) Processing Directory %s [%i/%i]" % \
+        (strftime("%H:%M:%S", gmtime()), dirchar, idir+1, len(dirs))
     for istep, nstep in enumerate(nsteps):
         try:
             npz = np.load('%s/Snapshot_%012d.npz' % (dirchar, nstep))
