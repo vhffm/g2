@@ -83,6 +83,11 @@ if not args.quickscan:
     print "!!          POSSIBLE WASTE OF TIME         !!"
     print "!!"
 
+print "!!"
+print "!! NOTICE - PARTICLE IDS 2000 AND 2001 ARE IGNORED !!"
+print "!!          THEY ARE USUALLY JUPIER AND SATURN     !!"
+print "!!"
+
 # Style Dictionary
 # http://matplotlib.org/api/markers_api.html#module-matplotlib.markers
 snap_c = [ 'g', 'r', 'b', 'm', 'k', \
@@ -142,21 +147,22 @@ if args.quickscan:
                 npz = np.load('%s/Snapshot_%012d.npz' % (dirchar, nstep))
                 snapshot = npz['snapshot'][()]
                 for particle in snapshot.particles:
-                    if first:
-                        amax = particle.a; amin = particle.a
-                        eccmax = particle.ecc; eccmin = particle.ecc
-                        incmax = particle.inc; incmin = particle.inc
-                        mmax = particle.m; mmin = particle.m
-                        first = False
-                    else:
-                        if particle.a > amax: amax = particle.a
-                        if particle.a < amin: amin = particle.a
-                        if particle.ecc > eccmax: eccmax = particle.ecc
-                        if particle.ecc < eccmin: eccmin = particle.ecc
-                        if particle.inc > incmax: incmax = particle.inc
-                        if particle.inc < incmin: incmin = particle.inc
-                        if particle.m > mmax: mmax = particle.m
-                        if particle.m < mmin: mmin = particle.m
+                    if particle.id < 2000:
+                        if first:
+                            amax = particle.a; amin = particle.a
+                            eccmax = particle.ecc; eccmin = particle.ecc
+                            incmax = particle.inc; incmin = particle.inc
+                            mmax = particle.m; mmin = particle.m
+                            first = False
+                        else:
+                            if particle.a > amax: amax = particle.a
+                            if particle.a < amin: amin = particle.a
+                            if particle.ecc > eccmax: eccmax = particle.ecc
+                            if particle.ecc < eccmin: eccmin = particle.ecc
+                            if particle.inc > incmax: incmax = particle.inc
+                            if particle.inc < incmin: incmin = particle.inc
+                            if particle.m > mmax: mmax = particle.m
+                            if particle.m < mmin: mmin = particle.m
             except IOError:
                 print "!! Could Not Open %s/Snapshot_%012d.npz" % \
                       (dirs[idir], nstep)
@@ -171,21 +177,22 @@ else:
                 npz = np.load('%s/Snapshot_%012d.npz' % (dirchar, nstep))
                 snapshot = npz['snapshot'][()]
                 for particle in snapshot.particles:
-                    if first:
-                        amax = particle.a; amin = particle.a
-                        eccmax = particle.ecc; eccmin = particle.ecc
-                        incmax = particle.inc; incmin = particle.inc
-                        mmax = particle.m; mmin = particle.m
-                        first = False
-                    else:
-                        if particle.a > amax: amax = particle.a
-                        if particle.a < amin: amin = particle.a
-                        if particle.ecc > eccmax: eccmax = particle.ecc
-                        if particle.ecc < eccmin: eccmin = particle.ecc
-                        if particle.inc > incmax: incmax = particle.inc
-                        if particle.inc < incmin: incmin = particle.inc
-                        if particle.m > mmax: mmax = particle.m
-                        if particle.m < mmin: mmin = particle.m
+                    if particle.id < 2000:
+                        if first:
+                            amax = particle.a; amin = particle.a
+                            eccmax = particle.ecc; eccmin = particle.ecc
+                            incmax = particle.inc; incmin = particle.inc
+                            mmax = particle.m; mmin = particle.m
+                            first = False
+                        else:
+                            if particle.a > amax: amax = particle.a
+                            if particle.a < amin: amin = particle.a
+                            if particle.ecc > eccmax: eccmax = particle.ecc
+                            if particle.ecc < eccmin: eccmin = particle.ecc
+                            if particle.inc > incmax: incmax = particle.inc
+                            if particle.inc < incmin: incmin = particle.inc
+                            if particle.m > mmax: mmax = particle.m
+                            if particle.m < mmin: mmin = particle.m
             except IOError:
                 print "!! Could Not Open %s/Snapshot_%012d.npz" % \
                       (dirs[idir], nstep)
@@ -215,6 +222,11 @@ for nstep in nsteps:
                 pecc[ipart] = particle.ecc
                 pinc[ipart] = particle.inc * r2d
                 pm[ipart] = particle.m
+                if particle.id >= 2000:
+                    pa[ipart] = np.nan
+                    pecc[ipart] = np.nan
+                    pinc[ipart] = np.nan
+                    pm[ipart] = np.nan
             # Plot Snapshot
             # http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.scatter
             if args.scale:
