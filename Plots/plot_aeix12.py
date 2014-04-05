@@ -254,11 +254,21 @@ for nstep in nsteps:
                         else: s = 3
                         ax1 = fig1.add_subplot(4,3,ii)
                         ax2 = fig2.add_subplot(4,3,ii)
+                        # Actual Data
                         ax1.scatter(pa, pecc, s=s**2., \
                                     c=snap_c[nsweep], marker=snap_s[nsweep], \
                                     edgecolors='none', \
-                                    alpha=0.5, label=tags[idir])
+                                    alpha=0.5)
                         ax2.scatter(pa, pinc, s=s**2., \
+                                    c=snap_c[nsweep], marker=snap_s[nsweep], \
+                                    edgecolors='none', \
+                                    alpha=0.5)
+                        # Fake Datapoint For Legend
+                        ax1.scatter([-10], [-10], s=75, \
+                                    c=snap_c[nsweep], marker=snap_s[nsweep], \
+                                    edgecolors='none', \
+                                    alpha=0.5, label=tags[idir])
+                        ax2.scatter([-10], [-10], s=75, \
                                     c=snap_c[nsweep], marker=snap_s[nsweep], \
                                     edgecolors='none', \
                                     alpha=0.5, label=tags[idir])
