@@ -79,12 +79,12 @@ if not args.scale:
 if not args.quicksan:
     print "!!"
     print "!! NOTICE - SCANNING ENTIRE SNAPSHOT RANGE !!"
-    print "!!          POSSIBLE WASTE OF TIME !!"
+    print "!!          POSSIBLE WASTE OF TIME         !!"
     print "!!"
 
 print "!!"
-print "!! NOTICE - PARTICLE IDS 2000 AND 2001 ARE IGNORED"
-print "!!          THEY ARE USUALLY JUPIER AND SATURN"
+print "!! NOTICE - PARTICLE IDS 2000 AND 2001 ARE IGNORED !!"
+print "!!          THEY ARE USUALLY JUPIER AND SATURN     !!"
 print "!!"
 
 # Style Dictionary
