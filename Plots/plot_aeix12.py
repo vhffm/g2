@@ -89,11 +89,11 @@ print "!!"
 
 # Style Dictionary
 # http://matplotlib.org/api/markers_api.html#module-matplotlib.markers
-snap_c = [ 'r', 'g', 'b', 'm', 'k', \
-           'r', 'g', 'b', 'm', 'k', \
-           'r', 'g', 'b', 'm', 'k', \
-           'r', 'g', 'b', 'm', 'k', \
-           'r', 'g', 'b', 'm', 'k' ]
+snap_c = [ 'g', 'r', 'b', 'm', 'k', \
+           'g', 'r', 'b', 'm', 'k', \
+           'g', 'r', 'b', 'm', 'k', \
+           'g', 'r', 'b', 'm', 'k', \
+           'g', 'r', 'b', 'm', 'k' ]
 snap_s = [ 'o', 'o', 'o', 'o', 'o', \
            'd', 'd', 'd', 'd', 'd', \
            'v', 'v', 'v', 'v', 'v', \
@@ -255,11 +255,11 @@ for nstep in nsteps:
                         ax1 = fig1.add_subplot(4,3,ii)
                         ax2 = fig2.add_subplot(4,3,ii)
                         ax1.scatter(pa, pecc, s=s**2., \
-                                    c=snap_c[nsweep+1], marker=snap_s[nsweep+1], \
+                                    c=snap_c[nsweep], marker=snap_s[nsweep], \
                                     edgecolors='none', \
                                     alpha=0.5, label=tags[idir])
                         ax2.scatter(pa, pinc, s=s**2., \
-                                    c=snap_c[nsweep+1], marker=snap_s[nsweep+1], \
+                                    c=snap_c[nsweep], marker=snap_s[nsweep], \
                                     edgecolors='none', \
                                     alpha=0.5, label=tags[idir])
                         if nsweep > 0:
