@@ -76,7 +76,7 @@ if not args.scale:
     print "!! NOTICE - NOT SCALING MARKERS WITH MASS !!"
     print "!!"
 
-if not args.quicksan:
+if not args.quickscan:
     print "!!"
     print "!! NOTICE - SCANNING ENTIRE SNAPSHOT RANGE !!"
     print "!!          POSSIBLE WASTE OF TIME         !!"
@@ -140,6 +140,7 @@ print "// Found %i Snapshots" % len(nsteps)
 if args.quickscan:
     print "// Quick Scanning Limits"
     print "// (%s UTC) Start Scanning Limits" % strftime("%H:%M:%S", gmtime())
+    first = True
     for nstep in [ nsteps[0], nsteps[-1] ]:
         print "// (%s UTC) Scanning Snapshot %012d/%012d" % \
             (strftime("%H:%M:%S", gmtime()), nstep, nsteps[-1])
