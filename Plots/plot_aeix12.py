@@ -19,6 +19,8 @@ from time import gmtime, strftime
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
+parser.add_argument('--quickscan', action='store_true', \
+                    help="Only Scan First And Last Snapshot [M_min, M_max].")
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--all', action='store_true', \
                    help="Plot Full Set of Snapshots.")
@@ -73,6 +75,13 @@ if not args.scale:
     print "!! NOTICE - NOT SCALING MARKERS WITH MASS !!"
     print "!!"
 
+if not args.quicksan:
+    print "!!"
+    print "!! NOTICE - SCANNING ENTIRE SNAPSHOT RANGE !!"
+    print "!!          POSSIBLE WASTE OF TIME !!"
+    print "!!"
+
+
 # Style Dictionary
 # http://matplotlib.org/api/markers_api.html#module-matplotlib.markers
 snap_c = [ 'r', 'g', 'b', 'm', 'k', \
@@ -123,36 +132,68 @@ if args.custom:
 print "// Found %i Snapshots" % len(nsteps)
 
 # Scan Limits
-print "// Scanning Limits"
-print "// (%s UTC) Start Scanning Limits" % strftime("%H:%M:%S", gmtime())
-first = True
-for nstep in nsteps:
-    print "// (%s UTC) Scanning Snapshot %012d/%012d" % \
-        (strftime("%H:%M:%S", gmtime()), nstep, nsteps[-1])
-    for idir, dirchar in enumerate(dirs):
-        try:
-            npz = np.load('%s/Snapshot_%012d.npz' % (dirchar, nstep))
-            snapshot = npz['snapshot'][()]
-            for particle in snapshot.particles:
-                if first:
-                    amax = particle.a; amin = particle.a
-                    eccmax = particle.ecc; eccmin = particle.ecc
-                    incmax = particle.inc; incmin = particle.inc
-                    mmax = particle.m; mmin = particle.m
-                    first = False
-                else:
-                    if particle.a > amax: amax = particle.a
-                    if particle.a < amin: amin = particle.a
-                    if particle.ecc > eccmax: eccmax = particle.ecc
-                    if particle.ecc < eccmin: eccmin = particle.ecc
-                    if particle.inc > incmax: incmax = particle.inc
-                    if particle.inc < incmin: incmin = particle.inc
-                    if particle.m > mmax: mmax = particle.m
-                    if particle.m < mmin: mmin = particle.m
-        except IOError:
-            print "!! Could Not Open %s/Snapshot_%012d.npz" % \
-                  (dirs[idir], nstep)
-print "// (%s UTC) Done Scanning Limits" % strftime("%H:%M:%S", gmtime())
+if args.quickscan:
+    print "// Quick Scanning Limits"
+    print "// (%s UTC) Start Scanning Limits" % strftime("%H:%M:%S", gmtime())
+    for nstep in [ nsteps[0], nsteps[-1] ]:
+        print "// (%s UTC) Scanning Snapshot %012d/%012d" % \
+            (strftime("%H:%M:%S", gmtime()), nstep, nsteps[-1])
+        for idir, dirchar in enumerate(dirs):
+            try:
+                npz = np.load('%s/Snapshot_%012d.npz' % (dirchar, nstep))
+                snapshot = npz['snapshot'][()]
+                for particle in snapshot.particles:
+                    if first:
+                        amax = particle.a; amin = particle.a
+                        eccmax = particle.ecc; eccmin = particle.ecc
+                        incmax = particle.inc; incmin = particle.inc
+                        mmax = particle.m; mmin = particle.m
+                        first = False
+                    else:
+                        if particle.a > amax: amax = particle.a
+                        if particle.a < amin: amin = particle.a
+                        if particle.ecc > eccmax: eccmax = particle.ecc
+                        if particle.ecc < eccmin: eccmin = particle.ecc
+                        if particle.inc > incmax: incmax = particle.inc
+                        if particle.inc < incmin: incmin = particle.inc
+                        if particle.m > mmax: mmax = particle.m
+                        if particle.m < mmin: mmin = particle.m
+            except IOError:
+                print "!! Could Not Open %s/Snapshot_%012d.npz" % \
+                      (dirs[idir], nstep)
+    print "// (%s UTC) Done Scanning Limits" % strftime("%H:%M:%S", gmtime())
+
+else:
+    print "// Scanning Limits"
+    print "// (%s UTC) Start Scanning Limits" % strftime("%H:%M:%S", gmtime())
+    first = True
+    for nstep in nsteps:
+        print "// (%s UTC) Scanning Snapshot %012d/%012d" % \
+            (strftime("%H:%M:%S", gmtime()), nstep, nsteps[-1])
+        for idir, dirchar in enumerate(dirs):
+            try:
+                npz = np.load('%s/Snapshot_%012d.npz' % (dirchar, nstep))
+                snapshot = npz['snapshot'][()]
+                for particle in snapshot.particles:
+                    if first:
+                        amax = particle.a; amin = particle.a
+                        eccmax = particle.ecc; eccmin = particle.ecc
+                        incmax = particle.inc; incmin = particle.inc
+                        mmax = particle.m; mmin = particle.m
+                        first = False
+                    else:
+                        if particle.a > amax: amax = particle.a
+                        if particle.a < amin: amin = particle.a
+                        if particle.ecc > eccmax: eccmax = particle.ecc
+                        if particle.ecc < eccmin: eccmin = particle.ecc
+                        if particle.inc > incmax: incmax = particle.inc
+                        if particle.inc < incmin: incmin = particle.inc
+                        if particle.m > mmax: mmax = particle.m
+                        if particle.m < mmin: mmin = particle.m
+            except IOError:
+                print "!! Could Not Open %s/Snapshot_%012d.npz" % \
+                      (dirs[idir], nstep)
+    print "// (%s UTC) Done Scanning Limits" % strftime("%H:%M:%S", gmtime())
 
 # Compute Line for Marker Size(Mass)
 m, n = mkline(mmin, 1.0, mmax, 36.0)
