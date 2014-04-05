@@ -84,7 +84,7 @@ if not args.quickscan:
 
 print "!!"
 print "!! NOTICE - PARTICLE IDS 2000 AND 2001 ARE IGNORED !!"
-print "!!          THEY ARE USUALLY JUPIER AND SATURN     !!"
+print "!!          THEY ARE USUALLY JUPITER AND SATURN    !!"
 print "!!"
 
 # Style Dictionary
