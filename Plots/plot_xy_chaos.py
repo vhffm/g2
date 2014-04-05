@@ -205,7 +205,7 @@ for istep in nsteps:
     ax = plt.subplot2grid((2,3), (1,0), colspan=3)
     colors = [ 'b', 'r', 'g' ]
     for ii in [ 0, 1, 2 ]:
-        ax.plot(tt[ii][:istep,iparticle], ds[ii][:istep,iparticle], color=colors[ii], linewidth=0.5, alpha=0.5, label=tags[ii])
+        ax.plot(tt[ii][:istep,iparticle], ds[ii][:istep,iparticle], color=colors[ii], linewidth=1.0, alpha=0.5, label=tags[ii])
         ax.plot(tt[ii][istep,iparticle], ds[ii][istep,iparticle], 'o', color=colors[ii], alpha=0.5)
         ax.set_xlim([0,2000])
         ax.set_ylim([0,4])
