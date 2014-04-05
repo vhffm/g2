@@ -27,8 +27,8 @@ group.add_argument('--all', action='store_true', \
                    help="Plot Full Set of Snapshots.")
 group.add_argument('--test', action='store_true', \
                    help="Plot Test Set of Snapshots.")
-group.add_argument('--custom', type=int, \
-                   help="Plot Custom Snapshot.")
+group.add_argument('--custom', type=int, nargs='+', \
+                   help="Plot Custom Snapshots.")
 parser.add_argument('--scale', action='store_true', \
                     help="Scale Marker Size with Particle Mass")
 args = parser.parse_args()
@@ -133,7 +133,10 @@ if args.all:
 if args.test:
     nsteps = np.mgrid[3600000000:3630000000:1000000]
 if args.custom:
-    nsteps = np.array([args.custom])
+    # Build Snapshot Number Array (From Input)
+    nsteps = range(args.custom[0], \
+                   args.custom[1] + args.custom[2], \
+                   args.custom[2])
 print "// Found %i Snapshots" % len(nsteps)
 
 # Scan Limits
