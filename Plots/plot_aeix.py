@@ -142,7 +142,8 @@ print "// Found %i Snapshots" % len(nsteps)
 if args.quickscan:
     print "// Quick-Scanning Limits"
     first = True
-    for nstep in [ nsteps[0], nsteps[-1] ]:
+    # for nstep in [ nsteps[0], nsteps[-1] ]:
+    for nstep in [ 0, nsteps[-1] ]:
         print "// (%s UTC) Scanning Snapshot %012d/%012d" % \
             (strftime("%H:%M:%S", gmtime()), nstep, nsteps[-1])
         for idir, dirchar in enumerate(dirs):
