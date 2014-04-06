@@ -207,8 +207,8 @@ for istep in nsteps:
     for ii in [ 0, 1, 2 ]:
         ax.plot(tt[ii][:istep,iparticle], ds[ii][:istep,iparticle], color=colors[ii], linewidth=1.0, alpha=0.5, label=tags[ii])
         ax.plot(tt[ii][istep,iparticle], ds[ii][istep,iparticle], 'o', color=colors[ii], alpha=0.5)
-        ax.set_xlim([0,2000])
-        ax.set_ylim([0,4])
+    ax.set_xlim([0,2000])
+    ax.set_ylim([0,4])
     ax.set_xlabel('Time (Years)')
     ax.set_ylabel('Separation (AU)')
     # Fix Ticks
