@@ -22,6 +22,8 @@ from time import gmtime, strftime
 parser = argparse.ArgumentParser()
 parser.add_argument('--quickscan', action='store_true', \
                     help="Only Scan First And Last Snapshot [M_min, M_max].")
+parser.add_argument('--coffset', type=int, default=0, \
+                    help="Marker Colour Offset")
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--all', action='store_true', \
                    help="Plot Full Set of Snapshots.")
@@ -257,11 +259,13 @@ for nstep in nsteps:
                         ax2 = fig2.add_subplot(4,3,ii)
                         # Actual Data
                         ax1.scatter(pa, pecc, s=s**2., \
-                                    c=snap_c[nsweep], marker=snap_s[nsweep], \
+                                    c=snap_c[nsweep+args.coffset], \
+                                    marker=snap_s[nsweep], \
                                     edgecolors='none', \
                                     alpha=0.5)
                         ax2.scatter(pa, pinc, s=s**2., \
-                                    c=snap_c[nsweep], marker=snap_s[nsweep], \
+                                    c=snap_c[nsweep+args.coffset], \
+                                    marker=snap_s[nsweep], \
                                     edgecolors='none', \
                                     alpha=0.5)
                         # Fake Datapoint For Legend
