@@ -218,7 +218,7 @@ for istep in nsteps:
     # Y-Axis Lin/Log Switch
     if args.lin or ( args.hybrid and tt[0][istep,0] >= 330.0 ):
         ax.set_ylim([0,4])
-        ax.set_yscale('lin')
+        ax.set_yscale('linear')
         ax.yaxis.set_ticks([0,1,2,3,4])
     if args.log or ( args.hybrid and tt[0][istep,0] < 330.0 ):
         ax.set_ylim([1.0e-7,10.0])
