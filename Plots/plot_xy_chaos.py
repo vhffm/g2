@@ -53,6 +53,13 @@ group.add_argument('--all', action='store_true', \
                    help="Plot Full Set of Snapshots.")
 group.add_argument('--custom', type=int, nargs='+', \
                    help="Plot Custom Snapshot.")
+group2 = parser.add_mutually_exclusive_group(required=True)
+group2.add_argument('--lin', action='store_true', \
+                    help="Plot Ds Linear.")
+group2.add_argument('--log', action='store_true', \
+                    help="Plot Ds Logarithmic.")
+group2.add_argument('--hybrid', action='store_true', \
+                    help="Plot Ds Logarithmic For t<320yr.")
 args = parser.parse_args()
 
 # List of Files and Tags
@@ -207,13 +214,21 @@ for istep in nsteps:
     for ii in [ 0, 1, 2 ]:
         ax.plot(tt[ii][:istep,iparticle], ds[ii][:istep,iparticle], color=colors[ii], linewidth=1.0, alpha=0.5, label=tags[ii])
         ax.plot(tt[ii][istep,iparticle], ds[ii][istep,iparticle], 'o', color=colors[ii], alpha=0.5)
+
+    # Y-Axis Lin/Log Switch
+    if args.lin or ( args.hybrid and tt[0][istep,0] >= 330.0 ):
+        ax.set_ylim([0,4])
+        ax.set_yscale('lin')
+        ax.yaxis.set_ticks([0,1,2,3,4])
+    if args.log or ( args.hybrid and tt[0][istep,0] < 330.0 ):
+        ax.set_ylim([1.0e-7,10.0])
+        ax.set_yscale('log')
+        ax.yaxis.set_ticks([1.0e-6,1.0e-4,1.0e-2,1.0e0])
+
     ax.set_xlim([0,2000])
-    ax.set_ylim([0,4])
     ax.set_xlabel('Time (Years)')
     ax.set_ylabel('Separation (AU)')
-    # Fix Ticks
-    ax.yaxis.set_ticks([0,1,2,3,4])
-    # ax.yaxis.set_ticklabels([0,1,2,3,4])
+
     # Legend
     ax.legend(loc='upper right', fontsize='x-small')
 
