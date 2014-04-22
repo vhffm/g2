@@ -185,12 +185,9 @@ if args.verbose:
     print ignore
     print ""
 
-# Compute time array
-dt = 6.0
-tout = nsteps * dt / 365.25
-t0 = tout[0]
-
 # Allocate some arrays
+tout = np.zeros(len(nsteps))
+
 x1 = np.zeros([len(nsteps),nparts])
 x2 = np.zeros_like(x1)
 
@@ -231,6 +228,11 @@ for istep, nstep in enumerate(nsteps):
     npz2 = np.load('%s/Snapshot_%012d.npz' % (dirs[1], nstep))
     snap1 = npz1['snapshot'][()]
     snap2 = npz2['snapshot'][()]
+    # Make Sure Output Times Align
+    if snap1.tout != snap2.tout:
+        print "!! Output Times Misaligned"
+        sys.exit()
+    tout_loc = snap1.tout
     x1_loc = np.zeros(nparts)
     x2_loc = np.zeros_like(x1_loc)
     y1_loc = np.zeros_like(x1_loc)
@@ -328,6 +330,7 @@ for istep, nstep in enumerate(nsteps):
                 (i1_loc[iidx], i2_loc[iidx])
             sys.exit()
     # Append
+    tout[istep] = tout_loc
     x1[istep,:] = x1_loc; y1[istep,:] = y1_loc; z1[istep,:] = z1_loc; m1[istep,:] = m1_loc
     phase1[istep,:] = phase1_loc
     eccen1[istep,:] = eccen1_loc
@@ -446,7 +449,7 @@ for istep, nstep in enumerate(nsteps):
 print "// Saving Data"
 np.savez(args.outfile, \
     tt = tt, \
-    t0 = t0, \
+    t0 = tout[0], \
     ds = ds, \
     lce = lce, \
     ltime = ltime, \
