@@ -367,7 +367,7 @@ ltime=1.0/lce
 
 # Create semi-major axis bins
 print "// Generating Bins in Semi-Major Axis"
-bin_edges = np.linspace(0,6.0,13)
+bin_edges = np.linspace(0,55.0,111)
 bin_cents = (bin_edges[1:]+bin_edges[:-1])/2.0
 digitalism = np.zeros([len(nsteps), nparts], dtype=int)
 for istep, nstep in enumerate(nsteps):
