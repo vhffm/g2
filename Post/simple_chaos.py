@@ -448,8 +448,8 @@ for istep, nstep in enumerate(nsteps):
 # Save Data
 print "// Saving Data"
 np.savez(args.outfile, \
-    tt = tt, \
-    t0 = tout[0], \
+    version = 2.0, \
+    tout = tout, \
     ds = ds, \
     lce = lce, \
     ltime = ltime, \
