@@ -194,3 +194,56 @@ def compute_ellipse(a, ecc, inc, Omega, omega):
 
     # Return
     return x, y, z
+
+def kep2del(a, e, i, Omega, omega, M):
+    """
+    Keper to Delaunay Elements.
+    Cf. (a) Joachim's Unpublished Paper
+        (b) http://www.bourbaphy.fr/chenciner.pdf
+    """
+
+    Msolar = 1.99e30 # kg
+    m = 5.0 * 5.97e24 / 2048.0
+    mu = m**2.0 * Msolar
+    Lambda = np.sqrt(mu * a)
+    L = np.sqrt(mu * a * ( 1.0 - e**2.0 ))
+    Lz = L * np.cos(i)
+    return Lambda, L, Lz, Omega, omega, M
+
+def del2poi(Lambda, L, Lz, Omega, omega, M):
+    """
+    Delaunay to Poincare Elements.
+    Cf. (a) Joachim's Unpublished Paper
+        (b) http://www.bourbaphy.fr/chenciner.pdf
+    """
+
+    lambda_small = M + omega + Omega
+    lambda_small = lambda_small % ( 2.0 * np.pi )
+    xi_real = np.sqrt(2.0 * ( Lambda - L )) * np.cos(omega + Omega)
+    xi_imag = np.sqrt(2.0 * ( Lambda - L )) * np.sin(omega + Omega)
+    eta_real = np.sqrt(2.0 * ( L - Lz )) * np.cos(Omega)
+    eta_imag = np.sqrt(2.0 * ( L - Lz )) * np.sin(Omega)
+    return Lambda, lambda_small, xi_real, xi_imag, eta_real, eta_imag
+
+def riemannian_line_element(a1, a2, e1, e2, i1, i2, \
+                            Omega1, Omega2, omega1, omega2):
+    """
+    Riemannian Metric in Kepler Space.
+    Cf. http://adsabs.harvard.edu/abs/2008CeMDA.100..169K
+    Eq. 21
+    """
+
+    # Some sort of normalization
+    L = 1.0
+    # Help Me 01
+    cos_xi = np.cos(i1) * np.cos(i2) + np.sin(i1) * np.sin(i2) * np.cos(Omega1 - Omega2)
+    # Help Me 02
+    cos_eta = ( np.cos(omega1) * np.cos(omega2) + np.cos(i1) * np.cos(i2) * np.sin(omega1) * np.sin(omega2) ) * np.cos(Omega1 - Omega2) \
+            + ( np.cos(i2) * np.cos(omega1) * np.sin(omega2) - np.cos(i1) * np.sin(omega1) * np.cos(omega2) ) * np.sin(Omega1 - Omega2) \
+            + np.sin(i1) * np.sin(i2) * np.sin(omega1) * np.sin(omega2)
+    # One More Conversion
+    p1 = a1 * ( 1.0 - e1**2.0 )
+    p2 = a2 * ( 1.0 - e2**2.0 )
+    # Hit Me
+    rho2 = 1.0 / L * ( p1 + p2 - 2.0 * np.sqrt(p1*p2) * cos_xi ) + ( e1**2.0 + e2**2.0 - 2.0 * e1 * e2 * cos_eta )
+    return rho2
