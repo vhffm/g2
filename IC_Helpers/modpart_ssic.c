@@ -74,7 +74,13 @@ int main(int argc, char*argv[]){
 
         /* Randomly shift coordinates */
         /* With (double), the minimum factor is 1.0e-16; */
-        factor = 1.0e-16;
+        /*
+         * 
+         * A number like 0.1xxx can store 16 significant digits.
+         * A number like 1.xxxx can store 15 significant digits.
+         *
+         */
+        factor = 1.0e-15;
         /*
         shift_x = ((((double)rand()/(double)(RAND_MAX)) - 0.5) * factor) + 1;
         shift_y = ((((double)rand()/(double)(RAND_MAX)) - 0.5) * factor) + 1;
