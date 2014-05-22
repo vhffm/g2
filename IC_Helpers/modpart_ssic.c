@@ -1,5 +1,5 @@
 /*
- ** modpart_ssic.c -- VH 18-02-2014
+ ** modpart_ssic.c -- VH 22-05-2014
  ** =====
  ** Shifts all coordinates in pkdgrav_planet IC file by a random amount.
  */
@@ -74,14 +74,40 @@ int main(int argc, char*argv[]){
 
         /* Randomly shift coordinates */
         /* With (double), the minimum factor is 1.0e-16; */
-        factor = 1.0e-6;
+        factor = 1.0e-16;
+        /*
         shift_x = ((((double)rand()/(double)(RAND_MAX)) - 0.5) * factor) + 1;
         shift_y = ((((double)rand()/(double)(RAND_MAX)) - 0.5) * factor) + 1;
         shift_z = ((((double)rand()/(double)(RAND_MAX)) - 0.5) * factor) + 1;
         data.pos[0] *= shift_x;
         data.pos[1] *= shift_y;
         data.pos[2] *= shift_z;
+        */
 
+        /* Randomly add or subtract factor */
+        /* With (double), the minimum factor is 1.0e-16; */
+        /* X */
+        if (rand() > RAND_MAX/2.0) {
+            shift_x = factor;
+        } else {
+            shift_x = -factor;
+        }
+        /* Y */
+        if (rand() > RAND_MAX/2.0) {
+            shift_y = factor;
+        } else {
+            shift_y = factor;
+        }
+        /* Z */
+        if (rand() > RAND_MAX/2.0) {
+            shift_z = factor;
+        } else {
+            shift_z = -factor;
+        }
+        data.pos[0] += shift_x;
+        data.pos[1] += shift_y;
+        data.pos[2] += shift_z;
+        
         /* Print data after shifting */
         /* printf("%.10g %d %.10g %.10g %.10g %.10g %.10g %.10g %.10g %.10g %.10g %.10g %.10g\n***\n", head.time, data.org_idx, data.mass, data.radius, data.pos[0], data.pos[1], data.pos[2], data.vel[0], data.vel[1], data.vel[2], data.spin[0], data.spin[1], data.spin[2]); */
 
