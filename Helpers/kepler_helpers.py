@@ -259,11 +259,11 @@ def cart2metric(r1, v1, r2, v2):
     # Area Vectors
     c1 = np.cross(r1,v1)
     c2 = np.cross(r2,v2)
-    # Laplace-Runge-Lenz Vectors / Eccentricity Vectorss
-    e1 = np.cross(r1,c1)/mu - r1/np.linalg.norm(r1)
-    e2 = np.cross(r2,c2)/mu - r1/np.linalg.norm(r2)
+    # Laplace-Runge-Lenz Vectors / Eccentricity Vectors
+    e1 = np.cross(v1,c1)/mu - r1/np.linalg.norm(r1)
+    e2 = np.cross(v2,c2)/mu - r2/np.linalg.norm(r2)
     # Distance (Squared)
     dc = c1 - c2
     de = e1 - e2
-    rho2 = 1.0/mu/L * np.linalg.norm(dc) * np.linalg.norm(de)
+    rho2 = 1.0/mu/L * np.dot(dc,dc) + np.dot(de,de)
     return rho2
