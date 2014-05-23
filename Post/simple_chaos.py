@@ -197,6 +197,15 @@ y2 = np.zeros_like(x1)
 z1 = np.zeros_like(x1)
 z2 = np.zeros_like(x1)
 
+vx1 = np.zeros_like(x1)
+vx2 = np.zeros_like(x1)
+
+vy1 = np.zeros_like(x1)
+vy2 = np.zeros_like(x1)
+
+vz1 = np.zeros_like(x1)
+vz2 = np.zeros_like(x1)
+
 m1 = np.zeros_like(x1)
 m2 = np.zeros_like(x1)
 
@@ -239,6 +248,12 @@ for istep, nstep in enumerate(nsteps):
     y2_loc = np.zeros_like(x1_loc)
     z1_loc = np.zeros_like(x1_loc)
     z2_loc = np.zeros_like(x1_loc)
+    vx1_loc = np.zeros_like(x1_loc)
+    vx2_loc = np.zeros_like(x1_loc)
+    vy1_loc = np.zeros_like(x1_loc)
+    vy2_loc = np.zeros_like(x1_loc)
+    vz1_loc = np.zeros_like(x1_loc)
+    vz2_loc = np.zeros_like(x1_loc)
     i1_loc = np.ones_like(x1_loc, dtype=int) * -1
     i2_loc = np.ones_like(x1_loc, dtype=int) * -1
     m1_loc = np.zeros_like(x1_loc)
@@ -264,6 +279,9 @@ for istep, nstep in enumerate(nsteps):
             x1_loc[iparticle] = particle.x
             y1_loc[iparticle] = particle.y
             z1_loc[iparticle] = particle.z
+            vx1_loc[iparticle] = particle.vx
+            vy1_loc[iparticle] = particle.vy
+            vz1_loc[iparticle] = particle.vz
             m1_loc[iparticle] = particle.m
             a1_loc[iparticle] = particle.a
             phase1_loc[iparticle] = particle.M0
@@ -282,6 +300,9 @@ for istep, nstep in enumerate(nsteps):
             x2_loc[iparticle] = particle.x
             y2_loc[iparticle] = particle.y
             z2_loc[iparticle] = particle.z
+            vx2_loc[iparticle] = particle.vx
+            vy2_loc[iparticle] = particle.vy
+            vz2_loc[iparticle] = particle.vz
             m2_loc[iparticle] = particle.m
             a2_loc[iparticle] = particle.a
             phase2_loc[iparticle] = particle.M0
@@ -295,6 +316,9 @@ for istep, nstep in enumerate(nsteps):
     x1_loc = x1_loc[i1_loc.argsort()]
     y1_loc = y1_loc[i1_loc.argsort()]
     z1_loc = z1_loc[i1_loc.argsort()]
+    vx1_loc = vx1_loc[i1_loc.argsort()]
+    vy1_loc = vy1_loc[i1_loc.argsort()]
+    vz1_loc = vz1_loc[i1_loc.argsort()]
     m1_loc = m1_loc[i1_loc.argsort()]
     a1_loc = a1_loc[i1_loc.argsort()]
     phase1_loc = phase1_loc[i1_loc.argsort()]
@@ -307,6 +331,9 @@ for istep, nstep in enumerate(nsteps):
     x2_loc = x2_loc[i2_loc.argsort()]
     y2_loc = y2_loc[i2_loc.argsort()]
     z2_loc = z2_loc[i2_loc.argsort()]
+    vx2_loc = vx2_loc[i2_loc.argsort()]
+    vy2_loc = vy2_loc[i2_loc.argsort()]
+    vz2_loc = vz2_loc[i2_loc.argsort()]
     m2_loc = m2_loc[i2_loc.argsort()]
     a2_loc = a2_loc[i2_loc.argsort()]
     phase2_loc = phase2_loc[i2_loc.argsort()]
@@ -332,12 +359,14 @@ for istep, nstep in enumerate(nsteps):
     # Append
     tout[istep] = tout_loc
     x1[istep,:] = x1_loc; y1[istep,:] = y1_loc; z1[istep,:] = z1_loc; m1[istep,:] = m1_loc
+    vx1[istep,:] = vx1_loc; vy1[istep,:] = vy1_loc; vz1[istep,:] = vz1_loc
     phase1[istep,:] = phase1_loc
     eccen1[istep,:] = eccen1_loc
     Omega1[istep,:] = Omega1_loc
     omega1[istep,:] = omega1_loc
     incli1[istep,:] = incli1_loc
     x2[istep,:] = x2_loc; y2[istep,:] = y2_loc; z2[istep,:] = z2_loc; m2[istep,:] = m2_loc
+    vx2[istep,:] = vx2_loc; vy2[istep,:] = vy2_loc; vz2[istep,:] = vz2_loc
     phase2[istep,:] = phase2_loc
     eccen2[istep,:] = eccen2_loc
     Omega2[istep,:] = Omega2_loc
@@ -455,6 +484,8 @@ np.savez(args.outfile, \
     ltime = ltime, \
     x1 = x1, y1 = y1, z1 = z1, \
     x2 = x2, y2 = y2, z2 = z2, \
+    vx1 = vx1, vy1 = vy1, vz1 = vz1, \
+    vx2 = vx2, vy2 = vy2, vz2 = vz2, \
     a1 = a1, m1 = m1, i1_loc = i1_loc, \
     a2 = a2, m2 = m2, i2_loc = i2_loc, \
     phase1 = phase1, ecc1 = eccen1, inc1 = incli1, \
