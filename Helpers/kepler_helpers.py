@@ -247,3 +247,23 @@ def riemannian_line_element(a1, a2, e1, e2, i1, i2, \
     # Hit Me
     rho2 = 1.0 / L * ( p1 + p2 - 2.0 * np.sqrt(p1*p2) * cos_xi ) + ( e1**2.0 + e2**2.0 - 2.0 * e1 * e2 * cos_eta )
     return rho2
+
+def cart2metric(r1, v1, r2, v2):
+    """
+    Computes Metric Distance.
+    Cf. Kholshevnikov 2007, Sec. 3, Eq. (4)
+    """
+    # mu = G * ( central_mass + mass )
+    mu = 1.0
+    L = 1.0
+    # Area Vectors
+    c1 = np.cross(r1,v1)
+    c2 = np.cross(r2,v2)
+    # Laplace-Runge-Lenz Vectors / Eccentricity Vectorss
+    e1 = np.cross(r1,c1)/mu - r1/np.linalg.norm(r1)
+    e2 = np.cross(r2,c2)/mu - r1/np.linalg.norm(r2)
+    # Distance (Squared)
+    dc = c1 - c2
+    de = e1 - e2
+    rho2 = 1.0/mu/L * np.linalg.norm(dc) * np.linalg.norm(de)
+    return rho2
