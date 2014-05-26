@@ -226,12 +226,19 @@ def del2poi(Lambda, L, Lz, Omega, omega, M):
     eta_imag = np.sqrt(2.0 * ( L - Lz )) * np.sin(Omega)
     return Lambda, lambda_small, xi_real, xi_imag, eta_real, eta_imag
 
-def riemannian_line_element(a1, a2, e1, e2, i1, i2, \
-                            Omega1, Omega2, omega1, omega2):
+def kep2metric(a1, a2, e1, e2, i1, i2, \
+               Omega1, Omega2, omega1, omega2):
     """
-    Riemannian Metric in Kepler Space.
+    Computes Metric Distance from Keplerian Elements.
     Cf. http://adsabs.harvard.edu/abs/2008CeMDA.100..169K
     Eq. 21
+
+    This breaks down for small inclinations, eccentricities.
+    Here, small changes in coordinates cause omega, Omega to vary hugely.
+    Thus, we cannot compute small differences anymore.
+     
+    Calculate directly from state vector (x,v) in this case.
+    See below in cart2metic, cart2metricX.
     """
 
     # Some sort of normalization
