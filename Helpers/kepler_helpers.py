@@ -7,6 +7,7 @@ cf. http://server.faia.upm.es/moda/curso1112/kepler.pdf
 """
 
 import numpy as np
+import vector_helpers as vh
 
 def cart2kep(r, v, mass, central_mass=1.0):
     """
@@ -266,4 +267,31 @@ def cart2metric(r1, v1, r2, v2):
     dc = c1 - c2
     de = e1 - e2
     rho2 = 1.0/mu/L * np.dot(dc,dc) + np.dot(de,de)
+    return rho2
+
+def cart2metricX(x1, y1, v1, vx1, vy1, vz1, \
+                 x2, y2, v2, vx2, vy2, vz2):
+    """
+    Computes Metric Distance.
+    Cf. Kholshevnikov 2007, Sec. 3, Eq. (4)
+    """
+    mu = 1.0
+    L = 1.0
+    # Area Vectors
+    cx1, cy1, cz1 = vh.cross(x1, y1, z1, vx1, vy1, vz1)
+    cx2, cy2, cz2 = vh.cross(x2, y2, z2, vx2, vy2, vz2)
+    # Laplace-Runge-Lenz Vectors / Eccentricity Vectors
+    vx1, vy1, vz1 = vh.cross(vx1, vy1, vz1, cx1, cy1, cz1) / mu
+    vx2, vy2, vz2 = vh.cross(vx2, vy2, vz2, cx2, cy2, cz2) / mu
+    ex1 = vx1 - x1 / np.norm(x1, y1, z1)
+    ey1 = vy1 - y1 / np.norm(x1, y1, z1)
+    ez1 = vz1 - z1 / np.norm(x1, y1, z1)
+    ex2 = vx2 - x2 / np.norm(x2, y2, z2)
+    ey2 = vy2 - y2 / np.norm(x2, y2, z2)
+    ez2 = vz2 - z2 / np.norm(x2, y2, z2)
+    # Distance (Squared)
+    dc2 = (cx1 - cx2)**2.0 + (cy1 - cy2)**2.0 + (cz1 - cz2)**2.0
+    de2 = (ex1 - ex2)**2.0 + (ey1 - ey2)**2.0 + (ez1 - ez2)**2.0
+    # Distance (Squared)
+    rho2 = 1.0/mu/L * dc2 + de2
     return rho2
