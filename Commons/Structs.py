@@ -11,8 +11,13 @@ class Particle():
     Orbital Phase (Mean Anomaly)  - M0          - [rad]
     XYZ-Position                  - x, y, z     - [AU]
     XYZ-Velocity                  - vx, vy, vz  - [AU/yr]
+                                                - [AU/day/0.01720209895]
     Particle Mass                 - m           - [Msun]
     Particle ID                   - id          - []
+
+    To convert velocities to km/s, do *au2km/24.0/3600.0*0.0172020989.
+
+    NB: For G=M=1, 1 Year = 2 Pi (From Kepler's Third Law).
     """
     def __init__(self):
         # General
