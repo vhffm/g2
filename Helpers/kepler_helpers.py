@@ -257,16 +257,16 @@ def cart2metric(r1, v1, r2, v2):
     # mu = G * ( central_mass + mass )
     mu = 1.0
     L = 1.0
-    # Area Vectors
-    c1 = np.cross(r1,v1)
-    c2 = np.cross(r2,v2)
+    # Specific Angular Momentum Vectors
+    h1 = np.cross(r1,v1)
+    h2 = np.cross(r2,v2)
     # Laplace-Runge-Lenz Vectors / Eccentricity Vectors
-    e1 = np.cross(v1,c1)/mu - r1/np.linalg.norm(r1)
-    e2 = np.cross(v2,c2)/mu - r2/np.linalg.norm(r2)
+    e1 = np.cross(v1,h1)/mu - r1/np.linalg.norm(r1)
+    e2 = np.cross(v2,h2)/mu - r2/np.linalg.norm(r2)
     # Distance (Squared)
-    dc = c1 - c2
+    dh = h1 - h2
     de = e1 - e2
-    rho2 = 1.0/mu/L * np.dot(dc,dc) + np.dot(de,de)
+    rho2 = 1.0/mu/L * np.dot(dh,dh) + np.dot(de,de)
     return rho2
 
 def cart2metricX(x1, y1, z1, vx1, vy1, vz1, \
@@ -277,12 +277,12 @@ def cart2metricX(x1, y1, z1, vx1, vy1, vz1, \
     """
     mu = 1.0
     L = 1.0
-    # Area Vectors
-    cx1, cy1, cz1 = vh.cross(x1, y1, z1, vx1, vy1, vz1)
-    cx2, cy2, cz2 = vh.cross(x2, y2, z2, vx2, vy2, vz2)
+    # Specific Angular Momentum Vectors
+    hx1, hy1, hz1 = vh.cross(x1, y1, z1, vx1, vy1, vz1)
+    hx2, hy2, hz2 = vh.cross(x2, y2, z2, vx2, vy2, vz2)
     # Laplace-Runge-Lenz Vectors / Eccentricity Vectors
-    vx1, vy1, vz1 = vh.cross(vx1, vy1, vz1, cx1, cy1, cz1)
-    vx2, vy2, vz2 = vh.cross(vx2, vy2, vz2, cx2, cy2, cz2)
+    vx1, vy1, vz1 = vh.cross(vx1, vy1, vz1, hx1, hy1, hz1)
+    vx2, vy2, vz2 = vh.cross(vx2, vy2, vz2, hx2, hy2, hz2)
     ex1 = vx1 / mu - x1 / vh.norm(x1, y1, z1)
     ey1 = vy1 / mu - y1 / vh.norm(x1, y1, z1)
     ez1 = vz1 / mu - z1 / vh.norm(x1, y1, z1)
@@ -290,8 +290,8 @@ def cart2metricX(x1, y1, z1, vx1, vy1, vz1, \
     ey2 = vy2 / mu - y2 / vh.norm(x2, y2, z2)
     ez2 = vz2 / mu - z2 / vh.norm(x2, y2, z2)
     # Distance (Squared)
-    dc2 = (cx1 - cx2)**2.0 + (cy1 - cy2)**2.0 + (cz1 - cz2)**2.0
+    dh2 = (hx1 - hx2)**2.0 + (hy1 - hy2)**2.0 + (hz1 - hz2)**2.0
     de2 = (ex1 - ex2)**2.0 + (ey1 - ey2)**2.0 + (ez1 - ez2)**2.0
     # Distance (Squared)
-    rho2 = 1.0/mu/L * dc2 + de2
+    rho2 = 1.0/mu/L * dh2 + de2
     return rho2
