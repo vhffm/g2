@@ -2,7 +2,7 @@
 Constants and Conversions.
 """
 
-import nunpy as np
+import numpy as np
 
 # Masses
 mearth = 5.97e24 # kg
