@@ -60,8 +60,8 @@ try:
     fitParams02, fitCovariances02 = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
                                               p0 = [ 4.0e9, 0.01, -1.0e10 ])
 except RuntimeError:
-    fitParams01 = np.array([np.nan, np.nan, np.nan])
-    fitCovariances01 = np.array([[np.nan, np.nan, np.nan], \
+    fitParams02 = np.array([np.nan, np.nan, np.nan])
+    fitCovariances02 = np.array([[np.nan, np.nan, np.nan], \
                                  [np.nan, np.nan, np.nan], \
                                  [np.nan, np.nan, np.nan]])
     print "!! Fit Failed"
@@ -76,8 +76,8 @@ try:
     fitParams03, fitCovariances03 = curve_fit(fit_func_pow, ttx_loc, rho_loc, \
                                               p0 = [ 1.0e12, 0.3, -8.0e12 ])
 except RuntimeError:
-    fitParams01 = np.array([np.nan, np.nan, np.nan])
-    fitCovariances01 = np.array([[np.nan, np.nan, np.nan], \
+    fitParams03 = np.array([np.nan, np.nan, np.nan])
+    fitCovariances03 = np.array([[np.nan, np.nan, np.nan], \
                                  [np.nan, np.nan, np.nan], \
                                  [np.nan, np.nan, np.nan]])
     print "!! Fit Failed"
