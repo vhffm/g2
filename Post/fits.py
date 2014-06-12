@@ -66,9 +66,9 @@ print "   Slope = %.2e" % slope03
 # Write
 print "// Writing %s" % args.outfile
 np.savez(args.outfile, \
-    fitParams01 = fitParams01, fitCovariances01, \
-    fitParams02 = fitParams02, fitCovariances02, \
-    fitParams03 = fitParams03, fitCovariances03, \
+    fitParams01 = fitParams01, fitCovariances01 = fitCovariances01, \
+    fitParams02 = fitParams02, fitCovariances02 = fitCovariances02, \
+    fitParams03 = fitParams03, fitCovariances03 = fitCovariances03, \
     te01 = te01, \
     te02 = te02, \
     slope03 = slope03 )
