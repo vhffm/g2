@@ -17,6 +17,7 @@ args = parser.parse_args()
 # Read
 print "// Reading %s" % (args.infile,)
 npz_in = np.load(args.infile)
+a1 = npz_in["a1"]
 ds = npz_in["ds"]
 tout = npz_in["tout"]
 x1 = npz_in["x1"]; x2 = npz_in["x2"]
@@ -35,7 +36,7 @@ rho2 = kh.cart2metricX(x1, y1, z1, vx1, vy1, vz1, \
 
 # Write
 print "// Writing %s" % (args.outfile,)
-np.savez(args.outfile, tout = tout, ds2 = ds2, rho2 = rho2, dv2 = dv2)
+np.savez(args.outfile, tout = tout, ds2 = ds2, rho2 = rho2, dv2 = dv2, a1 = a1)
 
 # Done
 print "// Done"
