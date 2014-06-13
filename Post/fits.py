@@ -40,7 +40,7 @@ rho_loc = rho[rho<1.0e7]
 try:
     fitParams01, fitCovariances01 = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
                                               p0 = [ 40000.0, 0.01, -10000.0 ])
-except RuntimeError:
+except (RuntimeError, TypeError):
     fitParams01 = np.array([np.nan, np.nan, np.nan])
     fitCovariances01 = np.array([[np.nan, np.nan, np.nan], \
                                  [np.nan, np.nan, np.nan], \
@@ -59,7 +59,7 @@ rho_loc = rho[bool_cb]
 try:
     fitParams02, fitCovariances02 = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
                                               p0 = [ 4.0e9, 0.01, -1.0e10 ])
-except RuntimeError:
+except (RuntimeError, TypeError):
     fitParams02 = np.array([np.nan, np.nan, np.nan])
     fitCovariances02 = np.array([[np.nan, np.nan, np.nan], \
                                  [np.nan, np.nan, np.nan], \
@@ -75,7 +75,7 @@ rho_loc = rho[rho>1.0e11]
 try:
     fitParams03, fitCovariances03 = curve_fit(fit_func_pow, ttx_loc, rho_loc, \
                                               p0 = [ 1.0e12, 0.3, -8.0e12 ])
-except RuntimeError:
+except (RuntimeError, TypeError):
     fitParams03 = np.array([np.nan, np.nan, np.nan])
     fitCovariances03 = np.array([[np.nan, np.nan, np.nan], \
                                  [np.nan, np.nan, np.nan], \
