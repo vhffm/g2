@@ -47,8 +47,8 @@ print "// Fitting First Exponential"
 for ipart in range(rho.shape[1]):
     ttx_loc = ttx[:,ipart]
     rho_loc = rho[:,ipart]
-    ttx_loc = ttx[rho<1.0e7]
-    rho_loc = rho[rho<1.0e7]
+    ttx_loc = ttx_loc[rho_loc<1.0e7]
+    rho_loc = rho_loc[rho_loc<1.0e7]
     try:
         fitParams01, _ = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
                                    p0 = [ 40000.0, 0.01, -10000.0 ])
