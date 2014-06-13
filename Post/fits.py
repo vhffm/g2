@@ -44,6 +44,7 @@ print "// Fitting %i Particles" % rho.shape[1]
 
 # Fit 01
 print "// Fitting First Exponential"
+failed = 0
 for ipart in range(rho.shape[1]):
     ttx_loc = ttx[:,ipart]
     rho_loc = rho[:,ipart]
@@ -54,14 +55,16 @@ for ipart in range(rho.shape[1]):
                                    p0 = [ 40000.0, 0.01, -10000.0 ])
         te01.append(1.0/fitParams01[1])
     except (RuntimeError, TypeError):
-        print "!! Fit Failed"
+        failed += 1
         te01.append(np.nan)
 
 te01 = np.array(te01)
+print "!! Fits Failed -- %i/%i" % (failed, rho.shape[1])
 print "   Median E-Folding Time = %.2e" % sps.nanmedian(te01)
 
 # Fit 02
 print "// Fitting Second Exponential"
+failed = 0
 for ipart in range(rho.shape[1]):
     ttx_loc = ttx[:,ipart]
     rho_loc = rho[:,ipart]
@@ -75,14 +78,16 @@ for ipart in range(rho.shape[1]):
                                    p0 = [ 4.0e9, 0.01, -1.0e10 ])
         te02.append(1.0/fitParams02[1])
     except (RuntimeError, TypeError):
-        print "!! Fit Failed"
+        failed += 1
         te02.append(np.nan)
 
 te02 = np.array(te02)
+print "!! Fits Failed -- %i/%i" % (failed, rho.shape[1])
 print "   Median E-Folding Time = %.2e" % sps.nanmedian(te02)
 
 # Fit 03
 print "// Fitting Power Law"
+failed = 0
 for ipart in range(rho.shape[1]):
     ttx_loc = ttx[:,ipart]
     rho_loc = rho[:,ipart]
@@ -93,10 +98,11 @@ for ipart in range(rho.shape[1]):
                                    p0 = [ 1.0e12, 0.3, -8.0e12 ])
         slope03.append(fitParams03[1])
     except (RuntimeError, TypeError):
-        print "!! Fit Failed"
+        failed += 1
         slope03.append(np.nan)
 
 slope03 = np.array(slope03)
+print "!! Fits Failed -- %i/%i" % (failed, rho.shape[1])
 print "   Median Slope = %.2e" % sps.nanmedian(slope03)
 
 # Write
