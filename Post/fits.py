@@ -52,10 +52,10 @@ for ipart in range(rho.shape[1]):
     try:
         fitParams01, _ = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
                                    p0 = [ 40000.0, 0.01, -10000.0 ])
+        te01.append(1.0/fitParams01[1])
     except (RuntimeError, TypeError):
-        fitParams01 = np.array([np.nan, np.nan, np.nan])
         print "!! Fit Failed"
-    te01.append(1.0/fitParams01[1])
+        te01.append(np.nan)
 
 te01 = np.array(te01)
 print "   Median E-Folding Time = %.2e" % sps.nanmedian(te01)
@@ -73,10 +73,10 @@ for ipart in range(rho.shape[1]):
     try:
         fitParams02, _ = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
                                    p0 = [ 4.0e9, 0.01, -1.0e10 ])
+        te02.append(1.0/fitParams02[1])
     except (RuntimeError, TypeError):
-        fitParams02 = np.array([np.nan, np.nan, np.nan])
         print "!! Fit Failed"
-    te02.append(1.0/fitParams02[1])
+        te02.append(np.nan)
 
 te02 = np.array(te02)
 print "   Median E-Folding Time = %.2e" % sps.nanmedian(te02)
@@ -91,10 +91,10 @@ for ipart in range(rho.shape[1]):
     try:
         fitParams03, _ = curve_fit(fit_func_pow, ttx_loc, rho_loc, \
                                    p0 = [ 1.0e12, 0.3, -8.0e12 ])
+        slope03.append(fitParams03[1])
     except (RuntimeError, TypeError):
-        fitParams03 = np.array([np.nan, np.nan, np.nan])
         print "!! Fit Failed"
-    slope03.append(fitParams03[1])
+        slope03.append(np.nan)
 
 slope03 = np.array(slope03)
 print "   Median Slope = %.2e" % sps.nanmedian(slope03)
