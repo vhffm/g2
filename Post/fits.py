@@ -72,10 +72,10 @@ rho_loc = rho[rho>1.0e11]
 try:
     fitParams03, _ = curve_fit(fit_func_pow, ttx_loc, rho_loc, \
                                p0 = [ 40000.0, 0.01, -10000.0 ])
-    slope03 = 1.0/fitParams01[1]
+    slope03 = 1.0/fitParams03[1]
 except (RuntimeError, TypeError):
     "!! Fit Failed"
-    slopr03 = np.nan
+    slope03 = np.nan
 print "   Slope = %.2e" % slope03
 
 # Write
