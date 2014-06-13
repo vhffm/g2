@@ -71,7 +71,7 @@ ttx_loc = ttx[rho>1.0e11]
 rho_loc = rho[rho>1.0e11]
 try:
     fitParams03, _ = curve_fit(fit_func_pow, ttx_loc, rho_loc, \
-                               p0 = [ 40000.0, 0.01, -10000.0 ])
+                               p0 = [ 1.0e12, 0.3, -8.0e12 ])
     slope03 = 1.0/fitParams03[1]
 except (RuntimeError, TypeError):
     "!! Fit Failed"
