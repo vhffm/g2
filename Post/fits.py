@@ -10,6 +10,8 @@ import numpy as np
 import argparse
 from scipy.optimize import curve_fit
 import scipy.stats.mstats as mstats
+import constants as C
+import kepler_helpers as kh
 
 # Define Fitting Functions
 def fit_func_exp(t, a, b, c):
@@ -17,6 +19,18 @@ def fit_func_exp(t, a, b, c):
 
 def fit_func_pow(t, a, b, c):
     return (a*t**b)+c
+
+# Other Functions
+def orbital_distance(dx):
+    GM = 1.0
+    x1 = 1.0; y1 = 0.0; z1 = 0.0
+    x2 = 1.0 + dx; y2 = 0.0; z2 = 0.0
+    v1 = np.sqrt(GM/x1)
+    v2 = np.sqrt(GM/x2)
+    vx1 = 0.0; vy1 = v1; vz1 = 0.0
+    vx2 = 0.0; vy2 = v2; vz2 = 0.0
+    return np.sqrt(kh.cart2metricX(x1, y1, z1, vx1, vy1, vz1, \
+                                   x2, y2, z2, vx2, vy2, vz2))
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
@@ -84,12 +98,35 @@ except (RuntimeError, TypeError):
     slope03 = np.nan
 print "   Slope = %.2e" % slope03
 
+# #############################################################################
+# Time To Hill Radius
+# #############################################################################
+print "// Computing Time To Hill Radius"
+Rh = []
+m = 5.0 * C.mearth / rho.shape[1]
+Rh.append(1.0 * (m / 3.0 / C.msun)**(1.0/3.0))
+Rh = np.array(Rh)
+rho_hill = orbital_distance(Rh)
+
+thill = []
+for iparticle in range(rho2.shape[1]):
+    rho_loc = np.sqrt(rho2[:,iparticle])
+    rho_x00 = rho_loc - rho_cut[isubdir]
+    sign = np.sign(rho_x00)
+    sign = np.array(sign, dtype=int)
+    diff = np.diff(sign)
+    idxdiff = np.where(diff)
+    idxdiff = idxdiff[0]
+    thill.extend(tout[idxdiff])
+thill = np.array(thill)
+
 # Write
 print "// Writing %s" % args.outfile
 np.savez(args.outfile, \
     te01 = te01, \
     te02 = te02, \
-    slope03 = slope03 )
+    slope03 = slope03, \
+    thill = thill )
 
 # Done
 print "// Done"
