@@ -64,7 +64,7 @@ try:
 except (RuntimeError, TypeError):
     "!! Fit Failed"
     te01 = np.nan
-print "   E-Folding Time = %.2e" % te01
+print "   E-Folding Time = %.2e yr" % te01
 
 # #############################################################################
 # Fit 02
@@ -82,7 +82,7 @@ try:
 except (RuntimeError, TypeError):
     "!! Fit Failed"
     te02 = np.nan
-print "   E-Folding Time = %.2e" % te02
+print "   E-Folding Time = %.2e yr" % te02
 
 # #############################################################################
 # Fit 03
@@ -120,7 +120,7 @@ for iparticle in range(rho2.shape[1]):
     thill.extend(tout[idxdiff])
 thill = np.array(thill)
 
-print "   Median Time To Hill Radius = %.2e" % np.median(thill)
+print "   Median Time To Hill Radius = %.2e yr" % np.median(thill)
 
 # Write
 print "// Writing %s" % args.outfile
