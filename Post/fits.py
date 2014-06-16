@@ -121,7 +121,7 @@ for iparticle in range(rho2.shape[1]):
     thill.extend(tout[idxdiff])
 thill = np.array(thill)
 
-print "   Median Time To Hill Radius = %.2e" % print np.median(thill)
+print "   Median Time To Hill Radius = %.2e" % np.median(thill)
 
 # Write
 print "// Writing %s" % args.outfile
