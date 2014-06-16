@@ -103,16 +103,15 @@ print "   Slope = %.2e" % slope03
 # Time To Hill Radius
 # #############################################################################
 print "// Computing Time To Hill Radius"
-Rh = []
-m = 5.0 * C.mearth / rho.shape[1]
-Rh.append(1.0 * (m / 3.0 / C.msun)**(1.0/3.0))
-Rh = np.array(Rh)
+m = 5.0 * C.mearth / rho2.shape[1]
+Rh = 1.0 * (m / 3.0 / C.msun)**(1.0/3.0)
 rho_hill = orbital_distance(Rh)
+print "   (N, m, R_hill) = (%i, %.2e kg, %.2e AU)" % (rho2.shape[1], m, Rh)
 
 thill = []
 for iparticle in range(rho2.shape[1]):
     rho_loc = np.sqrt(rho2[:,iparticle])
-    rho_x00 = rho_loc - rho_cut[isubdir]
+    rho_x00 = rho_loc - rho_hill
     sign = np.sign(rho_x00)
     sign = np.array(sign, dtype=int)
     diff = np.diff(sign)
