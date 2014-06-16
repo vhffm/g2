@@ -1,9 +1,10 @@
 """
-Read Metric Distance. Compute Different Fits.
+Read Metric Distance. Compute Different Fits. Note Easter Egg.
 
 1) First Exponential
 2) Second Exponential
-3) Final Power law
+3) Final Power Law
+4) Time To Hill Radius
 """
 
 import numpy as np
@@ -119,6 +120,8 @@ for iparticle in range(rho2.shape[1]):
     idxdiff = idxdiff[0]
     thill.extend(tout[idxdiff])
 thill = np.array(thill)
+
+print "   Median Time To Hill Radius = %.2e" % print np.median(thill)
 
 # Write
 print "// Writing %s" % args.outfile
