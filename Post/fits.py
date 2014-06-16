@@ -36,7 +36,9 @@ ttx = tout
 rho = np.sqrt(rho2/rho2[0,:])
 rho = mstats.gmean(rho, axis=1)
 
+# #############################################################################
 # Fit 01
+# #############################################################################
 print "// Fitting First Exponential"
 ttx_loc = ttx[rho<1.0e7]
 rho_loc = rho[rho<1.0e7]
@@ -49,7 +51,9 @@ except (RuntimeError, TypeError):
     te01 = np.nan
 print "   E-Folding Time = %.2e" % te01
 
+# #############################################################################
 # Fit 02
+# #############################################################################
 print "// Fitting Second Exponential"
 bool_01 = rho>1.0e7
 bool_02 = rho<=1.0e11
@@ -65,7 +69,9 @@ except (RuntimeError, TypeError):
     te02 = np.nan
 print "   E-Folding Time = %.2e" % te02
 
+# #############################################################################
 # Fit 03
+# #############################################################################
 print "// Fitting Power Law"
 ttx_loc = ttx[rho>1.0e11]
 rho_loc = rho[rho>1.0e11]
