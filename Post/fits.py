@@ -128,6 +128,7 @@ np.savez(args.outfile, \
     te01 = te01, \
     te02 = te02, \
     slope03 = slope03, \
+    rho = rho, \
     thill = thill )
 
 # Done
