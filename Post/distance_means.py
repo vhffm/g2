@@ -56,7 +56,7 @@ ds2_mean = mstats.gmean(ratio_ds2, axis=1)
 print "// Saving Files"
 np.savez(args.outfile, tout = tout, \
          rho2_mean = rho2_mean, \
-         ds2_mean = ds2_mean, dv2_mena = dv2_mean )
+         ds2_mean = ds2_mean, dv2_mean = dv2_mean )
 
 # Done
 print "// Done"
