@@ -10,7 +10,7 @@ import kepler_helpers as kh
 parser = argparse.ArgumentParser()
 parser.add_argument('--infile', default='XChaos.npz', \
                     help="Output File Name.")
-parser.add_argument('--outfile', default='XChaos_Distances.npz', \
+parser.add_argument('--outfile', default='Distances.npz', \
                     help="Output File Name.")
 args = parser.parse_args()
 

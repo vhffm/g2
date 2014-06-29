@@ -35,7 +35,7 @@ def orbital_distance(dx):
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--infile', default='XChaos.npz', \
+parser.add_argument('--infile', default='Distances.npz', \
                     help="Output File Name.")
 parser.add_argument('--outfile', default='Fits.npz', \
                     help="Output File Name.")
