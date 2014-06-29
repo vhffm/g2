@@ -111,8 +111,8 @@ for ii in [ 0, 1, 2, 3 ]:
 # Fit 01
 # #############################################################################
 print "// Fitting First Exponential (Global)"
-ttx_loc = ttx[rho<1.0e7]
-rho_loc = rho[rho<1.0e7]
+ttx_loc = ttx[rho<1.0e6]
+rho_loc = rho[rho<1.0e6]
 try:
     fitParams01, _ = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
                                p0 = [ 40000.0, 0.01, -10000.0 ])
@@ -141,7 +141,7 @@ for ii in [ 0, 1, 2, 3 ]:
 # #############################################################################
 print "// Fitting Second Exponential (Global)"
 bool_01 = rho>1.0e7
-bool_02 = rho<=1.0e11
+bool_02 = rho<=1.0e12
 bool_cb = np.logical_and(bool_01, bool_02)
 ttx_loc = ttx[bool_cb]
 rho_loc = rho[bool_cb]
@@ -176,11 +176,11 @@ for ii in [ 0, 1, 2, 3 ]:
 # Fit 03
 # #############################################################################
 print "// Fitting Power Law (Global)"
-ttx_loc = ttx[rho>1.0e11]
-rho_loc = rho[rho>1.0e11]
+ttx_loc = ttx[rho>1.0e12]
+rho_loc = rho[rho>1.0e12]
 try:
     fitParams03, _ = curve_fit(fit_func_pow, ttx_loc, rho_loc, \
-                               p0 = [ 1.0e12, 0.3, -8.0e12 ])
+                               p0 = [ 5.0e12, 0.1, -1.0e13 ])
     slope03 = fitParams03[1]
 except (RuntimeError, TypeError):
     "!! Fit Failed"
