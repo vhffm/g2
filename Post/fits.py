@@ -110,14 +110,12 @@ print "   (N, m, R_hill) = (%i, %.2e kg, %.2e AU)" % (rho2.shape[1], m, Rh)
 
 thill = []
 for iparticle in range(rho2.shape[1]):
-    rho_loc = np.sqrt(rho2[:,iparticle])
-    rho_x00 = rho_loc - rho_hill
-    sign = np.sign(rho_x00)
-    sign = np.array(sign, dtype=int)
+    rho_x00 = np.sqrt(rho2[:,iparticle]) - rho_hill
+    sign = np.sign(rho_x00).astype(int)
     diff = np.diff(sign)
-    idxdiff = np.where(diff)
-    idxdiff = idxdiff[0]
-    thill.extend(tout[idxdiff])
+    idxdiff = np.where(diff)[0]
+    if len(idxdiff) > 0:
+        thill.extend(tout[idxdiff[0]])
 thill = np.array(thill)
 
 print "   Median Time To Hill Radius = %.2e yr" % np.median(thill)
