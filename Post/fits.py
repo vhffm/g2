@@ -102,13 +102,13 @@ for ii in [ 0, 1, 2, 3 ]:
 
     # Compute Geometric Mean
     if not first:
-        ratio_gmean_abin = mstats.gmean(ratio_loc_abin, axis=0)
+        ratio_gmean_abin = mstats.gmean(np.atleast_2d(ratio_loc_abin), axis=0)
     else:
         ratio_gmean_abin = np.zeros_like(tout) * np.nan
         rho_loc_abin = np.atleast_2d(np.zeros_like(tout)) * np.nan 
     
     # Append
-    rho_abins.append(rho_loc_abin)
+    rho_abins.append(np.atleast_2d(rho_loc_abin))
     ratio_gmean_abins.append(ratio_gmean_abin)
 
 # #############################################################################
