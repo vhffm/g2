@@ -115,7 +115,7 @@ for iparticle in range(rho2.shape[1]):
     diff = np.diff(sign)
     idxdiff = np.where(diff > 0)[0]
     if len(idxdiff) > 0:
-        thill.extend(tout[idxdiff[0]])
+        thill.append(tout[idxdiff[0]])
 thill = np.array(thill)
 
 print "   Median Time To Hill Radius = %.2e yr" % np.median(thill)
