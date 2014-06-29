@@ -99,9 +99,13 @@ for ii in [ 0, 1, 2, 3 ]:
                                           rho_loc[:,iparticle]))
                 ratio_loc_abin = np.vstack((ratio_loc_abin, \
                                             ratio_loc[:,iparticle]))
-                
+
     # Compute Geometric Mean
-    ratio_gmean_abin = mstats.gmean(ratio_loc_abin, axis=0)
+    if not first:
+        ratio_gmean_abin = mstats.gmean(ratio_loc_abin, axis=0)
+    else:
+        ratio_gmean_abin = np.zeros_like(tout) * np.nan
+        rho_loc_abin = np.atleast_2d(np.zeros_like(tout)) * np.nan 
     
     # Append
     rho_abins.append(rho_loc_abin)
