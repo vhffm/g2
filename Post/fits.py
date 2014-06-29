@@ -113,7 +113,7 @@ for iparticle in range(rho2.shape[1]):
     rho_x00 = np.sqrt(rho2[:,iparticle]) - rho_hill
     sign = np.sign(rho_x00).astype(int)
     diff = np.diff(sign)
-    idxdiff = np.where(diff)[0]
+    idxdiff = np.where(diff > 0)[0]
     if len(idxdiff) > 0:
         thill.extend(tout[idxdiff[0]])
 thill = np.array(thill)
