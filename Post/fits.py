@@ -29,10 +29,10 @@ def fit_func_pow(t, a, b, c):
     return (a*t**b)+c
 
 # Other Functions
-def orbital_distance(dx):
+def orbital_distance(x, dx):
     GM = 1.0
-    x1 = 1.0; y1 = 0.0; z1 = 0.0
-    x2 = 1.0 + dx; y2 = 0.0; z2 = 0.0
+    x1 = x; y1 = 0.0; z1 = 0.0
+    x2 = x + dx; y2 = 0.0; z2 = 0.0
     v1 = np.sqrt(GM/x1)
     v2 = np.sqrt(GM/x2)
     vx1 = 0.0; vy1 = v1; vz1 = 0.0
@@ -68,11 +68,12 @@ print "// Splitting In Semi-Major Axis"
 # Check If First A1 In Bin
 # If So, Add To List
 
-rho_abins = []; ratio_gmean_abins = []
+rho_abins = []; ratio_gmean_abins = []; a1_abins = []
 for ii in [ 0, 1, 2, 3 ]:
 
     # Memcpy
     rho_loc = np.sqrt(npz["rho2"]).copy()
+    a1_loc = a1.copy()
     ratio_loc = rho_loc/rho_loc[0,:]
     
     # Set Filters
@@ -91,10 +92,13 @@ for ii in [ 0, 1, 2, 3 ]:
         # Is First Step In This Bin?
         if mybool[0,iparticle]:
             if first:
+                a1_loc_abin = a1_loc[:,iparticle]
                 rho_loc_abin = rho_loc[:,iparticle]
                 ratio_loc_abin = ratio_loc[:,iparticle]
                 first = False
             else:
+                a1_loc_abin = np.vstack((a1_loc_abin, \
+                                         a1_loc[:,iparticle]))
                 rho_loc_abin = np.vstack((rho_loc_abin, \
                                           rho_loc[:,iparticle]))
                 ratio_loc_abin = np.vstack((ratio_loc_abin, \
@@ -106,9 +110,11 @@ for ii in [ 0, 1, 2, 3 ]:
     else:
         ratio_gmean_abin = np.zeros_like(tout) * np.nan
         rho_loc_abin = np.atleast_2d(np.zeros_like(tout)) * np.nan 
+        a1_loc_abin = np.atleast_2d(np.zeros_like(tout)) * np.nan 
     
     # Append
     rho_abins.append(np.atleast_2d(rho_loc_abin))
+    a1_abins.append(np.atleast_2d(a1_loc_abin))
     ratio_gmean_abins.append(ratio_gmean_abin)
 
 # #############################################################################
@@ -210,13 +216,14 @@ for ii in [ 0, 1, 2, 3 ]:
 # #############################################################################
 m = 5.0 * C.mearth / rho2.shape[1]
 Rh = 1.0 * (m / 3.0 / C.msun)**(1.0/3.0)
-rho_hill = orbital_distance(Rh)
+rho_hill = orbital_distance(1.0, Rh)
 print "   (N, m, R_hill) = (%i, %.2e kg, %.2e AU)" % (rho2.shape[1], m, Rh)
 
 print "// Computing Time To Hill Radius (Global)"
 thill = []
 for iparticle in range(rho2.shape[1]):
-    rho_x00 = np.sqrt(rho2[:,iparticle]) - rho_hill
+    rho_x00 = np.sqrt(rho2[:,iparticle]) - \
+              orbital_distance(a1[0,iparticle], a1[0,iparticle] * Rh)
     sign = np.sign(rho_x00).astype(int)
     diff = np.diff(sign)
     idxdiff = np.where(diff > 0)[0]
@@ -234,7 +241,9 @@ thill_abins = []
 for ii in [ 0, 1, 2, 3 ]:
     thill_loc = []
     for iparticle in range(rho_abins[ii].shape[0]):
-        rho_x00 = rho_abins[ii][iparticle,:] - rho_hill
+        rho_x00 = rho_abins[ii][iparticle,:] - \
+                  orbital_distance(a1_abins[ii][0,iparticle], \
+                                   a1_abins[ii][0,iparticle] * Rh)
         sign = np.sign(rho_x00).astype(int)
         diff = np.diff(sign)
         idxdiff = np.where(diff)[0]
