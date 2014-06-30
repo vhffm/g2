@@ -180,8 +180,8 @@ for ii in [ 0, 1, 2, 3 ]:
 # Fit 03
 # #############################################################################
 print "// Fitting Power Law (Global)"
-ttx_loc = ttx[rho>1.0e12]
-rho_loc = rho[rho>1.0e12]
+ttx_loc = ttx[rho>2.0e12]
+rho_loc = rho[rho>2.0e12]
 try:
     fitParams03, _ = curve_fit(fit_func_pow, ttx_loc, rho_loc, \
                                p0 = [ 5.0e12, 0.1, -1.0e13 ])
@@ -224,6 +224,10 @@ for iparticle in range(rho2.shape[1]):
         thill.append(tout[idxdiff[0]])
 thill = np.array(thill)
 print "   Median Time To Hill Radius = %.2e yr" % np.median(thill)
+
+# #########################################################
+# @todo -- Compute Hill Radius On The Fly For Each Particle
+# #########################################################
 
 print "// Computing Time To Hill Radius (Semi-Major Axis Bin)"
 thill_abins = []
