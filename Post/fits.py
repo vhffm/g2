@@ -242,8 +242,8 @@ for ii in [ 0, 1, 2, 3 ]:
     thill_loc = []
     for iparticle in range(rho_abins[ii].shape[0]):
         rho_x00 = rho_abins[ii][iparticle,:] - \
-                  orbital_distance(a1_abins[ii][0,iparticle], \
-                                   a1_abins[ii][0,iparticle] * Rh)
+                  orbital_distance(a1_abins[ii][iparticle,0], \
+                                   a1_abins[ii][iparticle,0] * Rh)
         sign = np.sign(rho_x00).astype(int)
         diff = np.diff(sign)
         idxdiff = np.where(diff)[0]
