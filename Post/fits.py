@@ -216,16 +216,19 @@ rho_loc = rho[rho>2.0e12]
 try:
     fitParams03, pcov03_global = curve_fit(fit_func_pow, ttx_loc, rho_loc, \
                                            p0 = [ 5.0e12, 0.1, -1.0e13 ])
+    factor03 = fitParams03[0]
     slope03 = fitParams03[1]
     fits_global_good += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
     pcov03_global = np.nan * np.ones((3,3))
+    factor03 = np.nan
     slope03 = np.nan
     fits_global_bad += 1
-print "   Slope = %.2e" % slope03
+print "   Factor, Slope = %.2e, %.2e" % (factor03, slope03)
 
 print "// Fitting Power Law (Semi-Major Axis Bin)"
+factor03_abins = []
 slope03_abins = []
 pcov03_local = []
 for ii in [ 0, 1, 2, 3 ]:
@@ -235,15 +238,18 @@ for ii in [ 0, 1, 2, 3 ]:
         fitParams03, pcov03_local_loc = \
             curve_fit(fit_func_pow, ttx_loc, ratio_loc, \
                       p0 = [ 5.0e12, 0.1, -1.0e13 ])
+        factor03_abins.append(fitParams03[0])
         slope03_abins.append(fitParams03[1])
         fits_local_good += 1
     except (RuntimeError, TypeError):
         "!! Fit Failed"
         pcov03_local_loc = np.nan * np.ones((3,3))
+        factor03_abins.append(np.nan)
         slope03_abins.append(np.nan)
         fits_local_bad += 1
     pcov03_local.append(pcov03_local_loc)
-    print "   Slope = %.2e" % slope03_abins[-1]
+    print "   Factor, Slope = %.2e, %.2e" % \
+        (factor03_abins[-1], slope03_abins[-1])
 
 # #############################################################################
 # Time To Hill Radius
@@ -293,9 +299,11 @@ print "// Writing %s" % args.outfile
 np.savez(args.outfile, \
     te01 = te01, \
     te02 = te02, \
+    factor03 = factor03, \
     slope03 = slope03, \
     te01_abins = te01_abins, \
     te02_abins = te02_abins, \
+    factor03_abins = factor03_abins, \
     slope03_abins = slope03_abins, \
     rho = rho, \
     thill = thill, \
