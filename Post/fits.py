@@ -136,7 +136,7 @@ try:
     fits_global_good += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
-    pcov01 = np.nan
+    pcov01_global = np.nan
     te01 = np.nan
     fits_global_bad += 1
 print "   E-Folding Time = %.2e yr" % te01
@@ -178,7 +178,7 @@ try:
     fits_global_good += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
-    pcov02 = np.nan
+    pcov02_global = np.nan
     te02 = np.nan
     fits_global_bad += 1
 print "   E-Folding Time = %.2e yr" % te02
@@ -220,7 +220,7 @@ try:
     fits_global_good += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
-    pcov03 = np.nan
+    pcov03_global = np.nan
     slope03 = np.nan
     fits_global_bad += 1
 print "   Slope = %.2e" % slope03
