@@ -59,6 +59,12 @@ ttx = tout
 rho = np.sqrt(rho2/rho2[0,:])
 rho = mstats.gmean(rho, axis=1)
 
+# Initialize Counters
+fits_local_good = 0
+fits_local_bad = 0
+fits_global_good = 0
+fits_global_bad = 0
+
 # #############################################################################
 # Semi-Major Axis Splitting
 # #############################################################################
@@ -124,26 +130,36 @@ print "// Fitting First Exponential (Global)"
 ttx_loc = ttx[rho<1.0e6]
 rho_loc = rho[rho<1.0e6]
 try:
-    fitParams01, _ = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
-                               p0 = [ 40000.0, 0.01, -10000.0 ])
+    fitParams01, pcov01_global = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
+                                           p0 = [ 40000.0, 0.01, -10000.0 ])
     te01 = 1.0/fitParams01[1]
+    fits_global_good += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
+    pcov01 = np.nan
     te01 = np.nan
+    fits_global_bad += 1
 print "   E-Folding Time = %.2e yr" % te01
 
 print "// Fitting First Exponential (Semi-Major Axis Bin)"
 te01_abins = []
+pcov01_local = []
 for ii in [ 0, 1, 2, 3 ]:
     ttx_loc = tout[ratio_gmean_abins[ii]<1.0e6]
     ratio_loc = ratio_gmean_abins[ii][ratio_gmean_abins[ii]<1.0e6]
     try:
-        fitParams01, _ = curve_fit(fit_func_exp, ttx_loc, ratio_loc, \
-                                   p0 = [ 40000.0, 0.01, -10000.0 ])
+        fitParams01, pcov01_local_loc = \
+            curve_fit(fit_func_exp, ttx_loc, ratio_loc, \
+                      p0 = [ 40000.0, 0.01, -10000.0 ])
         te01_abins.append(1.0/fitParams01[1])
+        fits_local_good += 1
     except (RuntimeError, TypeError):
         "!! Fit Failed"
+        pcov01_local_loc = np.nan
         te01_abins.append(np.nan)
+        fits_local_bad += 1
+    pcov01_local.append(pcov01_local_loc)
+
     print "   E-Folding Time = %.2e yr" % te01_abins[-1]
 
 # #############################################################################
@@ -156,16 +172,20 @@ bool_cb = np.logical_and(bool_01, bool_02)
 ttx_loc = ttx[bool_cb]
 rho_loc = rho[bool_cb]
 try:
-    fitParams02, _ = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
-                               p0 = [ 40000.0, 0.01, -10000.0 ])
+    fitParams02, pcov02_global = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
+                                           p0 = [ 40000.0, 0.01, -10000.0 ])
     te02 = 1.0/fitParams02[1]
+    fits_global_good += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
+    pcov02 = np.nan
     te02 = np.nan
+    fits_global_bad += 1
 print "   E-Folding Time = %.2e yr" % te02
 
 print "// Fitting Second Exponential (Semi-Major Axis Bin)"
 te02_abins = []
+pcov02_local = []
 for ii in [ 0, 1, 2, 3 ]:
     bool_01 = ratio_gmean_abins[ii]>1.0e7
     bool_02 = ratio_gmean_abins[ii]<=1.0e12
@@ -174,12 +194,17 @@ for ii in [ 0, 1, 2, 3 ]:
     ttx_loc = tout[bool_cb]
     ratio_loc = ratio_gmean_abins[ii][bool_cb]
     try:
-        fitParams02, _ = curve_fit(fit_func_exp, ttx_loc, ratio_loc, \
-                                   p0 = [ 40000.0, 0.01, -10000.0 ])
+        fitParams02, pcov02_local_loc = \
+            curve_fit(fit_func_exp, ttx_loc, ratio_loc, \
+                      p0 = [ 40000.0, 0.01, -10000.0 ])
         te02_abins.append(1.0/fitParams02[1])
+        fits_local_good += 1
     except (RuntimeError, TypeError):
         "!! Fit Failed"
+        pcov02_local_loc = np.nan
         te02_abins.append(np.nan)
+        fits_local_bad += 1
+    pcov02_local.append(pcov02_local_loc)
     print "   E-Folding Time = %.2e yr" % te02_abins[-1]
 
 # #############################################################################
@@ -189,26 +214,35 @@ print "// Fitting Power Law (Global)"
 ttx_loc = ttx[rho>2.0e12]
 rho_loc = rho[rho>2.0e12]
 try:
-    fitParams03, _ = curve_fit(fit_func_pow, ttx_loc, rho_loc, \
-                               p0 = [ 5.0e12, 0.1, -1.0e13 ])
+    fitParams03, pcov03_global = curve_fit(fit_func_pow, ttx_loc, rho_loc, \
+                                           p0 = [ 5.0e12, 0.1, -1.0e13 ])
     slope03 = fitParams03[1]
+    fits_global_good += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
+    pcov03 = np.nan
     slope03 = np.nan
+    fits_global_bad += 1
 print "   Slope = %.2e" % slope03
 
 print "// Fitting Power Law (Semi-Major Axis Bin)"
 slope03_abins = []
+pcov03_local = []
 for ii in [ 0, 1, 2, 3 ]:
     ttx_loc = tout[ratio_gmean_abins[ii]>2.0e12]
     ratio_loc = ratio_gmean_abins[ii][ratio_gmean_abins[ii]>2.0e12]
     try:
-        fitParams03, _ = curve_fit(fit_func_pow, ttx_loc, ratio_loc, \
-                               p0 = [ 5.0e12, 0.1, -1.0e13 ])
+        fitParams03, pcov03_local_loc = \
+            curve_fit(fit_func_pow, ttx_loc, ratio_loc, \
+                      p0 = [ 5.0e12, 0.1, -1.0e13 ])
         slope03_abins.append(fitParams03[1])
+        fits_local_good += 1
     except (RuntimeError, TypeError):
         "!! Fit Failed"
+        pcov03_local_loc = np.nan
         slope03_abins.append(np.nan)
+        fits_local_bad += 1
+    pcov03_local.append(pcov03_local_loc)
     print "   Slope = %.2e" % slope03_abins[-1]
 
 # #############################################################################
@@ -265,7 +299,12 @@ np.savez(args.outfile, \
     slope03_abins = slope03_abins, \
     rho = rho, \
     thill = thill, \
-    thill_abins = thill_abins )
+    thill_abins = thill_abins,
+    pcov01_global = pcov01_global, pcov01_local = pcov01_local, \
+    pcov02_global = pcov02_global, pcov02_local = pcov02_local, \
+    pcov03_global = pcov03_global, pcov03_local = pcov03_local, \
+    fits_global_good = fits_global_good, fits_global_bad = fits_global_bad, \
+    fits_local_good = fits_local_good, fits_local_bad = fits_local_bad )
 
 # Done
 print "// Done"
