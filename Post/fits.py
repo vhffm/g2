@@ -136,7 +136,7 @@ try:
     fits_global_good += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
-    pcov01_global = np.nan
+    pcov01_global = np.nan * np.ones((3,3))
     te01 = np.nan
     fits_global_bad += 1
 print "   E-Folding Time = %.2e yr" % te01
@@ -155,7 +155,7 @@ for ii in [ 0, 1, 2, 3 ]:
         fits_local_good += 1
     except (RuntimeError, TypeError):
         "!! Fit Failed"
-        pcov01_local_loc = np.nan
+        pcov01_local_loc = np.nan * np.ones((3,3))
         te01_abins.append(np.nan)
         fits_local_bad += 1
     pcov01_local.append(pcov01_local_loc)
@@ -178,7 +178,7 @@ try:
     fits_global_good += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
-    pcov02_global = np.nan
+    pcov02_global = np.nan * np.ones((3,3))
     te02 = np.nan
     fits_global_bad += 1
 print "   E-Folding Time = %.2e yr" % te02
@@ -201,7 +201,7 @@ for ii in [ 0, 1, 2, 3 ]:
         fits_local_good += 1
     except (RuntimeError, TypeError):
         "!! Fit Failed"
-        pcov02_local_loc = np.nan
+        pcov02_local_loc = np.nan * np.ones((3,3))
         te02_abins.append(np.nan)
         fits_local_bad += 1
     pcov02_local.append(pcov02_local_loc)
@@ -220,7 +220,7 @@ try:
     fits_global_good += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
-    pcov03_global = np.nan
+    pcov03_global = np.nan * np.ones((3,3))
     slope03 = np.nan
     fits_global_bad += 1
 print "   Slope = %.2e" % slope03
@@ -239,7 +239,7 @@ for ii in [ 0, 1, 2, 3 ]:
         fits_local_good += 1
     except (RuntimeError, TypeError):
         "!! Fit Failed"
-        pcov03_local_loc = np.nan
+        pcov03_local_loc = np.nan * np.ones((3,3))
         slope03_abins.append(np.nan)
         fits_local_bad += 1
     pcov03_local.append(pcov03_local_loc)
