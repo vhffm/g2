@@ -132,8 +132,14 @@ rho_loc = rho[rho<1.0e6]
 try:
     fitParams01, pcov01_global = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
                                            p0 = [ 40000.0, 0.01, -10000.0 ])
-    te01 = 1.0/fitParams01[1]
-    fits_global_good += 1
+    if fitParams01[1] > 0.0:
+        te01 = 1.0/fitParams01[1]
+        fits_global_good += 1
+    else:
+        print "!! Fit Failed"
+        te01 = np.nan
+        pcov01_global = np.nan * np.ones((3,3))
+        fits_global_bad += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
     pcov01_global = np.nan * np.ones((3,3))
@@ -151,8 +157,14 @@ for ii in [ 0, 1, 2, 3 ]:
         fitParams01, pcov01_local_loc = \
             curve_fit(fit_func_exp, ttx_loc, ratio_loc, \
                       p0 = [ 40000.0, 0.01, -10000.0 ])
-        te01_abins.append(1.0/fitParams01[1])
-        fits_local_good += 1
+        if fitParams01[1] > 0.0:
+            te01_abins.append(1.0/fitParams01[1])
+            fits_local_good += 1
+        else:
+            print "!! Fit Failed"
+            pcov01_local_loc = np.nan * np.ones((3,3))    
+            te01_abins.append(np.nan)
+            fits_local_bad += 1
     except (RuntimeError, TypeError):
         "!! Fit Failed"
         pcov01_local_loc = np.nan * np.ones((3,3))
@@ -174,8 +186,14 @@ rho_loc = rho[bool_cb]
 try:
     fitParams02, pcov02_global = curve_fit(fit_func_exp, ttx_loc, rho_loc, \
                                            p0 = [ 40000.0, 0.01, -10000.0 ])
-    te02 = 1.0/fitParams02[1]
-    fits_global_good += 1
+    if fitParams02[1] > 0.0:
+        te02 = 1.0/fitParams02[1]
+        fits_global_good += 1
+    else:
+        print "!! Fit Failed"
+        te02 = np.nan
+        pcov02_global = np.nan * np.ones((3,3))
+        fits_global_bad += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
     pcov02_global = np.nan * np.ones((3,3))
@@ -197,8 +215,14 @@ for ii in [ 0, 1, 2, 3 ]:
         fitParams02, pcov02_local_loc = \
             curve_fit(fit_func_exp, ttx_loc, ratio_loc, \
                       p0 = [ 40000.0, 0.01, -10000.0 ])
-        te02_abins.append(1.0/fitParams02[1])
-        fits_local_good += 1
+        if fitParams02[1] > 0.0:
+            te02_abins.append(1.0/fitParams02[1])
+            fits_local_good += 1
+        else:
+            print "!! Fit Failed"
+            pcov02_local_loc = np.nan * np.ones((3,3))
+            te02_abins.append(np.nan)
+            fits_local_bad += 1
     except (RuntimeError, TypeError):
         "!! Fit Failed"
         pcov02_local_loc = np.nan * np.ones((3,3))
@@ -216,9 +240,16 @@ rho_loc = rho[rho>2.0e12]
 try:
     fitParams03, pcov03_global = curve_fit(fit_func_pow, ttx_loc, rho_loc, \
                                            p0 = [ 5.0e12, 0.1, -1.0e13 ])
-    factor03 = fitParams03[0]
-    slope03 = fitParams03[1]
-    fits_global_good += 1
+    if fitParams03[0] > 0.0 and fitParams03[1] > 0.0:
+        factor03 = fitParams03[0]
+        slope03 = fitParams03[1]
+        fits_global_good += 1
+    else:
+        print "!! Fit Failed"
+        pcov03_global = np.nan * np.ones((3,3))
+        factor03 = np.nan
+        slope03 = np.nan
+        fits_global_bad += 1
 except (RuntimeError, TypeError):
     "!! Fit Failed"
     pcov03_global = np.nan * np.ones((3,3))
@@ -238,9 +269,16 @@ for ii in [ 0, 1, 2, 3 ]:
         fitParams03, pcov03_local_loc = \
             curve_fit(fit_func_pow, ttx_loc, ratio_loc, \
                       p0 = [ 5.0e12, 0.1, -1.0e13 ])
-        factor03_abins.append(fitParams03[0])
-        slope03_abins.append(fitParams03[1])
-        fits_local_good += 1
+        if fitParams03[0] > 0.0 and fitParams03[1] > 0.0:
+            factor03_abins.append(fitParams03[0])
+            slope03_abins.append(fitParams03[1])
+            fits_local_good += 1
+        else:
+            print "!! Fit Failed"
+            pcov03_local_loc = np.nan * np.ones((3,3))
+            factor03_abins.append(np.nan)
+            slope03_abins.append(np.nan)
+            fits_local_bad += 1
     except (RuntimeError, TypeError):
         "!! Fit Failed"
         pcov03_local_loc = np.nan * np.ones((3,3))
