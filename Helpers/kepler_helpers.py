@@ -277,13 +277,17 @@ def cart2metric(r1, v1, r2, v2):
     return rho2
 
 def cart2metricX(x1, y1, z1, vx1, vy1, vz1, \
-                 x2, y2, z2, vx2, vy2, vz2):
+                 x2, y2, z2, vx2, vy2, vz2, \
+                 vanilla=True):
     """
     Computes Metric Distance.
     Cf. Kholshevnikov 2007, Sec. 3, Eq. (4)
     """
+    # Gravitational Constant
     mu = 1.0
+    # Scale Factors
     L = 1.0
+    L1 = 1.0
     # Specific Angular Momentum Vectors
     hx1, hy1, hz1 = vh.cross(x1, y1, z1, vx1, vy1, vz1)
     hx2, hy2, hz2 = vh.cross(x2, y2, z2, vx2, vy2, vz2)
@@ -296,9 +300,18 @@ def cart2metricX(x1, y1, z1, vx1, vy1, vz1, \
     ex2 = vx2 / mu - x2 / vh.norm(x2, y2, z2)
     ey2 = vy2 / mu - y2 / vh.norm(x2, y2, z2)
     ez2 = vz2 / mu - z2 / vh.norm(x2, y2, z2)
-    # Distance (Squared)
+    # Energy Constants
+    E1 = vh.dot(vx1, vy1, vz1, vx1, vy1, vz1) / 2.0 - mu / vh.norm(x1, y1, z1)
+    E2 = vh.dot(vx2, vy2, vz2, vx2, vy2, vz2) / 2.0 - mu / vh.norm(x2, y2, z2)
+    # Coordinate Distances (Squared)
     dh2 = (hx1 - hx2)**2.0 + (hy1 - hy2)**2.0 + (hz1 - hz2)**2.0
     de2 = (ex1 - ex2)**2.0 + (ey1 - ey2)**2.0 + (ez1 - ez2)**2.0
-    # Distance (Squared)
+    dE2 = (E1 - E2)**2.0
+    # Total Distances (Squared)
     rho2 = 1.0/mu/L * dh2 + de2
-    return rho2
+    rho2e = 1.0/mu/L * dh2 + de2 + L1**2.0 / mu**2.0 * dE2
+    # Return Values
+    if vanilla:
+        return rho2
+    else:
+        return rho2, rho2e, dh2, de2, dE2
