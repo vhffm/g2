@@ -35,8 +35,10 @@ class Particle():
 
     def cart2kep(self):
         self.a, self.ecc, self.inc, self.Omega, self.omega, self.M0 = \
-            cart2kep(np.array([self.x, self.y, self.z]), \
-                     np.array([self.vx, self.vy, self.vz]), self.m, \
+            cart2kep(np.array([self.x, self.y, self.z], dtype=np.float128), \
+                     np.array([self.vx, self.vy, self.vz], \
+                              dtype=np.float128), \
+                     self.m, \
                      central_mass=1.0)
     def kep2cart(self):
         x, v = \
