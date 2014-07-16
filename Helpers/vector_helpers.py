@@ -20,7 +20,7 @@ def norm(x1,y1,z1):
     return np.sqrt(dot(x1,y1,z1,x1,y1,z1))
 
 # Angle Between Vectors
-def compute_angle(x1,y1,z1,x2,y2,z2):
+def compute_angle(x1,y1,z1,x2,y2,z2,vanilla=True):
     # Dot Product -> Angle
     dots = dot(x1,y1,z1,x2,y2,z2)
     cos_theta = dots / (norm(x1,y1,z1) * norm(x2,y2,z2))
@@ -35,4 +35,10 @@ def compute_angle(x1,y1,z1,x2,y2,z2):
     nandots[nandots<0] = np.pi
     nandots[nandots>0] = 0.0
     theta[np.isnan(theta)] = nandots
-    return theta
+    # Get Sin (Better For Small Angles, But No Orientation Info)
+    sin_theta = norm(cx,cy,cz) / (norm(x1,y1,z1) * norm(x2,y2,z2))
+    # Return
+    if vanilla:
+        return theta
+    else:
+        return theta, cos_theta, sin_theta
