@@ -213,7 +213,7 @@ a1 = np.zeros_like(x1)
 a2 = np.zeros_like(x1)
 
 phase1 = np.zeros_like(x1)
-phase2 = np.zeros_like(x2)
+phase2 = np.zeros_like(x1)
 
 eccen1 = np.zeros_like(x1)
 eccen2 = np.zeros_like(x1)
