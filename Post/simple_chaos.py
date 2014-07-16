@@ -188,7 +188,7 @@ if args.verbose:
 # Allocate some arrays
 tout = np.zeros(len(nsteps))
 
-x1 = np.zeros([len(nsteps),nparts])
+x1 = np.zeros([len(nsteps),nparts], dtype=np.float128)
 x2 = np.zeros_like(x1)
 
 y1 = np.zeros_like(x1)
@@ -242,7 +242,7 @@ for istep, nstep in enumerate(nsteps):
         print "!! Output Times Misaligned"
         sys.exit()
     tout_loc = snap1.tout
-    x1_loc = np.zeros(nparts)
+    x1_loc = np.zeros(nparts, dtype=np.float128)
     x2_loc = np.zeros_like(x1_loc)
     y1_loc = np.zeros_like(x1_loc)
     y2_loc = np.zeros_like(x1_loc)
@@ -400,7 +400,10 @@ bin_edges = np.linspace(0,55.0,111)
 bin_cents = (bin_edges[1:]+bin_edges[:-1])/2.0
 digitalism = np.zeros([len(nsteps), nparts], dtype=int)
 for istep, nstep in enumerate(nsteps):
-    digitalism[istep,:] = np.digitize(a1[istep,:], bin_edges)
+    digitalism[istep,:] = np.digitize(a1[istep,:].astype(np.float64, \
+                                                         copy=True, \
+                                                         casting='unsafe'), \
+                                      bin_edges)
 
 # --------------
 # Bin Separation
