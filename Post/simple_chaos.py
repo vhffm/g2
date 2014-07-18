@@ -31,6 +31,11 @@ group2.add_argument('--genga', action='store_true', \
                     help="Genga Outputs.")
 group2.add_argument('--pkd', action='store_true', \
                     help="Pkdgrav_Planet Outputs.")
+group3 = parser.add_mutually_exclusive_group(required=True)
+group3.add_argument('--quad', action='store_true', \
+                    help="Store Quad Precision.")
+group3.add_argument('--double', action='store_true', \
+                    help="Store Double Precision.")
 args = parser.parse_args()
 
 # Info On Output
@@ -188,7 +193,11 @@ if args.verbose:
 # Allocate some arrays
 tout = np.zeros(len(nsteps))
 
-x1 = np.zeros([len(nsteps),nparts], dtype=np.float128)
+# Double/Quad?
+if args.quad:
+    x1 = np.zeros([len(nsteps),nparts], dtype=np.float128)
+else:
+    x1 = np.zeros([len(nsteps),nparts], dtype=np.float64)
 x2 = np.zeros_like(x1)
 
 y1 = np.zeros_like(x1)
@@ -242,7 +251,10 @@ for istep, nstep in enumerate(nsteps):
         print "!! Output Times Misaligned"
         sys.exit()
     tout_loc = snap1.tout
-    x1_loc = np.zeros(nparts, dtype=np.float128)
+    if args.quad:
+        x1_loc = np.zeros(nparts, dtype=np.float128)
+    else:
+        x1_loc = np.zeros(nparts, dtype=np.float64)
     x2_loc = np.zeros_like(x1_loc)
     y1_loc = np.zeros_like(x1_loc)
     y2_loc = np.zeros_like(x1_loc)
@@ -477,10 +489,17 @@ for istep, nstep in enumerate(nsteps):
                 ltime_q1[istep-2,ibin] = np.nan
                 ltime_q3[istep-2,ibin] = np.nan
 
+# What Precision
+if args.quad:
+    precision = 'quad'
+else:
+    precision = 'double'
+
 # Save Data
 print "// Saving Data"
 np.savez(args.outfile, \
-    version = 2.0, \
+    version = 2.1, \
+    precision = precision, \
     tout = tout, \
     ds = ds, \
     lce = lce, \
