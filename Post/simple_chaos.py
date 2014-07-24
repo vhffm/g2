@@ -218,8 +218,8 @@ vz2 = np.zeros_like(x1)
 m1 = np.zeros_like(x1)
 m2 = np.zeros_like(x1)
 
-i1 = np.zeros_like(x1)
-i2 = np.zeros_like(x1)
+i1 = np.zeros_like(x1, dtype=int)
+i2 = np.zeros_like(x1, dtype=int)
 
 a1 = np.zeros_like(x1)
 a2 = np.zeros_like(x1)
