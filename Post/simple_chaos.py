@@ -218,6 +218,9 @@ vz2 = np.zeros_like(x1)
 m1 = np.zeros_like(x1)
 m2 = np.zeros_like(x1)
 
+i1 = np.zeros_like(x1)
+i2 = np.zeros_like(x1)
+
 a1 = np.zeros_like(x1)
 a2 = np.zeros_like(x1)
 
@@ -372,6 +375,7 @@ for istep, nstep in enumerate(nsteps):
     tout[istep] = tout_loc
     x1[istep,:] = x1_loc; y1[istep,:] = y1_loc; z1[istep,:] = z1_loc; m1[istep,:] = m1_loc
     vx1[istep,:] = vx1_loc; vy1[istep,:] = vy1_loc; vz1[istep,:] = vz1_loc
+    i1[istep,:] = i1_loc
     phase1[istep,:] = phase1_loc
     eccen1[istep,:] = eccen1_loc
     Omega1[istep,:] = Omega1_loc
@@ -379,6 +383,7 @@ for istep, nstep in enumerate(nsteps):
     incli1[istep,:] = incli1_loc
     x2[istep,:] = x2_loc; y2[istep,:] = y2_loc; z2[istep,:] = z2_loc; m2[istep,:] = m2_loc
     vx2[istep,:] = vx2_loc; vy2[istep,:] = vy2_loc; vz2[istep,:] = vz2_loc
+    i2[istep,:] = i2_loc
     phase2[istep,:] = phase2_loc
     eccen2[istep,:] = eccen2_loc
     Omega2[istep,:] = Omega2_loc
@@ -498,7 +503,7 @@ else:
 # Save Data
 print "// Saving Data"
 np.savez(args.outfile, \
-    version = 2.1, \
+    version = 2.2, \
     precision = precision, \
     tout = tout, \
     ds = ds, \
@@ -508,8 +513,8 @@ np.savez(args.outfile, \
     x2 = x2, y2 = y2, z2 = z2, \
     vx1 = vx1, vy1 = vy1, vz1 = vz1, \
     vx2 = vx2, vy2 = vy2, vz2 = vz2, \
-    a1 = a1, m1 = m1, i1_loc = i1_loc, \
-    a2 = a2, m2 = m2, i2_loc = i2_loc, \
+    a1 = a1, m1 = m1, i1 = i1, \
+    a2 = a2, m2 = m2, i2 = i2, \
     phase1 = phase1, ecc1 = eccen1, inc1 = incli1, \
     phase2 = phase2, ecc2 = eccen2, inc2 = incli2, \
     Omega1 = Omega1, omega1 = omega1, \
