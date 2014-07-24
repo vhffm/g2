@@ -39,7 +39,7 @@ print "// Writing %s" % (args.outfile,)
 np.savez(args.outfile, \
     precision = npz_in["precision"], \
     version = npz_in["version"], \
-    tout = tout, ds2 = ds2, rho2 = rho2, dv2 = dv2, a1 = a1)
+    tout = tout, ds2 = ds2, rho2 = rho2, dv2 = dv2, a1 = a1, i1 = npz_in["i1"])
 
 # Done
 print "// Done"
