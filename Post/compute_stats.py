@@ -64,6 +64,8 @@ mass = np.zeros([len(dirs),nsteps.shape[0]])
 mass_above_cutoff = np.zeros_like(mass)
 mass_below_cutoff = np.zeros_like(mass)
 npart = np.zeros([len(dirs),nsteps.shape[0]])
+npart_above_cutoff = np.zeros_like(npart)
+npart_below_cutoff = np.zeros_like(npart)
 for idir, dirchar in enumerate(dirs):
     print "// (%s UTC) Processing Directory %s [%i/%i]" % \
         (strftime("%H:%M:%S", gmtime()), dirchar, idir+1, len(dirs))
@@ -80,8 +82,10 @@ for idir, dirchar in enumerate(dirs):
                     mass[idir,istep] += particle.m
                     if particle.m >= m_cutoff:
                         mass_above_cutoff[idir,istep] += particle.m
+                        npart_above_cutoff[idir,istep] += 1
                     else:
                         mass_below_cutoff[idir,istep] += particle.m
+                        npart_below_cutoff[idir,istep] += 1
         except IOError:
             mass[idir,istep] = np.nan
 
@@ -113,6 +117,18 @@ npart_std = np.std(npart, axis=0)
 npart_q25 = np.percentile(npart, 25, axis=0)
 npart_q75 = np.percentile(npart, 75, axis=0)
 
+npart_above_cutoff_avg = np.mean(npart_above_cutoff, axis=0)
+npart_above_cutoff_med = np.median(npart_above_cutoff, axis=0)
+npart_above_cutoff_std = np.std(npart_above_cutoff, axis=0)
+npart_above_cutoff_q25 = np.percentile(npart_above_cutoff, 25, axis=0)
+npart_above_cutoff_q75 = np.percentile(npart_above_cutoff, 75, axis=0)
+
+npart_below_cutoff_avg = np.mean(npart_below_cutoff, axis=0)
+npart_below_cutoff_med = np.median(npart_below_cutoff, axis=0)
+npart_below_cutoff_std = np.std(npart_below_cutoff, axis=0)
+npart_below_cutoff_q25 = np.percentile(npart_below_cutoff, 25, axis=0)
+npart_below_cutoff_q75 = np.percentile(npart_below_cutoff, 75, axis=0)
+
 # Store
 print "// Saving"
 np.savez("Stats.npz", \
@@ -131,6 +147,12 @@ np.savez("Stats.npz", \
     mass_below_cutoff_q25 = mass_below_cutoff_q25, \
     mass_below_cutoff_q75 = mass_below_cutoff_q75, \
     npart_avg = npart_avg, npart_med = npart_med, npart_std = npart_std, \
+    npart_above_cutoff_avg = npart_above_cutoff_avg, \
+    npart_above_cutoff_med = npart_above_cutoff_med, \
+    npart_above_cutoff_std = npart_above_cutoff_std, \
+    npart_below_cutoff_avg = npart_below_cutoff_avg, \
+    npart_below_cutoff_med = npart_below_cutoff_med, \
+    npart_below_cutoff_std = npart_below_cutoff_std, \
     mass_q25 = mass_q25, mass_q75 = mass_q75, \
     npart_q25 = npart_q25, npart_q75 = npart_q75 \
     )
