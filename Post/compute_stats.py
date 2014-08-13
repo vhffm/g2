@@ -172,7 +172,7 @@ np.savez("Stats.npz", \
     mass_q25 = mass_q25, mass_q75 = mass_q75, \
     mass_q10 = mass_q10, mass_q90 = mass_q10, \
     npart_q25 = npart_q25, npart_q75 = npart_q75, \
-    npart_q10 = npart_q10, npart_q75 = npart_q90 \
+    npart_q10 = npart_q10, npart_q90 = npart_q90 \
     )
 
 # Done
