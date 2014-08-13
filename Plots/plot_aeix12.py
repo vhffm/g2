@@ -55,10 +55,10 @@ mpl.rcParams['legend.scatterpoints'] = 1
 
 # Lighten labels
 # http://matplotlib.org/users/customizing.html
-mpl.rcParams['axes.labelcolor']  = grey
-mpl.rcParams['xtick.color']      = grey
-mpl.rcParams['ytick.color']      = grey
-mpl.rcParams['axes.edgecolor']   = grey
+# mpl.rcParams['axes.labelcolor']  = grey
+# mpl.rcParams['xtick.color']      = grey
+# mpl.rcParams['ytick.color']      = grey
+# mpl.rcParams['axes.edgecolor']   = grey
 
 # Adjust ticks
 mpl.rcParams['xtick.major.size'] = 4
