@@ -96,18 +96,24 @@ mass_med = np.median(mass, axis=0)
 mass_std = np.std(mass, axis=0)
 mass_q25 = np.percentile(mass, 25, axis=0)
 mass_q75 = np.percentile(mass, 75, axis=0)
+mass_q10 = np.percentile(mass, 10, axis=0)
+mass_q90 = np.percentile(mass, 90, axis=0)
 
 mass_above_cutoff_avg = np.mean(mass_above_cutoff, axis=0)
 mass_above_cutoff_med = np.median(mass_above_cutoff, axis=0)
 mass_above_cutoff_std = np.std(mass_above_cutoff, axis=0)
 mass_above_cutoff_q25 = np.percentile(mass_above_cutoff, 25, axis=0)
 mass_above_cutoff_q75 = np.percentile(mass_above_cutoff, 75, axis=0)
+mass_above_cutoff_q10 = np.percentile(mass_above_cutoff, 10, axis=0)
+mass_above_cutoff_q90 = np.percentile(mass_above_cutoff, 90, axis=0)
 
 mass_below_cutoff_avg = np.mean(mass_below_cutoff, axis=0)
 mass_below_cutoff_med = np.median(mass_below_cutoff, axis=0)
 mass_below_cutoff_std = np.std(mass_below_cutoff, axis=0)
 mass_below_cutoff_q25 = np.percentile(mass_below_cutoff, 25, axis=0)
 mass_below_cutoff_q75 = np.percentile(mass_below_cutoff, 75, axis=0)
+mass_below_cutoff_q10 = np.percentile(mass_below_cutoff, 10, axis=0)
+mass_below_cutoff_q90 = np.percentile(mass_below_cutoff, 90, axis=0)
 
 # Process Particle Number
 print "// Computing Particle Number Stats"
@@ -116,18 +122,24 @@ npart_med = np.median(npart, axis=0)
 npart_std = np.std(npart, axis=0)
 npart_q25 = np.percentile(npart, 25, axis=0)
 npart_q75 = np.percentile(npart, 75, axis=0)
+npart_q10 = np.percentile(npart, 10, axis=0)
+npart_q90 = np.percentile(npart, 90, axis=0)
 
 npart_above_cutoff_avg = np.mean(npart_above_cutoff, axis=0)
 npart_above_cutoff_med = np.median(npart_above_cutoff, axis=0)
 npart_above_cutoff_std = np.std(npart_above_cutoff, axis=0)
 npart_above_cutoff_q25 = np.percentile(npart_above_cutoff, 25, axis=0)
 npart_above_cutoff_q75 = np.percentile(npart_above_cutoff, 75, axis=0)
+npart_above_cutoff_q10 = np.percentile(npart_above_cutoff, 10, axis=0)
+npart_above_cutoff_q90 = np.percentile(npart_above_cutoff, 90, axis=0)
 
 npart_below_cutoff_avg = np.mean(npart_below_cutoff, axis=0)
 npart_below_cutoff_med = np.median(npart_below_cutoff, axis=0)
 npart_below_cutoff_std = np.std(npart_below_cutoff, axis=0)
 npart_below_cutoff_q25 = np.percentile(npart_below_cutoff, 25, axis=0)
 npart_below_cutoff_q75 = np.percentile(npart_below_cutoff, 75, axis=0)
+npart_below_cutoff_q10 = np.percentile(npart_below_cutoff, 10, axis=0)
+npart_below_cutoff_q90 = np.percentile(npart_below_cutoff, 90, axis=0)
 
 # Store
 print "// Saving"
@@ -141,11 +153,15 @@ np.savez("Stats.npz", \
     mass_above_cutoff_std = mass_above_cutoff_std, \
     mass_above_cutoff_q25 = mass_above_cutoff_q25, \
     mass_above_cutoff_q75 = mass_above_cutoff_q75, \
+    mass_above_cutoff_q10 = mass_above_cutoff_q10, \
+    mass_above_cutoff_q90 = mass_above_cutoff_q90, \
     mass_below_cutoff_avg = mass_below_cutoff_avg, \
     mass_below_cutoff_med = mass_below_cutoff_med, \
     mass_below_cutoff_std = mass_below_cutoff_std, \
     mass_below_cutoff_q25 = mass_below_cutoff_q25, \
     mass_below_cutoff_q75 = mass_below_cutoff_q75, \
+    mass_below_cutoff_q10 = mass_below_cutoff_q10, \
+    mass_below_cutoff_q90 = mass_below_cutoff_q90, \
     npart_avg = npart_avg, npart_med = npart_med, npart_std = npart_std, \
     npart_above_cutoff_avg = npart_above_cutoff_avg, \
     npart_above_cutoff_med = npart_above_cutoff_med, \
@@ -154,7 +170,9 @@ np.savez("Stats.npz", \
     npart_below_cutoff_med = npart_below_cutoff_med, \
     npart_below_cutoff_std = npart_below_cutoff_std, \
     mass_q25 = mass_q25, mass_q75 = mass_q75, \
-    npart_q25 = npart_q25, npart_q75 = npart_q75 \
+    mass_q10 = mass_q10, mass_q90 = mass_q10, \
+    npart_q25 = npart_q25, npart_q75 = npart_q75, \
+    npart_q10 = npart_q10, npart_q75 = npart_q90 \
     )
 
 # Done
