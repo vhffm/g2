@@ -4,6 +4,14 @@ Use List to Specify Directories.
 Can Handle Arbitrary Number of Directories. 
 Displayed on 4x3=12 Grid. Then Stacked.
 Jupiter & Saturn (2000, 2001) Ignored.
+
+Dirlist Format:
+van01,/path/
+cjs01,/path/
+ejs01,/path/
+
+Mean Motion (Solid) & Nu6 (Dashed) Resonances Overplotted in Colour Of Runs.
+Tag In Dirlist Determines Resonace Location.
 """
 
 from glob import glob
@@ -252,7 +260,50 @@ for nstep in nsteps:
                                 pecc[ipart] = np.nan
                                 pinc[ipart] = np.nan
                                 pm[ipart] = np.nan
-                        # Plot Snapshot
+
+                        # Plot EJS Resonances
+                        if tags[idir][:3] == "ejs":
+                            # Mean Motions Resonances
+                            # 2:1 Jupiter MMR: a=3.28 AU
+                            # 3:1 Jupiter MMR: a=2.50 AU
+                            # 3:2 Jupiter MMR: a=3.97 AU
+                            ax1.plot([3.28,3.28], [0,10], '-', \
+                                     c=snap_c[nsweep+args.coffset], \
+                                     lw=1.0, alpha=0.5)
+                            ax1.plot([2.50,2.50], [0,10], '-', \
+                                     c=snap_c[nsweep+args.coffset], \
+                                     lw=1.0, alpha=0.5)
+                            ax1.plot([3.97,3.97], [0,10], '-', \
+                                     c=snap_c[nsweep+args.coffset], \
+                                     lw=1.0, alpha=0.5)
+
+                            # Plot Nu6 Resonances (What About Nu5?)
+                            # Cf. Murray & Dermott p309
+                            ax1.plot([2.00,2.00], [0,10], '--', \
+                                     c=snap_c[nsweep+args.coffset], \
+                                     lw=1.0, alpha=0.5)
+                            ax1.plot([2.60,2.60], [0,10], '--', \
+                                     c=snap_c[nsweep+args.coffset], \
+                                     lw=1.0, alpha=0.5)
+
+                        # Plot CJS Resonances
+                        # Are There Nu6/Nu5?
+                        if tags[idir][:3] == "cjs":
+                            # Mean Motion Resonances
+                            # 2:1 Jupiter MMR: a=3.43 AU
+                            # 3:1 Jupiter MMR: a=2.62 AU
+                            # 3:2 Jupiter MMR: a=4.16 AU
+                            ax1.plot([3.43,3.43], [0,10], '-', \
+                                     c=snap_c[nsweep+args.coffset], \
+                                     lw=1.0, alpha=0.5)
+                            ax1.plot([2.62,2.62], [0,10], '-', \
+                                     c=snap_c[nsweep+args.coffset], \
+                                     lw=1.0, alpha=0.5)
+                            ax1.plot([4.16,4.16], [0,10], '-', \
+                                     c=snap_c[nsweep+args.coffset], \
+                                     lw=1.0, alpha=0.5)
+
+                    # Plot Snapshot
                         if args.scale: s = pm * m + n
                         else: s = 3
                         ax1 = fig1.add_subplot(4,3,ii)
