@@ -249,6 +249,14 @@ for istep, nstep in enumerate(nsteps):
     npz2 = np.load('%s/Snapshot_%012d.npz' % (dirs[1], nstep))
     snap1 = npz1['snapshot'][()]
     snap2 = npz2['snapshot'][()]
+    # For Quad Precision, Need Quad Precision Inputs
+    if args.quad:
+        if not (snap1.version >= 2 and snap1.precision == "quad"):
+            raise \
+                Exception("Need Version >=2 & Quad Precision Snapshots [S1]. ")
+        if not (snap2.version >= 2 and snap2.precision == "quad"):
+            raise \
+                Exception("Need Version >=2 & Quad Precision Snapshots [S2]. ")
     # Make Sure Output Times Align
     if snap1.tout != snap2.tout:
         print "!! Output Times Misaligned"
