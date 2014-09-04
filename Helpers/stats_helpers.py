@@ -7,7 +7,7 @@ Cf. http://mail.scipy.org/pipermail/scipy-user/2013-May/034580.html
 # Scipy imports.
 from scipy import linalg, special
 from numpy import atleast_2d, reshape, zeros, newaxis, dot, exp, pi, sqrt, \
-     ravel, power, atleast_1d, squeeze, sum, transpose
+     ravel, power, atleast_1d, squeeze, sum, transpose, isscalar
 import numpy 
 
 class gaussian_kde(object):
@@ -100,7 +100,7 @@ class Covariator(object):
             self.covariance_factor = self.scotts_factor
         elif bw_method == 'silverman':
             self.covariance_factor = self.silverman_factor
-        elif np.isscalar(bw_method) and not isinstance(bw_method, basestring):
+        elif isscalar(bw_method) and not isinstance(bw_method, basestring):
             self._bw_method = 'use constant'
             self.covariance_factor = lambda: bw_method
         elif callable(bw_method):
