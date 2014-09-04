@@ -19,7 +19,7 @@ class Particle():
 
     NB: For G=M=1, 1 Year = 2 Pi (From Kepler's Third Law).
     """
-    def __init__(self):
+    def __init__(self, precision='double'):
         # General
         self.id = None
         # Cartesian
@@ -32,14 +32,25 @@ class Particle():
         self.m, self.r = None, None
         # Ellipse
         self.xell = None; self.yell = None; self.zell = None
+        # Set Precision
+        if precision == 'double' or precision == 'quad':
+            self.precision = precision
+        else:
+            raise Exception("Invalid Kepler Elements Precision Requested.")
+        # File Version
+        self.version = 2
 
     def cart2kep(self):
+        # Set Precision
+        if self.precision == 'quad':
+            x = np.array([self.x, self.y, self.z], dtype=np.float128)
+            v = np.array([self.vx, self.vy, self.vz], dtype=np.float128)
+        elif self.precision == 'double':
+            x = np.array([self.x, self.y, self.z], dtype=np.float64)
+            v = np.array([self.vx, self.vy, self.vz], dtype=np.float64)
+        # Compute Kepler Elements
         self.a, self.ecc, self.inc, self.Omega, self.omega, self.M0 = \
-            cart2kep(np.array([self.x, self.y, self.z], dtype=np.float128), \
-                     np.array([self.vx, self.vy, self.vz], \
-                              dtype=np.float128), \
-                     self.m, \
-                     central_mass=1.0)
+            cart2kep(x, v, self.m, central_mass=1.0)
     def kep2cart(self):
         x, v = \
             kep2cart(self.a, self.ecc, self.inc, \
@@ -71,3 +82,5 @@ class Snapshot():
         self.nstep = None
         self.nparticles = None
         self.ellipses = None
+        self.version = 2
+        self.precision = 'double'

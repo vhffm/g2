@@ -9,20 +9,22 @@ from Structs import Snapshot, Particle
 import numpy as np
 
 class Loader():
-    def __init__(self, nstep, fname, ellipses):
+    def __init__(self, nstep, fname, ellipses, precision):
         self.nstep = nstep
         self.fname = fname
         self.snapshot = Snapshot()
         self.snapshot.nstep = nstep
         self.snapshot.ellipses = ellipses
+        self.snapshot.precision = precision
 
 class GengaIC(Loader):
     pass
 
 class GengaOut(Loader):
-    def __init__(self, nstep=1, ellipses=False, run_name="gasrun"):
+    def __init__(self, nstep=1, ellipses=False, run_name="gasrun", \
+                       precision="double"):
         fname = "Out%s_%012d.dat" % (run_name, nstep)
-        Loader.__init__(self, nstep, fname, ellipses)
+        Loader.__init__(self, nstep, fname, ellipses, precision)
 
     def load(self):
         with open(self.fname, 'r') as f:
@@ -35,7 +37,7 @@ class GengaOut(Loader):
                 if first:
                     self.snapshot.tout = float(line[0])     # yr
                     first = False
-                particle = Particle()
+                particle = Particle(self.snapshot.precision)
                 particle.id = float(line[1])    # -
                 particle.m  = float(line[2])    # Msun
                 particle.r  = float(line[3])    # AU
@@ -52,9 +54,9 @@ class GengaOut(Loader):
             self.snapshot.particles = particles
 
 class SSAscii(Loader):
-    def __init__(self, nstep=1, ellipses=False):
+    def __init__(self, nstep=1, ellipses=False, precision="double"):
         fname = "Out.%012d.dat" % nstep
-        Loader.__init__(self, nstep, fname, ellipses)
+        Loader.__init__(self, nstep, fname, ellipses, precision)
 
     def load(self):
         with open(self.fname, 'r') as f:
@@ -67,7 +69,7 @@ class SSAscii(Loader):
                 if first:
                     self.snapshot.tout = float(line[0]) / 2. / np.pi    # TU -> yr
                     first = False
-                particle = Particle()
+                particle = Particle(self.snapshot.precision)
                 particle.id = float(line[1])    # -
                 particle.m  = float(line[2])    # Msun
                 particle.r  = float(line[3])    # AU
