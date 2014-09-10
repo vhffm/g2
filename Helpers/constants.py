@@ -5,8 +5,9 @@ Constants and Conversions.
 import numpy as np
 
 # Masses
-mearth = 5.97e24 # kg
-msun   = 1.99e30 # kg
+mjupiter = 1.89e27 # kg
+mearth   = 5.97e24 # kg
+msun     = 1.99e30 # kg
 
 # Angle Conversions
 r2d = 180.0 / np.pi
