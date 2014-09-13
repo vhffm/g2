@@ -5,6 +5,7 @@ Constants and Conversions.
 import numpy as np
 
 # Masses
+msaturn  = 5.68e26 # kg
 mjupiter = 1.89e27 # kg
 mearth   = 5.97e24 # kg
 msun     = 1.99e30 # kg
