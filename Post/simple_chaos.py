@@ -511,7 +511,7 @@ else:
 # Save Data
 print "// Saving Data"
 np.savez(args.outfile, \
-    version = 2.2, \
+    version = int(3), \
     precision = precision, \
     tout = tout, \
     ds = ds, \
