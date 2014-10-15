@@ -11,7 +11,7 @@ import scipy.stats.mstats as mstats
 parser = argparse.ArgumentParser()
 parser.add_argument('--outfile', default='Distances_Means.npz', \
                     help="Output File Name.")
-parser.add_argument('--semi-major-axis', action='store_true', \
+parser.add_argument('--semi_major_axis', action='store_true', \
                     help="Filter/Bin/Save in Semi-Major Axis")
 args = parser.parse_args()
 
@@ -57,12 +57,12 @@ dv2_mean = mstats.gmean(ratio_dv2, axis=1)
 ds2_mean = mstats.gmean(ratio_ds2, axis=1)
 
 # Filter/Bin Semi-Major Axis
-print "// Filtering Distances. Be Patient."
-if args.semi-major-axis:
+rho2_means_a = []
+if args.semi_major_axis:
+    print "// Filtering Distances. Be Patient."
 
-    rho2_means_a = []
+    tags = [ "a<1", "1<a<2", "2<a<3", "a>3" ]
     for ii in [ 0, 1, 2, 3 ]:
-
         print "   %s" % tags[ii]
         
         # Copy, Compute Ratio
