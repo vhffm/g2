@@ -38,7 +38,7 @@ rho2 = kh.cart2metricX(x1, y1, z1, vx1, vy1, vz1, \
 print "// Writing %s" % (args.outfile,)
 np.savez(args.outfile, \
     precision = npz_in["precision"][()], \
-    version = int(npz_in["version"][()]), \
+    version = int(3), \
     tout = tout, ds2 = ds2, rho2 = rho2, dv2 = dv2, a1 = a1, i1 = npz_in["i1"])
 
 # Done

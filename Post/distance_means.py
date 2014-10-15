@@ -93,7 +93,7 @@ if args.semi_major_axis:
 print "// Saving Files"
 np.savez(args.outfile, tout = tout, \
          precision = npz["precision"][()], \
-         version = int(npz["version"][()])+1, \
+         version = int(4), \
          rho2_mean = rho2_mean, \
          rho2_means_a = rho2_means_a, \
          ds2_mean = ds2_mean, dv2_mean = dv2_mean )
