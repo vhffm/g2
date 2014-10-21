@@ -23,7 +23,7 @@ for line in lines_in:
         lines_out.append(line)
     else:
         sys.stderr.write("Removed Particle %i (%i CEs) \n" % \
-            ( int(line.strip().split()[1]), int(line.strip().split()[19]) )
+            ( int(line.strip().split()[1]), int(line.strip().split()[19]) ) )
         cce += 1
 
 # Removed Stats
