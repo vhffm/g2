@@ -17,10 +17,17 @@ args = parser.parse_args()
 lines_in = sys.stdin.read().rstrip("\n").split("\n")
 
 # Remove particles with too many CEs
-lines_out = []
+lines_out = []; cce = 0
 for line in lines_in:
     if not int(line.strip().split()[19]) >= args.ce:
         lines_out.append(line)
+    else:
+        sys.stderr.write("Removed Particle %i (%i CEs) \n" % \
+            ( int(line.strip().split()[1]), int(line.strip().split()[19]) )
+        cce += 1
+
+# Removed Stats
+sys.stderr.write("Removed %i Particles\n" % cce)
 
 # Dump to stdout
 for line in lines_out:
