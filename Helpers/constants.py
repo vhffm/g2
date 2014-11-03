@@ -9,6 +9,7 @@ msaturn  = 5.68319e26 # kg
 mjupiter = 1.89813e27 # kg
 mearth   = 5.97219e24 # kg
 msun     = 1.98844e30 # kg
+mpluto   = 1.30900e22 # kg
 
 # Angle Conversions
 r2d = 180.0 / np.pi
