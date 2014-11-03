@@ -1,0 +1,213 @@
+"""
+Plot Apo- & Perihelia.
+"""
+
+import matplotlib as mpl; mpl.use('agg')
+import matplotlib.pyplot as plt
+import numpy as np
+import constants as C
+import brewer2mpl as b2m
+import argparse
+import sys
+from glob import glob
+from time import gmtime, strftime
+
+# Load Colormaps
+c3 = b2m.get_map('Dark2', 'Qualitative', 3)
+
+# Parse Arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("--run_name", default='_solar_full', \
+                    help='Name of Simulation Run.')
+group1 = parser.add_mutually_exclusive_group(required=True)
+group1.add_argument('--all', action='store_true', \
+                   help="Reduce Full Set of Snapshots.")
+group1.add_argument('--custom', type=int, nargs='+', \
+                   help="Plot Custom Snapshot.")
+args = parser.parse_args()
+
+# Sanity Check
+if args.custom:
+    if not len(args.custom) == 3:
+        print "!! Output set must be defined by three numbers."
+        sys.exit()
+
+# Full Set
+if args.all:
+    nsteps = []
+    globs = glob("Snapshot_*.npz")
+    globs = sorted(globs)
+    for g in globs:
+        nstep = int(g.split(".")[0].split("_")[-1])
+        nsteps.append(nstep)
+
+# Custom Set
+if args.custom:
+    # Build Output Number Array (From Input)
+    nsteps = \
+        np.mgrid[args.custom[0]:args.custom[1]+args.custom[2]:args.custom[2]]
+    print "// Using Outputs %012d:%012d:%012d" % \
+        ( args.custom[0], args.custom[1], args.custom[2] )
+
+# Test Set (Deprecated)
+# Runs (from:to:steps)
+# nsteps = np.mgrid[0:1000000+100000:100000]
+# nsteps = np.mgrid[1000000-100000:1000000+100000:100000]
+
+# Load Collision & Ejection Files, Abort If Absent
+try:
+    print "// Loading Collisions"
+    c = np.loadtxt("Collisions%s.dat" % args.run_name)
+    print "// Loading Ejections"
+    e = np.loadtxt("Ejections%s.dat" % args.run_name)
+except:
+    print "// Missing Collion or Ejection File. Abort."
+    sys.exit()
+
+# Prep Collisions, Ejections To Filter
+ctime = c[:,0]
+cid01 = c[:,1].astype(int)
+cid02 = c[:,13].astype(int)
+etime = e[:,0]
+etype = e[:,13].astype(int)
+
+#
+# Loop Me, Baby
+# https://www.youtube.com/watch?v=DVpq59F9I9o
+# 
+for istep, nstep in enumerate(nsteps):
+    print "// (%s UTC) Processing Snapshot %012d/%012d" % \
+        (strftime("%H:%M:%S", gmtime()), nstep, nsteps[-1])
+    # print "            Loading"
+    npz = np.load("Snapshot_%012d.npz" % nstep)
+    snap = npz["snapshot"][()]
+
+    aloc = np.zeros(snap.nparticles)
+    eloc = np.zeros_like(aloc)
+    mloc = np.zeros_like(aloc)
+    for iparticle, particle in enumerate(snap.particles):
+        aloc[iparticle] = particle.a
+        eloc[iparticle] = particle.ecc
+        mloc[iparticle] = particle.m
+
+    # print "            Processing"
+
+    # Massive/Massless
+    bool_test = mloc==0.0
+    bool_mass = mloc>0.0
+
+    # Compute Apo-/Perihelia
+    eloc[np.logical_or(eloc>1, eloc<0)] = np.nan
+    rp = (1.0 - eloc) * aloc
+    ra = (1.0 + eloc) * aloc
+
+    #
+    # Slice & Count Collisions, Ejections
+    #
+
+    # Apply Time Slicing
+    cid01_loc = cid01[ctime<=snap.tout]
+    cid02_loc = cid02[ctime<=snap.tout]
+    etype_loc = etype[etime<=snap.tout]
+
+    # Inner SS Collisions [Mercury, Venus, Earth, Mars]
+    coll_01 = np.sum(np.logical_or(cid01_loc==0, cid02_loc==0))
+    coll_02 = np.sum(np.logical_or(cid01_loc==1, cid02_loc==1))
+    coll_03 = np.sum(np.logical_or(cid01_loc==2, cid02_loc==2))
+    coll_04 = np.sum(np.logical_or(cid01_loc==3, cid02_loc==3))
+
+    # Total Collisions, Ejected, Infall
+    Nejected = np.sum(etype_loc==-3)
+    Ninfall = np.sum(etype_loc==-2)
+    Ncoll= np.sum(ctime<=snap.tout)
+
+    # 
+    # Plot
+    #
+
+    # print "            Plotting"
+
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+
+    # Inner Solar System
+    ax.fill_between([1.0e-1, 1.0e6], [1.0e-1, 1.0e-1], [1.7, 1.7], \
+                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0)
+    ax.fill_between([1.0e-1, 1.0e6], [1.0e-1, 1.0e-1], [1.1, 1.1], \
+                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0)
+    ax.fill_between([1.0e-1, 1.7], [1.0e-1, 1.0e-1], [1.0e2, 1.0e2], \
+                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0)
+    ax.fill_between([1.0e-1, 1.1], [1.0e-1, 1.0e-1], [1.0e2, 1.0e2], \
+                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0)
+
+    # Data Points
+    ax.scatter(ra[bool_test], rp[bool_test], \
+               s=3.0, \
+               c=c3.mpl_colors[0], alpha=0.8, lw=0)
+    ax.scatter(ra[bool_mass], rp[bool_mass], \
+               s=(mloc[bool_mass]/(C.mmercury/C.msun)+30)**(2./3.), \
+               c=c3.mpl_colors[1], alpha=0.8, lw=0.5)
+
+    # Reference Circular Orbit Line
+    ax.plot([0.1,1,10,100], [0.1,1,10,100], c='k', alpha=0.2, lw=0.5)
+
+    # Timer
+    ax.text(0.03, 0.92, r"%.2e yr" % snap.tout, \
+            horizontalalignment='left', color='black', size='small', \
+            transform=ax.transAxes)
+
+    # Number of Particles
+    ax.text(0.75, 0.10, r"$N(r_p<1.7) = %i$" % \
+            rp[np.logical_and(rp<1.7, bool_test)].shape[0], \
+            horizontalalignment='left', color='black', \
+            transform=ax.transAxes)
+    ax.text(0.75, 0.04, r"$N(r_p<1.1) = %i$" % \
+            rp[np.logical_and(rp<1.1, bool_test)].shape[0], \
+            horizontalalignment='left', color='black', \
+            transform=ax.transAxes)
+
+    # Impact/Ejection/Infall Counter
+    ax.text(0.75, 0.94, r"$N_{\mathrm{Ejected}} = %i$" % \
+            Nejected, \
+            horizontalalignment='left', color='black', \
+            transform=ax.transAxes)
+    ax.text(0.75, 0.88, r"$N_{\mathrm{Infall}} = %i$" % \
+            Ninfall, \
+            horizontalalignment='left', color='black', \
+            transform=ax.transAxes)
+    ax.text(0.75, 0.82, r"$N_{\mathrm{Collision}} = %i$" % \
+            Ncoll, \
+            horizontalalignment='left', color='black', \
+            transform=ax.transAxes)
+
+    # MVEM Collisions
+    ax.text(0.3, 0.92, r"$N_\mathrm{Impacts}(M,V,E,M) = (%i,%i,%i,%i)$" % \
+            (coll_01, coll_02, coll_03, coll_04), \
+            horizontalalignment='left', color='black', \
+            transform=ax.transAxes)
+
+    # Remaining Particle Counter
+    ax.text(0.03, 0.8, r"$N_{\mathrm{Mass}} = %i$" % \
+            np.sum(bool_mass), \
+            horizontalalignment='left', color='black', \
+            transform=ax.transAxes)
+    ax.text(0.03, 0.74, r"$N_{\mathrm{Test}} = %i$" % \
+            np.sum(bool_test), \
+            horizontalalignment='left', color='black', \
+            transform=ax.transAxes)
+
+    # Labels, Scales, Limits
+    ax.set_xlim([1.0e-1,1.0e6])
+    ax.set_ylim([1.0e-1,1.0e2])
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    # ax.set_xlabel('r_a = a (1+e)')
+    # ax.set_ylabel('r_p = a (1-e)')
+    ax.set_xlabel('Apohelion (Farthest) (AU)')
+    ax.set_ylabel('Perihelion (Closest) (AU)')
+    
+    fig.savefig("rpra_%012d.png" % nstep)
+    fig.clf()
+    fig.clear()    
+
+print "// (%s UTC) Done" % strftime("%H:%M:%S", gmtime())
