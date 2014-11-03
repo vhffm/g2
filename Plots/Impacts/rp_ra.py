@@ -210,7 +210,6 @@ for istep, nstep in enumerate(nsteps):
     ax.set_title("%s" % args.tag)
     
     fig.savefig("rpra_%012d.png" % nstep)
-    fig.clf()
-    fig.clear()    
+    plt.close(fig)
 
 print "// (%s UTC) Done" % strftime("%H:%M:%S", gmtime())
