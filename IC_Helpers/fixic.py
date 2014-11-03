@@ -2,6 +2,16 @@
 Fix Mass, Radius, Position, Velocity Format.
 Fix Velocity Units On Request.
 
+Only fix velocity units when we import from NASA HORIZONS or similar.
+
+!!! Some Notes:
+
+Genga & Pkdgrav use (almost) the same unit set.
+G = M = 1 // 1yr = 2 Pi // 1 Day = 2 Pi / 365.25 ~ 0.017202423838958484.
+
+The day in Genga is different from twpi/365.25 in the 6th decimal place. Why?
+No adjustment is needed after running readinput.c for conversion.
+
 Assume File Format:
 << t i m r x y z vx vy vz Sx Sy Sz >>
    0 1 2 3 4 5 6  7  8  9 10 11 12
@@ -19,7 +29,7 @@ args = parser.parse_args()
 
 # Genga DayUnit
 # Cf. define.h in genga/source
-# Why is this not = 2.0 * np.pi / 365.25?
+# Why is this not EXACTLTY = 2.0 * np.pi / 365.25 = 0.017202423838958484
 dayUnit = 0.01720209895
 
 # Read lines from stdin
