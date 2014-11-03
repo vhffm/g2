@@ -19,6 +19,8 @@ c3 = b2m.get_map('Dark2', 'Qualitative', 3)
 parser = argparse.ArgumentParser()
 parser.add_argument("--run_name", default='_solar_full', \
                     help='Name of Simulation Run.')
+parser.add_argument("--tag", \
+                    help='Title Tag.')
 group1 = parser.add_mutually_exclusive_group(required=True)
 group1.add_argument('--all', action='store_true', \
                    help="Reduce Full Set of Snapshots.")
@@ -205,6 +207,7 @@ for istep, nstep in enumerate(nsteps):
     # ax.set_ylabel('r_p = a (1-e)')
     ax.set_xlabel('Apohelion (Farthest) (AU)')
     ax.set_ylabel('Perihelion (Closest) (AU)')
+    ax.set_title("%s" % args.tag)
     
     fig.savefig("rpra_%012d.png" % nstep)
     fig.clf()
