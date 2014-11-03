@@ -69,16 +69,16 @@ except:
 # Prep Collisions, Ejections To Filter
 # Set empty 2d array if there are no collisions/ejections
 if c.shape[0]==0:
-    ctime = np.array([], dtype=int)
-    cid01 = np.array([], dtype=int)
-    cid02 = np.array([], dtype=int)
+    ctime = np.array([[],[]], dtype=int)
+    cid01 = np.array([[],[]], dtype=int)
+    cid02 = np.array([[],[]], dtype=int)
 else:
     ctime = c[:,0]
     cid01 = c[:,1].astype(int)
     cid02 = c[:,13].astype(int)
 if e.shape[0]==0:
-    etime = np.array([], dtype=int)
-    etype = np.array([], dtype=int)
+    etime = np.array([[],[]], dtype=int)
+    etype = np.array([[],[]], dtype=int)
 else:
     etime = e[:,0]
     etype = e[:,13].astype(int)
