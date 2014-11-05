@@ -1,47 +1,34 @@
 """
-Remove Moons from ICs.
-python nomoons.py --ic_old XXX --ic_new YYY --output_file ZZZ.
+Remove moons from stdin (requires default Genga column ordering).
+python killmoons2.py --ce 95000 < $output_to_change > $changed_output
 """
 
 import numpy as np
 import argparse
+import sys
 
 # Parse arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--ic_old', type=str, required=True, \
-                    help="Old IC file with moons.")
-parser.add_argument('--ic_new', type=str, required=True, \
-                    help="New IC file without moons.")
-parser.add_argument('--output_file', type=str, required=True, \
-                    help="Output file to scan for CEs at step 1000. ")
+parser.add_argument('--ce', type=int, required=True, \
+                    help="Number of close encounters required for removal")
 args = parser.parse_args()
 
-# Read output
-# Decide which particle IDs to remove
-print "// Reading output                 -- %s" % args.output_file
-with open(args.output_file, "r") as f:
-    lines = f.readlines()
-    pids_to_remove = []
-    for line in lines:
-        line = line.strip().split()
-        # Column 19 counts number of close encounters (CEs)
-        # If at step 1000 we >985 CEs, we probably have a moon
-        if int(line[19]) > 985:
-            pids_to_remove.append(int(line[1]))
+# Read lines from stdin
+lines_in = sys.stdin.read().rstrip("\n").split("\n")
 
-# Read initial conditions file
-# Filter out particles we should remove
-print "// Reading old initial conditions -- %s" % args.ic_old
-with open(args.ic_old, "r") as f:
-    lines_in = f.readlines()
-    lines_out = []
-    for line in lines_in:
-        # int(line.strip().split()[1]) contains the particle ID
-        if not int(line.strip().split()[1]) in pids_to_remove:
-            lines_out.append(line)
+# Remove particles with too many CEs
+lines_out = []; cce = 0
+for line in lines_in:
+    if not int(line.strip().split()[19]) >= args.ce:
+        lines_out.append(line)
+    else:
+        sys.stderr.write("Removed Particle %i (%i CEs) \n" % \
+            ( int(line.strip().split()[1]), int(line.strip().split()[19]) ) )
+        cce += 1
 
-# Write cleaned up initial conditions file
-print "// Writing new initial conditions -- %s" % args.ic_new
-with open(args.ic_new, "w") as f:
-    for line in lines_out:
-        f.write(line)
+# Removed Stats
+sys.stderr.write("Removed %i Particles\n" % cce)
+
+# Dump to stdout
+for line in lines_out:
+    print line
