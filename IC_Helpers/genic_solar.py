@@ -101,6 +101,10 @@ if args.cjs or args.ejs or args.nice1 or args.nice2:
             jupiter = line
         elif iplanet == 1:
             saturn = line
+        elif iplanet == 2:
+            uranus = line
+        elif iplanet == 3:
+            neptune = line
 
 # Cat
 if args.all:
