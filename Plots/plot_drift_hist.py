@@ -65,6 +65,12 @@ for istep in rng:
     ax.set_ylabel('Fraction of Particles')
     ax.set_title('Radius | t=%0.2f Years' % tt[istep])
     ax.set_xlim([-0.15,0.15])
+    if tt[istep] > 1000:
+        ax.set_ylim([0,0.1])
+    elif tt[istep] > 320:
+        ax.set_ylim([0,0.2])
+    else:
+        ax.set_ylim([0,1.0])
 
     # Right Panel, Radial Difference Histogram
     ax = axarr[1]
@@ -75,6 +81,12 @@ for istep in rng:
     # ax.set_ylabel('Fraction of Particles')
     ax.set_title('Arc Length | t=%0.2f Years' % tt[istep])
     ax.set_xlim([0,15])
+    if tt[istep] > 500:
+        ax.set_ylim([0,0.1])
+    elif tt[istep] > 320:
+        ax.set_ylim([0,0.2])
+    else:
+        ax.set_ylim([0,1.0])
 
     # Save Figure
     fig.savefig("Test_%05d.png" % istep)
