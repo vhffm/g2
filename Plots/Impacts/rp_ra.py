@@ -59,9 +59,9 @@ if args.custom:
 # Load Collision & Ejection Files, Abort If Absent
 try:
     print "// Loading Collisions"
-    c = np.loadtxt("Collisions%s.dat" % args.run_name)
+    c = np.loadtxt("Collisions%s.dat" % args.run_name, ndmin=2)
     print "// Loading Ejections"
-    e = np.loadtxt("Ejections%s.dat" % args.run_name)
+    e = np.loadtxt("Ejections%s.dat" % args.run_name, ndmin=2)
 except:
     print "// Missing Collion or Ejection File. Abort."
     sys.exit()
