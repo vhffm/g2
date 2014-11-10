@@ -43,6 +43,7 @@ if args.custom:
 x = np.ones(len(nsteps)) * np.nan
 y = np.ones_like(x) * np.nan
 z = np.ones_like(x) * np.nan
+t = np.zeros_like(x)
 
 # Load first snapshot, make sure particle is present
 npz = np.load('Snapshot_%012d.npz' % nsteps[0])
@@ -66,6 +67,7 @@ for istep, nstep in enumerate(nsteps):
     # Load Snapshots
     npz = np.load('Snapshot_%012d.npz' % nstep)
     snap = npz['snapshot'][()]
+    t[istep] = snap.tout
     for iparticle, particle in enumerate(snap.particles):
         if int(particle.id) == args.pid:
             x[istep] = particle.x
@@ -77,7 +79,7 @@ print "// Done -- %s UTC" % strftime("%H:%M:%S", gmtime())
 # Save Data
 print "// Saving Data"
 np.savez("TimeSeries_%04d.npz" % args.pid, \
-    x = x, y = y, z = z)
+    x = x, y = y, z = z, t = t )
 
 # Done
 print "// Done"
