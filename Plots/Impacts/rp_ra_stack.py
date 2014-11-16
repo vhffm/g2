@@ -140,9 +140,8 @@ for istep, nstep in enumerate(nsteps):
 
         # Reset Counters
         if idir == 0:
-            Nejected = 0
-            Ninfall = 0
-            Ncoll = 0
+            Nejected, Ninfall, Ncoll = 0, 0, 0
+            coll_01, coll_02, coll_03, coll_04 = 0, 0, 0, 0
 
         aloc = np.zeros(snap.nparticles)
         eloc = np.zeros_like(aloc)
@@ -181,10 +180,10 @@ for istep, nstep in enumerate(nsteps):
         etype_loc = etype_all[idir][etime_all[idir]<=snap.tout]
 
         # Inner SS Collisions [Mercury, Venus, Earth, Mars]
-        coll_01 = np.sum(np.logical_or(cid01_loc==0, cid02_loc==0))
-        coll_02 = np.sum(np.logical_or(cid01_loc==1, cid02_loc==1))
-        coll_03 = np.sum(np.logical_or(cid01_loc==2, cid02_loc==2))
-        coll_04 = np.sum(np.logical_or(cid01_loc==3, cid02_loc==3))
+        coll_01 += np.sum(np.logical_or(cid01_loc==0, cid02_loc==0))
+        coll_02 += np.sum(np.logical_or(cid01_loc==1, cid02_loc==1))
+        coll_03 += np.sum(np.logical_or(cid01_loc==2, cid02_loc==2))
+        coll_04 += np.sum(np.logical_or(cid01_loc==3, cid02_loc==3))
 
         # Total Collisions, Ejected, Infall
         Nejected += np.sum(etype_loc==-3)
