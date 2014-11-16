@@ -211,7 +211,7 @@ for istep, nstep in enumerate(nsteps):
     # Data Points
     ax.scatter(ra[bool_test], rp[bool_test], \
                s=3.0, \
-               c=c3.mpl_colors[0], alpha=0.8, lw=0)
+               c=c3.mpl_colors[0], alpha=0.8, edgecolor=c3.mpl_colors[0])
     ax.scatter(ra[bool_mass], rp[bool_mass], \
                s=(mloc[bool_mass]/(C.mmercury/C.msun)+30)**(2./3.), \
                c=c3.mpl_colors[1], alpha=0.8, lw=0.5)
