@@ -176,9 +176,9 @@ for istep, nstep in enumerate(nsteps):
         #
 
         # Apply Time Slicing
-        cid01_loc = cid01_all[idir][ctime<=snap.tout]
-        cid02_loc = cid02_all[idir][ctime<=snap.tout]
-        etype_loc = etype_all[idir][etime<=snap.tout]
+        cid01_loc = cid01_all[idir][ctime_all[idir]<=snap.tout]
+        cid02_loc = cid02_all[idir][ctime_all[idir]<=snap.tout]
+        etype_loc = etype_all[idir][etime_all[idir]<=snap.tout]
 
         # Inner SS Collisions [Mercury, Venus, Earth, Mars]
         coll_01 = np.sum(np.logical_or(cid01_loc==0, cid02_loc==0))
