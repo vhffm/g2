@@ -217,7 +217,7 @@ for istep, nstep in enumerate(nsteps):
     # ax.set_ylabel('r_p = a (1-e)')
     ax.set_xlabel('Apohelion (Farthest) (AU)')
     ax.set_ylabel('Perihelion (Closest) (AU)')
-    ax.set_title("%s" % args.tag)
+    ax.set_title("%s" % args.tag, fontsize="small")
     
     fig.savefig("rpra_%012d.png" % nstep)
     plt.close(fig)
