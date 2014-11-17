@@ -144,13 +144,13 @@ for istep, nstep in enumerate(nsteps):
 
     # Inner Solar System
     ax.fill_between([1.0e-1, 1.0e6], [1.0e-1, 1.0e-1], [1.7, 1.7], \
-                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0)
+                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0.5)
     ax.fill_between([1.0e-1, 1.0e6], [1.0e-1, 1.0e-1], [1.1, 1.1], \
-                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0)
+                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0.5)
     ax.fill_between([1.0e-1, 1.7], [1.0e-1, 1.0e-1], [1.0e2, 1.0e2], \
-                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0)
+                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0.5)
     ax.fill_between([1.0e-1, 1.1], [1.0e-1, 1.0e-1], [1.0e2, 1.0e2], \
-                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0)
+                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0.5)
 
     # Data Points
     ax.scatter(ra[bool_test], rp[bool_test], \
