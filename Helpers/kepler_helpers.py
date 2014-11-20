@@ -9,6 +9,84 @@ cf. http://server.faia.upm.es/moda/curso1112/kepler.pdf
 import numpy as np
 import vector_helpers as vh
 
+def cart2kepX(x, y, z, vx, vy, vz, mass, central_mass=1.0):
+    """
+    Vectorized version of cart2kep. Much love for many particles.
+
+    @params
+    r - (x,y,z) Cartesian Positions
+    v - (vx,vy,vz) Cartesian Velocities
+    mass - Particle Mass
+    central_mass - Mass of Central Object
+
+    @returns
+    a - Semi-Major Axis
+    ecc - Eccentricity
+    inc - Inclination
+    Omega - Longitude of the Ascending Node
+    omega - Argument of Periapsis
+    M - Mean Anomaly at Epoch
+
+    Cf. http://www.bruce-shapiro.com/pair/ElementConversionRecipes.pdf
+    """
+
+    # Gravitational Parameter
+    G = 1.0
+    mu = G * ( central_mass + mass )
+
+    # Angular Momentum Vector
+    hx, hy, hz = vh.cross(x, y, z, vx, vy, vz)
+
+    # Laplace-Runge-Lenz Vector
+    # Scalar Eccentricity
+    tmp_x, tmp_y, tmp_z = vh.cross(vx, vy, vz, hx, hy, hz)
+    r_norm = vh.norm(x, y, z)
+    lrl_x = tmp_x / mu - x / r_norm
+    lrl_y = tmp_y / mu - y / r_norm
+    lrl_z = tmp_z / mu - z / r_norm
+    ecc = vh.norm(lrl_x, lrl_y, lrl_z)
+
+    # Semi-Major Axis
+    a = vh.dot(hx, hy, hz, hx, hy, hz) / ( mu * ( 1.0 - ecc**2.0 ) )
+
+    # Inclination
+    h_norm = vh.norm(hx, hy, hz)
+    inc = np.arccos(vh.dot(0.0, 0.0, 1.0, hx, hy, hz) / h_norm)
+
+    # Longitude of the Ascending Node
+    nx, ny, nz = vh.cross(0.0, 0.0, 1.0, hx, hy, hz)
+    n_norm = vh.norm(nx, ny, nz)
+    tmp0 = 0.0
+    tmpX = np.arccos(vh.dot(1.0, 0.0, 0.0, nx, ny, nz) / n_norm)
+    Omega = np.where(inc==0.0, tmp0, tmpX)
+    Omega[vh.dot(lrl_x, lrl_y, lrl_z, 0.0, 1.0, 0.0) < 0.0] = \
+        2.0 * np.pi - Omega[vh.dot(lrl_x, lrl_y, lrl_z, 0.0, 1.0, 0.0) < 0.0]
+
+    # Argument of Perigee
+    # For Zero Inclination, Fall Back to 2D Case
+    # http://en.wikipedia.org/wiki/Argument_of_periapsis
+    tmp0 = np.arctan2(lrl_y/ecc, lrl_x/ecc)
+    tmpX = np.arccos(vh.dot(nx, ny, nz, lrl_x, lrl_y, lrl_z) / (n_norm * ecc))
+    omega = np.where(inc==0.0, tmp0, tmpX)
+    omega[vh.dot(lrl_x, lrl_y, lrl_z, 0.0, 0.0, 1.0) < 0.0] = \
+        2.0 * np.pi - omega[vh.dot(lrl_x, lrl_y, lrl_z, 0.0, 0.0, 1.0) < 0.0]
+
+    # True Anomaly
+    theta = np.arccos(vh.dot(lrl_x, lrl_y, lrl_z, x, y, z) / (ecc * r_norm))
+    theta[vh.dot(x, y, z, vx, vy, vz) < 0.0] = \
+        2.0 * np.pi - theta[vh.dot(x, y, z, vx, vy, vz) < 0.0]
+
+    # Eccentric Anomaly
+    E = np.arccos((ecc + np.cos(theta)) / (1 + ecc * np.cos(theta)))
+    E[np.logical_and(np.pi < theta, theta < 2.0 * np.pi)] = \
+        2.0 * np.pi - E[np.logical_and(np.pi < theta, theta < 2.0 * np.pi)]
+
+    # Mean Anomaly
+    M = E - ecc * np.sin(E)
+
+    # Return Set
+    return a, ecc, inc, Omega, omega, M
+
 def cart2kep(r, v, mass, central_mass=1.0):
     """
     @params
