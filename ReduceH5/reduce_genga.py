@@ -104,6 +104,7 @@ for istep, nstep in enumerate(nsteps):
         f5["particles/m"].attrs["units"] = "Msun"
         f5.attrs["tout"] = tout[0]
         f5.attrs["tout_units"] = "yr"
+        f5.attrs["run_name"] = args.run_name
 
         # Compute Ellipses?
         # @todo - Write vectorized version?
