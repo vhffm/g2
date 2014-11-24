@@ -16,6 +16,7 @@ from time import gmtime, strftime
 
 # Load Colormaps
 c3 = b2m.get_map('Dark2', 'Qualitative', 3)
+cx = b2m.get_map('BuPu', 'Sequential', 9, reverse=True)
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
@@ -146,7 +147,14 @@ for istep, nstep in enumerate(nsteps):
             aloc = f5["particles"]["a"][()]
             eloc = f5["particles"]["e"][()]
             mloc = f5["particles"]["m"][()]
+            pidx_loc = f5["particles"]["pid"][()]
             tout = f5.attrs["tout"]
+
+        # Global IDs
+        if idir == 0:
+            pidx = pidx_loc
+        else:
+            pidx = np.concatenate([pidx, pidx_loc])
 
         # Massive/Massless
         # Massive From First Directory Only
@@ -191,6 +199,12 @@ for istep, nstep in enumerate(nsteps):
         Ninfall += np.sum(etype_loc==-2)
         Ncoll += np.sum(ctime<=tout)
 
+    # Centr Covers Jupiter/Saturn
+    bool_inner = np.logical_and(bool_test, pidx<25000)
+    bool_centr = np.logical_and(bool_test, \
+                                np.logical_and(pidx>=25000, pidx<80000))
+    bool_outer = np.logical_and(bool_test, pidx>=80000)
+
     # 
     # Plot
     #
@@ -200,21 +214,38 @@ for istep, nstep in enumerate(nsteps):
 
     # Inner Solar System
     ax.fill_between([1.0e-1, 1.0e6], [1.0e-1, 1.0e-1], [1.7, 1.7], \
-                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0.5)
+                    facecolor=c3.mpl_colors[0], alpha=0.05, lw=0.5)
     ax.fill_between([1.0e-1, 1.0e6], [1.0e-1, 1.0e-1], [1.1, 1.1], \
-                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0.5)
+                    facecolor=c3.mpl_colors[0], alpha=0.05, lw=0.5)
     ax.fill_between([1.0e-1, 1.7], [1.0e-1, 1.0e-1], [1.0e2, 1.0e2], \
-                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0.5)
+                    facecolor=c3.mpl_colors[0], alpha=0.05, lw=0.5)
     ax.fill_between([1.0e-1, 1.1], [1.0e-1, 1.0e-1], [1.0e2, 1.0e2], \
-                    facecolor=c3.mpl_colors[2], alpha=0.2, lw=0.5)
+                    facecolor=c3.mpl_colors[0], alpha=0.05, lw=0.5)
+
+    # Massive
+    ax.scatter(ra[bool_mass], rp[bool_mass], \
+               s=(mloc[bool_mass]/(C.mmercury/C.msun)+30)**(2./3.), \
+               c=c3.mpl_colors[1], alpha=0.8, lw=0.5)
 
     # Data Points
     ax.scatter(ra[bool_test], rp[bool_test], \
                s=1.0, \
                c=c3.mpl_colors[0], alpha=0.8, edgecolor=c3.mpl_colors[0])
-    ax.scatter(ra[bool_mass], rp[bool_mass], \
-               s=(mall[bool_mass]/(C.mmercury/C.msun)+30)**(2./3.), \
-               c=c3.mpl_colors[1], alpha=0.8, lw=0.5)
+
+    # Outer Test Particles
+    ax.scatter(ra[bool_outer], rp[bool_outer], \
+               s=1.0, \
+               c=c3.mpl_colors[0], alpha=0.8, edgecolor=cx.mpl_colors[4])
+
+    # Middle Test Particles
+    ax.scatter(ra[bool_centr], rp[bool_centr], \
+               s=1.0, \
+               c=c3.mpl_colors[0], alpha=0.8, edgecolor=cx.mpl_colors[2])
+
+    # Inner Test Particles
+    ax.scatter(ra[bool_inner], rp[bool_inner], \
+               s=1.0, \
+               c=c3.mpl_colors[0], alpha=0.8, edgecolor=cx.mpl_colors[0])
 
     # Reference Circular Orbit Line
     ax.plot([0.1,1,10,100], [0.1,1,10,100], c='k', alpha=0.2, lw=0.5)
