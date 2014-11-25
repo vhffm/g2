@@ -224,7 +224,7 @@ for istep, nstep in enumerate(nsteps):
 
     # Massive
     ax.scatter(ra[bool_mass], rp[bool_mass], \
-               s=(mloc[bool_mass]/(C.mmercury/C.msun)+30)**(2./3.), \
+               s=(mall[bool_mass]/(C.mmercury/C.msun)+30)**(2./3.), \
                c=c3.mpl_colors[1], alpha=0.8, lw=0.5)
 
     # Data Points
