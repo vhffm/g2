@@ -59,8 +59,8 @@ def cart2kepX(x, y, z, vx, vy, vz, mass, central_mass=1.0):
     tmp0 = 0.0
     tmpX = np.arccos(vh.dot(1.0, 0.0, 0.0, nx, ny, nz) / n_norm)
     Omega = np.where(inc==0.0, tmp0, tmpX)
-    Omega[vh.dot(lrl_x, lrl_y, lrl_z, 0.0, 1.0, 0.0) < 0.0] = \
-        2.0 * np.pi - Omega[vh.dot(lrl_x, lrl_y, lrl_z, 0.0, 1.0, 0.0) < 0.0]
+    Omega[vh.dot(nx, ny, nz, 0.0, 1.0, 0.0) < 0.0] = \
+        2.0 * np.pi - Omega[vh.dot(nx, ny, nz, 0.0, 1.0, 0.0) < 0.0]
 
     # Argument of Perigee
     # For Zero Inclination, Fall Back to 2D Case
