@@ -129,12 +129,11 @@ for istep, nstep in enumerate(nsteps):
         # Compute Ellipses?
         if args.ellipses:
             xell, yell, zell = kh.compute_ellipseX(a, e, i, Omega, omega)
-            for ipid, pidloc in enumerate(pid):
-                f5.create_dataset("ellipses/%i/x" % pidloc, data=xell[ipid,:])
-                f5.create_dataset("ellipses/%i/y" % pidloc, data=yell[ipid,:])
-                f5.create_dataset("ellipses/%i/z" % pidloc, data=zell[ipid,:])
-                f5["ellipses/%i/x" % pidloc].attrs["units"] = "AU"
-                f5["ellipses/%i/y" % pidloc].attrs["units"] = "AU"
-                f5["ellipses/%i/z" % pidloc].attrs["units"] = "AU"
+            f5.create_dataset("ellipses/x", data=xell)
+            f5.create_dataset("ellipses/y", data=yell)
+            f5.create_dataset("ellipses/z", data=zell)
+            f5["ellipses/x"].attrs["units"] = "AU"
+            f5["ellipses/y"].attrs["units"] = "AU"
+            f5["ellipses/z"].attrs["units"] = "AU"
 
 print "// Done -- %s UTC" % strftime("%H:%M:%S", gmtime())
