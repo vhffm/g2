@@ -254,6 +254,47 @@ def nr(M, ecc, epsilon_target=1.0e-5):
     # print "Found E=%.2f" % Ei1
     return Ei1
 
+def compute_ellipseX(a, ecc, inc, Omega, omega):
+    """
+    Compute XYZ Sequence for a Kepler Ellipse.
+    Vectorized Version. Expects 1D Arrays Passed.
+    """
+
+    # Some Reshaping
+    a = a[:,np.newaxis]
+    ecc = ecc[:,np.newaxis]
+    inc = inc[:,np.newaxis]
+    Omega = Omega[:,np.newaxis]
+    omega = omega[:,np.newaxis]
+
+    # Eccentric Anomaly
+    E = np.linspace(0.0, 2.*np.pi, 128)
+    E = E[np.newaxis,:]
+
+    # PQW Unit Vectors
+    Px = np.cos(omega) * np.cos(Omega) - \
+         np.sin(omega) * np.cos(inc) * np.sin(Omega)
+    Py = np.cos(omega) * np.sin(Omega) + \
+         np.sin(omega) * np.cos(inc) * np.cos(Omega)
+    Pz = np.sin(omega) * np.sin(inc)
+
+    Qx = - np.sin(omega) * np.cos(Omega) - \
+           np.cos(omega) * np.cos(inc) * np.sin(Omega)
+    Qy = - np.sin(omega) * np.sin(Omega) + \
+           np.cos(omega) * np.cos(inc) * np.cos(Omega)
+    Qz =   np.sin(inc) * np.cos(omega)
+
+    # Compute Ellipse
+    x = a * (np.cos(E) - ecc) * Px + \
+        a * np.sqrt(1.0 - ecc**2.) * np.sin(E) * Qx
+    y = a * (np.cos(E) - ecc) * Py + \
+        a * np.sqrt(1.0 - ecc**2.) * np.sin(E) * Qy
+    z = a * (np.cos(E) - ecc) * Pz + \
+        a * np.sqrt(1.0 - ecc**2.) * np.sin(E) * Qz
+
+    # Return
+    return x, y, z
+
 def compute_ellipse(a, ecc, inc, Omega, omega):
     """
     Compute XYZ Sequence for a Kepler Ellipse.
