@@ -20,10 +20,21 @@ group1.add_argument('--all', action='store_true', \
                    help="Reduce Full Set of Snapshots.")
 group1.add_argument('--custom', type=int, nargs='+', \
                    help="Plot Custom Snapshot.")
+group2 = parser.add_mutually_exclusive_group(required=True)
+group2.add_argument('--heliocentric', action='store_true', \
+                   help="Heliocentric Coordinates.")
+group2.add_argument('--barycentric', action='store_true', \
+                   help="Barycentric Coordinates.")
 args = parser.parse_args()
 
 # Output Simulation Name
 print "// Run Name: %s" % args.run_name
+
+# Coordinates Info
+if args.heliocentric:
+    print "// Using Heliocentric Coordinates"
+if args.barycentric:
+    print "// Using Barycentric Coordinates"
 
 # Ellipse Warning
 if args.ellipses:
@@ -75,6 +86,11 @@ for istep, nstep in enumerate(nsteps):
     vy = genga[:,8].astype("float64")
     vz = genga[:,9].astype("float64")
 
+    if args.barycentric:
+        x, vx = kh.helio2bary(x, vx, m)
+        y, vy = kh.helio2bary(y, vy, m)
+        z, vz = kh.helio2bary(z, vz, m)
+
     # Compute Keplerian Elements
     a, e, i, Omega, omega, M0 = \
         kh.cart2kepX(x, y, z, vx, vy, vz, m, central_mass=1.0)
@@ -105,6 +121,10 @@ for istep, nstep in enumerate(nsteps):
         f5.attrs["tout"] = tout[0]
         f5.attrs["tout_units"] = "yr"
         f5.attrs["run_name"] = args.run_name
+        if args.heliocentric:
+            f5.attrs["coordinate_frame"] = "heliocentric"
+        if args.barycentric:
+            f5.attrs["coordinate_frame"] = "barycentric"
 
         # Compute Ellipses?
         # @todo - Write vectorized version?

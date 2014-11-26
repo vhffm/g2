@@ -9,6 +9,26 @@ cf. http://server.faia.upm.es/moda/curso1112/kepler.pdf
 import numpy as np
 import vector_helpers as vh
 
+def helio2bary(r_h, v_h, m, return_sun=False, central_mass=1.0):
+    """
+    Convert Helio- to Barycentric Coordinates.
+    """
+
+    total_mass = np.sum(m) + central_mass
+
+    # Barycenter Offsets
+    r_b = np.sum(r_h * m) / total_mass
+    v_b = np.sum(v_h * m) / total_mass
+
+    # New Coordinates
+    r = r_h - r_b
+    v = v_h - v_b
+
+    if return_sun:
+        return r, v, -r_b, -v_b
+    else:
+        return r, v
+
 def cart2kepX(x, y, z, vx, vy, vz, mass, central_mass=1.0):
     """
     Vectorized version of cart2kep. Much love for many particles.
