@@ -61,7 +61,7 @@ for istep, nstep in enumerate(nsteps):
         (strftime("%H:%M:%S", gmtime()), nstep, nsteps[-1])
 
     fname = "Out%s_%012d.dat" % (args.run_name, nstep)
-    genga = np.loadtxt("%s" % fname)
+    genga = np.loadtxt("%s" % fname, ndmin=2)
 
     # t i m r x y z vx vy vz Sx Sy Sz
     # 0 1 2 3 4 5 6  7  8  9 10 11 12
