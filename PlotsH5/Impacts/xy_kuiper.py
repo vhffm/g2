@@ -71,14 +71,14 @@ for istep, nstep in enumerate(nsteps):
         
         # Ellipses, Inner Planets
         for ii in [ 0, 1, 2, 3 ]:
-            xell = f5["ellipses/%s/x" % ii][()]
-            yell = f5["ellipses/%s/y" % ii][()]
+            xell = f5["ellipses/x"][ii,:]
+            yell = f5["ellipses/y"][ii,:]
             ax.plot(xell, yell, lw=1.0, alpha=0.6, c=c3.mpl_colors[0])
             
         # Ellipses, Outer Planets
         for ii in [ 4, 5, 6, 7, 8]:
-            xell = f5["ellipses/%s/x" % ii][()]
-            yell = f5["ellipses/%s/y" % ii][()]
+            xell = f5["ellipses/x"][ii,:]
+            yell = f5["ellipses/y"][ii,:]
             ax.plot(xell, yell, lw=1.0, alpha=0.6, c=c3.mpl_colors[1])
             
         # Kuiper Belt
