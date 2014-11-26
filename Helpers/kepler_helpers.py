@@ -262,11 +262,6 @@ def compute_ellipse(a, ecc, inc, Omega, omega):
     # Eccentric Anomaly
     E = np.linspace(0.0, 2.*np.pi, 128)
 
-    # Allocate
-    x = np.zeros_like(E)
-    y = np.zeros_like(E)
-    z = np.zeros_like(E)
-
     # PQW Unit Vectors
     Px = np.cos(omega) * np.cos(Omega) - \
          np.sin(omega) * np.cos(inc) * np.sin(Omega)
@@ -280,16 +275,13 @@ def compute_ellipse(a, ecc, inc, Omega, omega):
            np.cos(omega) * np.cos(inc) * np.cos(Omega)
     Qz =   np.sin(inc) * np.cos(omega)
 
-    P = np.array([Px, Py, Pz])
-    Q = np.array([Qx, Qy, Qz])
-
-    # Loop Ellipse
-    for iE in range(E.shape[0]):
-        r = a * (np.cos(E[iE]) - ecc) * P + \
-            a * np.sqrt(1 - ecc**2.) * np.sin(E[iE]) * Q
-        x[iE] = r[0]
-        y[iE] = r[1]
-        z[iE] = r[2]
+    # Compute Ellipse
+    x = a * (np.cos(E) - ecc) * Px + \
+        a * np.sqrt(1.0 - ecc**2.) * np.sin(E) * Qx
+    y = a * (np.cos(E) - ecc) * Py + \
+        a * np.sqrt(1.0 - ecc**2.) * np.sin(E) * Qy
+    z = a * (np.cos(E) - ecc) * Pz + \
+        a * np.sqrt(1.0 - ecc**2.) * np.sin(E) * Qz
 
     # Return
     return x, y, z
