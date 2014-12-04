@@ -22,6 +22,8 @@ group2 = parser.add_mutually_exclusive_group(required=True)
 group2.add_argument('--all', action='store_true', help="All Planets.")
 group2.add_argument('--outer', action='store_true', help="Outer Planets.")
 group2.add_argument('--inner', action='store_true', help="Inner Planets.")
+group2.add_argument('--giants', action='store_true', \
+                    help="Giant (Gas/Ice) Planets.")
 group2.add_argument('--js', action='store_true', help="Jupiter/Saturn Only.")
 args = parser.parse_args()
 
@@ -130,6 +132,8 @@ if args.js:
     ss = [ jupiter, saturn ]
 if args.outer:
     ss = [ jupiter, saturn, uranus, neptune, pluto ]
+if args.giants:
+    ss = [ jupiter, saturn, uranus, neptune ]
 if args.inner:
     ss = [ mercury, venus, earth, mars ]
 
