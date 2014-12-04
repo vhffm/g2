@@ -87,8 +87,8 @@ if args.cjs or args.ejs or args.nice1 or args.nice2:
     # Cf. Figure 1 Caption in Gomes+ 2005
     if args.nice3:
         anew = np.array([5.45, 8.18, 11.5, 14.2])
-        enew = np.array([0.001, 0.001, 0.001, 0.001])
-        inew = np.array([0.001, 0.001, 0.001, 0.001])
+        enew = np.array([0.0001, 0.0001, 0.0001, 0.0001])
+        inew = np.array([0.0001, 0.0001, 0.0001, 0.0001])
 
     # Nice4 Model
     # Like Nice3, but Jupiter and Saturn P1/P2 ~ 1.98
