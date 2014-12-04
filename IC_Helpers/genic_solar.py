@@ -16,6 +16,8 @@ group1.add_argument('--ejs', action='store_true', help="EJS Configuration.")
 group1.add_argument('--cjs', action='store_true', help="CJS Configuration.")
 group1.add_argument('--nice1', action='store_true', help="Nice 1 Model.")
 group1.add_argument('--nice2', action='store_true', help="Nice 2 Model.")
+group1.add_argument('--nice3', action='store_true', help="Nice 3 Model.")
+group1.add_argument('--nice4', action='store_true', help="Nice 4 Model.")
 group2 = parser.add_mutually_exclusive_group(required=True)
 group2.add_argument('--all', action='store_true', help="All Planets.")
 group2.add_argument('--outer', action='store_true', help="Outer Planets.")
@@ -79,10 +81,24 @@ if args.cjs or args.ejs or args.nice1 or args.nice2:
         enew = np.array([0.0044, 0.017, 0.053, 0.011])
         inew = np.array([0.016, 0.016, 0.044, 0.029])
 
+    # Nice3 Model
+    # Cf. Figure 1 Caption in Gomes+ 2005
+    if args.nice3:
+        anew = np.array([5.45, 8.18, 11.5, 14.2])
+        enew = np.array([0.001, 0.001, 0.001, 0.001])
+        inew = np.array([0.001, 0.001, 0.001, 0.001])
+
+    # Nice4 Model
+    # Like Nice3, but Jupiter and Saturn P1/P2 ~ 1.98
+    if args.nice4:
+        anew = np.array([5.45, 8.6, 11.5, 14.2])
+        enew = np.array([0.0001, 0.0001, 0.0001, 0.0001])
+        inew = np.array([0.0001, 0.0001, 0.0001, 0.0001])
+
     # What Planets To Fix?
     if args.ejs or args.cjs:
         plist = [ jupiter, saturn ]
-    elif args.nice1 or args.nice2:
+    elif args.nice1 or args.nice2 or args.nice3 or args.nice4:
         plist = [ jupiter, saturn, uranus, neptune ]
 
     for iplanet, planet in enumerate(plist):
