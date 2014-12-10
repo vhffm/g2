@@ -56,6 +56,10 @@ if args.custom:
 if not args.tag:
     args.tag = os.getcwd()
 
+# Fixed Planet IDs
+inner_ids = np.array([0,1,2,3])
+outer_ids = np.array([4,5,6,7])
+
 #
 # Loop Me, Baby
 # https://www.youtube.com/watch?v=DVpq59F9I9o
@@ -70,13 +74,17 @@ for istep, nstep in enumerate(nsteps):
         ax.set_aspect("equal")
         
         # Ellipses, Inner Planets
-        for ii in [ 0, 1, 2, 3 ]:
+        inner_mask = np.in1d(f5["particles/pid"][()], inner_ids)
+        inner_indices = np.where(inner_mask == True)[0]
+        for ii in inner_indices:
             xell = f5["ellipses/x"][ii,:]
             yell = f5["ellipses/y"][ii,:]
             ax.plot(xell, yell, lw=1.0, alpha=0.6, c=c3.mpl_colors[0])
-            
+
         # Ellipses, Outer Planets
-        for ii in [ 4, 5, 6, 7, 8]:
+        outer_mask = np.in1d(f5["particles/pid"][()], outer_ids)
+        outer_indices = np.where(outer_mask == True)[0]
+        for ii in outer_indices:
             xell = f5["ellipses/x"][ii,:]
             yell = f5["ellipses/y"][ii,:]
             ax.plot(xell, yell, lw=1.0, alpha=0.6, c=c3.mpl_colors[1])
