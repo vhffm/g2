@@ -77,7 +77,7 @@ for istep, nstep in enumerate(nsteps):
     vx = genga[:,7].astype("float64")
     vy = genga[:,8].astype("float64")
     vz = genga[:,9].astype("float64")
-    ce_count = genga[:,19].astype("float64")
+    ce_count = genga[:,19].astype("int")
 
     if args.barycentric:
         x, vx = kh.helio2bary(x, vx, m)
