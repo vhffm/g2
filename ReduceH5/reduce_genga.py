@@ -77,6 +77,7 @@ for istep, nstep in enumerate(nsteps):
     vx = genga[:,7].astype("float64")
     vy = genga[:,8].astype("float64")
     vz = genga[:,9].astype("float64")
+    ce_count = genga[:,19].astype("float64")
 
     if args.barycentric:
         x, vx = kh.helio2bary(x, vx, m)
@@ -103,6 +104,7 @@ for istep, nstep in enumerate(nsteps):
         f5.create_dataset("particles/Omega", data=Omega)
         f5.create_dataset("particles/omega", data=omega)
         f5.create_dataset("particles/M0", data=M0)
+        f5.create_dataset("particles/ce_count", data=ce_count)
         f5["particles/x"].attrs["units"] = "AU"
         f5["particles/y"].attrs["units"] = "AU"
         f5["particles/z"].attrs["units"] = "AU"
