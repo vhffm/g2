@@ -36,14 +36,6 @@ if args.heliocentric:
 if args.barycentric:
     print "// Using Barycentric Coordinates"
 
-# Ellipse Warning
-if args.ellipses:
-    print ""
-    print "!!"
-    print "!! Ellipse Computations Un-Optimized and Slow. For-Loops Suck."
-    print "!!"
-    print ""
-
 # Supress Invalid Errora (e.g., Arccos[pi])
 np.seterr(invalid="ignore")
 
