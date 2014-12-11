@@ -84,6 +84,7 @@ if not args.tag:
 # Loop Me, Baby
 # https://www.youtube.com/watch?v=DVpq59F9I9o
 # 
+last_valid_step = [ 0, 0, 0, 0, 0, 0 ]
 for istep, nstep in enumerate(nsteps):
     print "// (%s UTC) Processing Snapshot %012d/%012d" % \
         (strftime("%H:%M:%S", gmtime()), nstep, nsteps[-1])
@@ -99,6 +100,9 @@ for istep, nstep in enumerate(nsteps):
             with h5py.File("%s/Snapshot_%012d.hdf5" % (cdir, nstep), "r") as f5:
                 # Record Time
                 tout = f5.attrs["tout"]
+
+                # Record Last Valid Step
+                last_valid_step[idir] = nstep
                 
                 # Plot Test Particles
                 axflat[idir].scatter(f5["particles/x"][9:], \
@@ -124,8 +128,37 @@ for istep, nstep in enumerate(nsteps):
                 
                 # Title
                 axflat[idir].set_title("%s" % run_names[idir])
+
         except:
-            pass
+            # Load Last Valid Snapshot
+            with h5py.File("%s/Snapshot_%012d.hdf5" % \
+                           (cdir, last_valid_step[idir]), "r") as f5:
+                
+                # Plot Test Particles
+                axflat[idir].scatter(f5["particles/x"][9:], \
+                                     f5["particles/y"][9:], \
+                                     s=1, alpha=0.5, \
+                                     edgecolor=c3.mpl_colors[1], \
+                                     color=c3.mpl_colors[1])
+                
+                # Compute Ellipses
+                xell, yell, zell = \
+                    kh.compute_ellipseX(f5["particles/a"][:9], \
+                                        f5["particles/e"][:9], \
+                                        f5["particles/i"][:9], \
+                                        f5["particles/Omega"][:9], \
+                                        f5["particles/omega"][:9])
+                    
+                # Plot Planets
+                axflat[idir].plot(xell.T, yell.T, color="k", linewidth=1.0)
+                axflat[idir].scatter(f5["particles/x"][:9], \
+                                     f5["particles/y"][:9], \
+                                     c="k", marker="+", s=12**2, \
+                                     alpha=1.0, zorder=3)
+                
+                # Title
+                axflat[idir].set_title("%s / %012d" % \
+                    (run_names[idir], last_valid_step[idir]))
 
         # Set Scale
         # for ax in axflat:
