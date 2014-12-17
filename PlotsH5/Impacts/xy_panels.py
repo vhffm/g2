@@ -21,6 +21,8 @@ c3 = b2m.get_map('Dark2', 'Qualitative', 3)
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
+parser.add_argument("--count_in", type=int, \
+                    help='Determine Output Range from This Line In Dirlist')
 parser.add_argument("--tag", \
                     help='Title Tag. Defaults Current Working Dir.')
 group1 = parser.add_mutually_exclusive_group(required=True)
@@ -53,14 +55,19 @@ if args.custom:
         print "!! Output set must be defined by three numbers."
         sys.exit()
 
-# Full Set. Based On First Directory.
+# Full Set. Based On First/Count_In Directory.
 if args.all:
     nsteps = []
-    globs = glob("%s/Snapshot_*.hdf5" % dirs[0])
+    if args.count_in:
+        idir = args.count_in - 1
+    else:
+        idir = 0
+    globs = glob("%s/Snapshot_*.hdf5" % dirs[idir])
     globs = sorted(globs)
     for g in globs:
         nstep = int(g.split(".")[0].split("_")[-1])
         nsteps.append(nstep)
+    print "// Scanned %s For Output Range" % dirs[idir]
     print "// Reading %i Outputs Per Directory" % len(nsteps)
 
 # Custom Set
