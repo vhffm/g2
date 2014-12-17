@@ -55,7 +55,7 @@ if args.custom:
         print "!! Output set must be defined by three numbers."
         sys.exit()
 
-# Full Set. Based On First Directory.
+# Full Set. Based On First/Count_In Directory.
 if args.all:
     nsteps = []
     if args.count_in:
