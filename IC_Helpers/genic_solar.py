@@ -9,6 +9,7 @@ Output Format Is Default Genga IC.
 import numpy as np
 import argparse
 import kepler_helpers as kh
+import constants as C
 
 # Parse arguments
 parser = argparse.ArgumentParser()
@@ -19,6 +20,8 @@ group1.add_argument('--nice1', action='store_true', help="Nice 1 Model.")
 group1.add_argument('--nice2', action='store_true', help="Nice 2 Model.")
 group1.add_argument('--nice3', action='store_true', help="Nice 3 Model.")
 group1.add_argument('--nice4', action='store_true', help="Nice 4 Model.")
+group1.add_argument('--morby', action='store_true', \
+                    help="Alessandro Morbidelli Mail.")
 group2 = parser.add_mutually_exclusive_group(required=True)
 group2.add_argument('--all', action='store_true', help="All Planets.")
 group2.add_argument('--outer', action='store_true', help="Outer Planets.")
@@ -103,7 +106,10 @@ if args.solar2:
             pluto = line_new
 
 # Adjust Orbital Parameters
-if args.cjs or args.ejs or args.nice1 or args.nice2 or args.nice3 or args.nice4:
+if args.cjs or args.ejs or \
+    args.nice1 or args.nice2 or args.nice3 or args.nice4 or \
+    args.morby:
+
     # CJS, EJS Models
     # Cf. Raymond 2006, Morishima 2010
     if args.cjs:
@@ -114,6 +120,34 @@ if args.cjs or args.ejs or args.nice1 or args.nice2 or args.nice3 or args.nice4:
         anew = np.array([5.200, 9.550])
         enew = np.array([0.048, 0.056])
         inew = np.array([0.020, 0.000])
+
+    # ICs for 1 Gyr Stable Run in Morbidelli+ 2007 / Levison+ 2011
+    # Reported Stable for 4 Gyr in Tests
+    # Source: E-Mail
+    # Date: Tue, 17 Feb 2015 11:28:50 +0100
+    # From: alessandro morbidelli <morby@oca.eu>
+    # To: Volker Hoffmann <volker@physik.uzh.ch>, hal@boulder.swri.edu
+    if args.morby:
+        # semi major axis (AU), eccentricity, inclination (rad), longitude of the node (rad), argument of pericenter (rad), mean anomaly (rad), mass (n units where the Sun's mass is (2PI)^2.
+        #   0.5429655E+01  0.4890734E-02  0.6005074E-03  0.2099288E+01  0.6161135E+01  0.1208643E+00  0.3947842E-01
+        #   0.7298669E+01  0.9955255E-02  0.1175241E-03  0.2056477E+01  0.2942986E+01  0.3344157E+01  0.1121187E-01
+        #   0.9640065E+01  0.4988758E-01  0.9948838E-03  0.1854808E+01  0.2748019E+01  0.3574791E+01  0.1776529E-02
+        #   0.1161223E+02  0.1060971E-01  0.1614985E-03  0.2498409E+01  0.4613698E+01  0.4832179E+01  0.1776529E-02
+        anew = np.array([0.5429655E+01, 0.7298669E+01, \
+                         0.9640065E+01, 0.1161223E+02])
+        enew = np.array([0.4890734E-02, 0.9955255E-02, \
+                         0.4988758E-01, 0.1060971E-01])
+        inew = np.array([0.6005074E-03, 0.1175241E-03, \
+                         0.9948838E-03, 0.1614985E-03])
+        Omega = np.array([0.2099288E+01, 0.2056477E+01, \
+                          0.1854808E+01, 0.2498409E+01])
+        omega = np.array([0.6161135E+01, 0.2942986E+01, \
+                          0.2748019E+01, 0.4613698E+01])
+        M0 = np.array([0.1208643E+00, 0.3344157E+01, \
+                          0.3574791E+01, 0.4832179E+01])
+        mnew = np.array([0.3947842E-01, 0.1121187E-01, \
+                         0.1776529E-02, 0.1776529E-02])
+        mnew /= C.twopi**2.0
 
     # Nice1 Model
     # Cf. Tsiganis 2005 (Text, Figure 1)
@@ -150,7 +184,7 @@ if args.cjs or args.ejs or args.nice1 or args.nice2 or args.nice3 or args.nice4:
     # What Planets To Fix?
     if args.ejs or args.cjs:
         plist = [ jupiter, saturn ]
-    elif args.nice1 or args.nice2 or args.nice3 or args.nice4:
+    elif args.nice1 or args.nice2 or args.nice3 or args.nice4 or args.morby:
         plist = [ jupiter, saturn, uranus, neptune ]
 
     for iplanet, planet in enumerate(plist):
@@ -158,11 +192,24 @@ if args.cjs or args.ejs or args.nice1 or args.nice2 or args.nice3 or args.nice4:
         iloc = int(line[1])
         mloc = float(line[2])
         rloc = float(line[3])
-        xold = np.array([ float(line[4]), float(line[5]), float(line[6]) ])
-        vold = np.array([ float(line[7]), float(line[8]), float(line[9]) ])
-        _, _, _, Omega, omega, M0 = kh.cart2kep(xold, vold, mloc)
-        xnew, vnew = kh.kep2cart(anew[iplanet], enew[iplanet], inew[iplanet], \
-                                 Omega, omega, M0, mloc)
+        # Nice{1,2,3,4} & EJS => Keep Angles
+        if not args.morby:
+            xold = np.array([ float(line[4]), float(line[5]), float(line[6]) ])
+            vold = np.array([ float(line[7]), float(line[8]), float(line[9]) ])
+            _, _, _, Omega, omega, M0 = kh.cart2kep(xold, vold, mloc)
+            xnew, vnew = \
+                kh.kep2cart(anew[iplanet], enew[iplanet], inew[iplanet], \
+                            Omega, omega, M0, mloc)
+        # Morby ICs
+        else:
+            xnew, vnew = kh.kep2cart(anew[iplanet], \
+                                     enew[iplanet], \
+                                     inew[iplanet], \
+                                     Omega[iplanet], \
+                                     omega[iplanet], \
+                                     M0[iplanet], \
+                                     mnew[iplanet])
+            mloc = mnew[iplanet]
         # <<< t i m r x y z vx vy vz Sx Sy Sz >>>
         line = "0 %i %.19f %.19f %.19f %.19f %.19f %.19f %.19f %.19f 0.0 0.0 0.0" % (iloc, mloc, rloc, xnew[0], xnew[1], xnew[2], vnew[0], vnew[1], vnew[2])
         if iplanet == 0:
