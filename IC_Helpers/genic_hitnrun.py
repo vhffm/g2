@@ -131,9 +131,9 @@ def impactor_ic(alpha, beta_sign, theta, phase_offset, impactor_mass, \
     vesc = 11.20   # surface escape velocity (km/s) [present day earth]
     vesc *= C.kms_to_genga   # genga units
     # scalar multiplier for vector components (can be 1+X or 1-X)
-    if beta_sign == "+":
+    if beta_sign == "-":
         beta = 1.0 - alpha * vesc / np.sqrt(np.sum(v0**2.0))
-    elif beta_sign == "-":
+    elif beta_sign == "+":
         beta = 1.0 + alpha * vesc / np.sqrt(np.sum(v0**2.0))
 
     # Rotate, Scale
