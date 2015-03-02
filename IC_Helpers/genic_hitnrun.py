@@ -226,7 +226,7 @@ while collision or niteration < 10:
     a1, e1, i1, Omega1, omega1, M1 = \
         impactor_ic(args.alpha, \
                     args.beta_sign, \
-                    args.theta, \
+                    args.theta * C.d2r, \
                     phase_offset, \
                     args.mass, \
                     display_earth)
