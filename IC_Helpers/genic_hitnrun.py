@@ -6,6 +6,9 @@ b) Iteratively move impactor orbital phase to avoid Earth collision.
 
 For step (b), we rely on Genga to integrate to orbit for a bit.
 Make sure Genga is compiled to ignore the lock.dat.
+
+Example:
+python ./genic_hitnrun.py --alpha 1.2 --theta 35.0 --beta_sign "-" --mass 0.009
 """
 
 import subprocess as sp
@@ -13,6 +16,7 @@ import kepler_helpers as kh
 import constants as C
 import numpy as np
 import pandas as pd
+import argparse
 
 ###############################################################################
 ###############################################################################
@@ -126,8 +130,6 @@ def impactor_ic(alpha, beta_sign, theta, phase_offset, impactor_mass, \
     # Shift Orbit
     vesc = 11.20   # surface escape velocity (km/s) [present day earth]
     vesc *= C.kms_to_genga   # genga units
-    # theta = 35.0 * C.d2r
-    # alpha = 1.2 # vrel/vesc
     # scalar multiplier for vector components (can be 1+X or 1-X)
     if beta_sign == "+":
         beta = 1.0 - alpha * vesc / np.sqrt(np.sum(v0**2.0))
@@ -184,6 +186,19 @@ def impactor_ic(alpha, beta_sign, theta, phase_offset, impactor_mass, \
 ###############################################################################
 ###############################################################################
 
+# Parse Arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("--alpha", type=float, required=True, \
+                    help="Impactor Velocity / Escape Velocity")
+parser.add_argument("--theta", type=float, required=True, \
+                    help="Impactor Angle (Degree)")
+parser.add_argument("--beta_sign", type=str, required=True, \
+                    choices=["+", "-"], \
+                    help="Impactor Slower/Faster Than Earth?")
+parser.add_argument("--mass", type=float, required=True, \
+                    help="Impactor Mass (Earth Masses)")
+args = parser.parse_args()
+
 # Loop ICs Until Converged
 collision = True
 niteration = 0
@@ -202,12 +217,6 @@ while collision or niteration < 10:
             f.write(line)
 
     # Generate ICs
-    # lines = ic_file()
-    alpha = 1.2
-    beta_sign = "-"
-    # beta_sign = "+"
-    theta = 35.0
-    impactor_mass = 0.009
     if niteration == 1:
         display_earth = True
     else:
@@ -215,11 +224,15 @@ while collision or niteration < 10:
 
     # Generate Impactor ICs
     a1, e1, i1, Omega1, omega1, M1 = \
-        impactor_ic(alpha, beta_sign, theta, phase_offset, impactor_mass, \
+        impactor_ic(args.alpha, \
+                    args.beta_sign, \
+                    args.theta, \
+                    phase_offset, \
+                    args.mass, \
                     display_earth)
 
     # Write ICs
-    lines = ic_file(a1, e1, i1, Omega1, omega1, M1, impactor_mass)
+    lines = ic_file(a1, e1, i1, Omega1, omega1, M1, args.mass)
     with open("initial.dat", "w") as f:
         for line in lines:
             f.write(line)
