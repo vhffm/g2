@@ -49,11 +49,12 @@ for line in lines_in:
                           float(line_loc[9]) ])
 
         # Massive Particle => Test Particle (ID 10000)
-        line_new = "0.0 %i 0.0 %.16e " % (10000, r_in)
-        line_new += "%.16e %.16e %.16e " % (x_in[0], x_in[1], x_in[2])
-        line_new += "%.16e %.16e %.16e " % (v_in[0], v_in[1], v_in[2])
-        line_new += "0.0 0.0 0.0"
-        lines_out.append(line_new)
+        # line_new = "0.0 %i 0.0 %.16e " % (10000, r_in)
+        # line_new += "%.16e %.16e %.16e " % (x_in[0], x_in[1], x_in[2])
+        # line_new += "%.16e %.16e %.16e " % (v_in[0], v_in[1], v_in[2])
+        # line_new += "0.0 0.0 0.0"
+        # lines_out.append(line_new)
+        lines_out.append(line)
 
         # Generate Cone Ranges
         xr = np.linspace(np.pi/8.0, 0.0, nr, endpoint=False)
