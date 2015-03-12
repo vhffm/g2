@@ -17,7 +17,7 @@ parser.add_argument("--pid", type=int, required=True, \
                     help="Particle ID to Replace.")
 parser.add_argument("--nr", type=int, default=32, \
                     help="Cone: Number of Radial Samples")
-parser.add_argument("--nalpha", type=int, default=128, \
+parser.add_argument("--nalpha", type=int, default=256, \
                     help="Cone: Number of Angular Samples")
 parser.add_argument("--aspect", type=float, default=0.1, \
                     help="Cone: Aspect Ratio (Circle vs. Ellipse)")
