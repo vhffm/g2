@@ -77,7 +77,7 @@ for line in lines_in:
                 theta = r * np.cos(alpha)
                 phi = r * np.sin(alpha) * aspect
                 # Velocity Normalization
-                vnorm = np.sin(1.0 - (r / (np.pi/64.0 + dr)))
+                vnorm = np.sin(np.pi/2.0 - (r / (np.pi/64.0 + dr)))
                 # Rotations
                 Rz = np.array([[ np.cos(theta), -np.sin(theta), 0.0 ], \
                                [ np.sin(theta),  np.cos(theta), 0.0 ], \
