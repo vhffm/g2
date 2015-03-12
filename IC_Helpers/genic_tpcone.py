@@ -57,7 +57,7 @@ for line in lines_in:
         lines_out.append(line)
 
         # Generate Cone Ranges
-        xr = np.linspace(np.pi/8.0, 0.0, nr, endpoint=False)
+        xr = np.linspace(np.pi/64.0, 0.0, nr, endpoint=False)
         xalpha = np.linspace(-np.pi, np.pi, nalpha, endpoint=False)
         xr = xr[::-1]
 
