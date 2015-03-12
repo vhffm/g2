@@ -57,9 +57,9 @@ for line in lines_in:
         lines_out.append(line)
 
         # Generate Cone Ranges
-        xr = np.linspace(np.pi/64.0, 0.0, nr, endpoint=False)
+        xr, dr = np.linspace(np.pi/64.0, 0.0, nr, endpoint=False, retstep=True)
         xalpha = np.linspace(-np.pi, np.pi, nalpha, endpoint=False)
-        xr = xr[::-1]
+        xr = xr[::-1]; dr = -dr
 
         # Allocate Arrays
         vold = np.tile(v_in[np.newaxis,:], (nr*nalpha,1))
@@ -76,6 +76,8 @@ for line in lines_in:
                 # XY in Cone (=Theta/Phi)
                 theta = r * np.cos(alpha)
                 phi = r * np.sin(alpha) * aspect
+                # Velocity Normalization
+                vnorm = np.sin(1.0 - (r / (np.pi/64.0 + dr)))
                 # Rotations
                 Rz = np.array([[ np.cos(theta), -np.sin(theta), 0.0 ], \
                                [ np.sin(theta),  np.cos(theta), 0.0 ], \
@@ -83,8 +85,8 @@ for line in lines_in:
                 Ry = np.array([[ np.cos(phi), 0.0, np.sin(phi) ], \
                                [ 0.0, 1.0, 0.0 ], \
                                [ - np.sin(phi), 0.0, np.cos(phi) ] ])
-                # Rotate, Replace
-                vnew[ii,:] = np.dot(Ry, np.dot(Rz, vold[ii,:]))
+                # Rotate, Scale, Replace
+                vnew[ii,:] = np.dot(Ry, np.dot(Rz, vold[ii,:])) * vnorm
 
         # Generate IC Lines
         for ii in range(vnew.shape[0]):
