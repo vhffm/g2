@@ -3,3 +3,9 @@
 */*.dat
 *.dat
 */*.o
+Notebooks/.ipynb_checkpoints/*
+Notebooks/*.ipynb
+Notebooks/*.html
+!Horizons/*.dat
+!MoonFormingImpact/*.dat
+Tests/*
