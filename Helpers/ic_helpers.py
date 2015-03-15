@@ -76,50 +76,54 @@ def MainFragmentReufer12(sim_name, earth):
         mass = 0.112426
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.25, "+", 32.5 * C.d2r, 2.25e-6, mass, earth)
-    if sim_name == "cC03m":
+    elif sim_name == "cC03m":
         mass = 0.112426
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.25, "-", 32.5 * C.d2r, 1.9e-4, mass, earth)
 
     # fA01
-    if sim_name == "fA01p":
+    elif sim_name == "fA01p":
         mass = 0.111688
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.30, "+", 30.0 * C.d2r, 3.35e-6, mass, earth)
-    if sim_name == "fA01m":
+    elif sim_name == "fA01m":
         mass = 0.111688
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.30, "-", 30.0 * C.d2r, 1.98e-4, mass, earth)
 
     # iA08
-    if sim_name == "iA08p":
+    elif sim_name == "iA08p":
         mass = 0.111196
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.2, "+", 30.0 * C.d2r, 1.29e-6, mass, earth)
-    if sim_name == "iA08m":
+    elif sim_name == "iA08m":
         mass = 0.111196
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.2, "-", 30.0 * C.d2r, 1.8e-4, mass, earth)
 
     # iA14
-    if sim_name == "iA14p":
+    elif sim_name == "iA14p":
         mass = 0.11328
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.3, "+", 32.5 * C.d2r, 3.35e-6, mass, earth)
-    if sim_name == "iA14m":
+    elif sim_name == "iA14m":
         mass = 0.11328
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.3, "-", 32.5 * C.d2r, 2.0e-4, mass, earth)
 
     # iA27
-    if sim_name == "iA27p":
+    elif sim_name == "iA27p":
         mass = 0.111811
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.0, "+", 60.0 * C.d2r, 9.35e-7, mass, earth)
-    if sim_name == "iA27m":
+    elif sim_name == "iA27m":
         mass = 0.111811
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.0, "-", 60.0 * C.d2r, 1.45e-4, mass, earth)
+
+    # Debug
+    else:
+        raise Exception("Specified Simulation Not Found.")
 
     # Return
     return a, e, i, Omega, omega, M, mass
