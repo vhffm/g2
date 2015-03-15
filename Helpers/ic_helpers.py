@@ -86,7 +86,7 @@ def MainFragmentReufer12(sim_name, earth):
         mass = 0.111688
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.30, "+", 30.0 * C.d2r, 3.35e-6, mass, earth)
-    if sim_name == "fA01p":
+    if sim_name == "fA01m":
         mass = 0.111688
         a, e, i, Omega, omega, M = \
             MainFragmentIC(1.30, "-", 30.0 * C.d2r, 1.98e-4, mass, earth)
@@ -109,7 +109,7 @@ def MainFragmentReufer12(sim_name, earth):
     if sim_name == "iA14m":
         mass = 0.11328
         a, e, i, Omega, omega, M = \
-        MainFragmentIC(1.3, "-", 32.5 * C.d2r, 2.0e-4, mass, earth)
+            MainFragmentIC(1.3, "-", 32.5 * C.d2r, 2.0e-4, mass, earth)
 
     # iA27
     if sim_name == "iA27p":
