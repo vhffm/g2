@@ -30,7 +30,9 @@ parser.add_argument('--debug', action='store_true', \
 parser.add_argument("--rho", type=float, default=4.5, \
                     help="Fragment Density (Default: 4.5 g/cc).")
 parser.add_argument("--r12sim", type=str, required=True, \
-                    choices=["cC03p","cC03m","fA01p","fA01m" ], \
+                    choices=["cC03p","cC03m","fA01p","fA01m",\
+                             "iA08p","iA08m","iA14p","iA14m",\
+                             "iA27p","iA27m"], \
                     help="Select Reufer+ 2012 Simulation.")
 group1 = parser.add_argument_group()
 group1.add_argument('--fragment', action='store_true', \
