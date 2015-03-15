@@ -1,9 +1,12 @@
 """
-Some Initial Conditions.
+Some Initial Conditions. Also Helpers and Wrappers.
 """
 
 import numpy as np
 import constants as C
+import kepler_helpers as kh
+import physics_helpers as ph
+import vector_helpers as vh
 
 
 def Solar2():
@@ -56,3 +59,146 @@ def Solar2():
                "pluto" ]
 
     return plist, pnames
+
+
+def MainFragmentReufer12(sim_name, earth):
+    """
+    Generates Main Fragment for Collisions in Reufer+ 2012.
+    Tabulated Collisions. Calls MainFragmentIC().
+
+    @param sim_name: Simulation Name from Reufer+ 2012 Table - [String]
+    @param earth: Genga IC Line for Target (Earth) - []
+    @return: Fragment Orbital Elements - []
+    """
+
+    # cC03
+    if sim_name == "cC03p":
+        mass = 0.112426
+        a, e, i, Omega, omega, M = \
+            MainFragmentIC(1.25, "+", 32.5 * C.d2r, 2.25e-6, mass, earth)
+    if sim_name == "cC03m":
+        mass = 0.112426
+        a, e, i, Omega, omega, M = \
+            MainFragmentIC(1.25, "-", 32.5 * C.d2r, 1.9e-4, mass, earth)
+
+    # fA01
+    if sim_name == "fA01p":
+        mass = 0.111688
+        a, e, i, Omega, omega, M = \
+            MainFragmentIC(1.30, "+", 30.0 * C.d2r, 3.35e-6, mass, earth)
+    if sim_name == "fA01p":
+        mass = 0.111688
+        a, e, i, Omega, omega, M = \
+            MainFragmentIC(1.30, "-", 30.0 * C.d2r, 1.98e-4, mass, earth)
+
+    # Return
+    return a, e, i, Omega, omega, M, mass
+
+
+def MainFragmentIC(alpha, beta_sign, theta, phase_offset, mass, earth):
+    """
+    Generates ICs for Main Fragment. After Earth-Collision.
+
+    @param alpha: Impactor Velocity / Escape Velocity - []
+    @param beta_sign: Impactor Faster or Slower than Earth? - [+/-]
+    @param theta: Impact Angle - [Rad]
+    @param phase_offset: Move impactor by this after collision - [Rad]
+    @param mass: Impactor Mass - [Earth Masses]
+    @param earth: Genga IC Line for Target (Earth) - []
+
+    @return: Fragment Orbital Elements - []
+    """
+
+    # Earth Initial Conditions (Genga IC Format)
+    earth = earth.strip().split()
+    m0 = float(earth[2]) # Solar Masses
+    x0 = np.array([float(earth[4]), float(earth[5]), float(earth[6])]) # AU
+    v0 = np.array([float(earth[7]), float(earth[8]), float(earth[9])]) # AU/Day
+
+    # Shift Orbit
+    vesc = 11.20             # Surface Escape Velocity (km/s) [Today]
+    vesc *= C.kms_to_genga   # Genga Units
+
+    # Scalar Multiplier for Vector Components (can be 1+X or 1-X)
+    if beta_sign == "-":
+        beta = 1.0 - alpha * vesc / np.sqrt(np.sum(v0**2.0))
+    elif beta_sign == "+":
+        beta = 1.0 + alpha * vesc / np.sqrt(np.sum(v0**2.0))
+
+    # Rotate, Scale
+    vx1, vy1 = vh.rotate_xy(v0[0], v0[1], theta)
+    v1 = np.array([vx1, vy1, v0[2]])
+    v1 *= beta
+
+    # Compute Impactor Orbit
+    a1, e1, i1, Omega1, omega1, M1 = \
+        kh.cart2kep(x0, v1, mass * C.mearth / C.msun)
+
+    # Shift Phase
+    M1 += phase_offset
+    while M1 > C.twopi:
+        M1 -= C.twopi
+
+    # Return
+    return a1, e1, i1, Omega1, omega1, M1
+
+
+def Cone(x_in, v_in, r_in, nr=32, nalpha=128, aspect=0.1):
+    """
+    Generates Cone of Test Particles.
+
+    @param x_in: Position Vector (XYZ) of Main Fragment - [AU]
+    @param v_in: Velocity Vector (XYZ) of Main Fragment - [AU/Day]
+    @param r_in: Radius of Test Particles - [AU]
+    @param nr: Radial Samples of Cone - []
+    @param nalpha: Aziumthal Samples of Cone - []
+    @param aspect: Aspect Ratio (X/Y) of Cones - []
+
+    @return: Genga ICs Lines for Cone Test Particles - []
+    """
+
+    # Generate Cone Ranges
+    xr, dr = np.linspace(np.pi/64.0, 0.0, nr, endpoint=False, retstep=True)
+    xalpha = np.linspace(-np.pi, np.pi, nalpha, endpoint=False)
+    xr = xr[::-1]; dr = -dr
+
+    # Allocate Arrays
+    vold = np.tile(v_in[np.newaxis,:], (nr*nalpha,1))
+    vnew = np.zeros([nr*nalpha,3])
+
+    # Generate Velocity Vectors
+    # @todo - Clearly, this code can be vectorized, etc.
+    #       - It would probably take an hour of coding for neglible gain.
+    #       - So, meh.
+    for ir, r in enumerate(xr):
+        for ialpha, alpha in enumerate(xalpha):
+            # Index Juggling
+            ii = ir * nalpha + ialpha
+            # XY in Cone (=Theta/Phi)
+            theta = r * np.cos(alpha)
+            phi = r * np.sin(alpha) * aspect
+            # Velocity Normalization
+            vnorm = np.sin(np.pi/2.0 - (r / (np.pi/64.0 + dr)))
+            # Rotations
+            Rz = np.array([[ np.cos(theta), -np.sin(theta), 0.0 ], \
+                           [ np.sin(theta),  np.cos(theta), 0.0 ], \
+                           [ 0.0, 0.0, 1.0 ]])
+            Ry = np.array([[ np.cos(phi), 0.0, np.sin(phi) ], \
+                           [ 0.0, 1.0, 0.0 ], \
+                           [ - np.sin(phi), 0.0, np.cos(phi) ] ])
+            # Rotate, Scale, Replace
+            vnew[ii,:] = np.dot(Ry, np.dot(Rz, vold[ii,:])) * vnorm
+
+    # Generate IC Lines
+    lines_out = []
+    for ii in range(vnew.shape[0]):
+        line_new = "0.0 %05d %.16e %.16e " % (ii + 10001, 0.0, r_in)
+        line_new += "%+.16e %+.16e %+.16e " % (x_in[0], x_in[1], x_in[2])
+        line_new += "%+.16e %+.16e %+.16e " % (vnew[ii,0], \
+                                               vnew[ii,1], \
+                                               vnew[ii,2])
+        line_new += "0.0 0.0 0.0"
+        lines_out.append(line_new)
+
+    # Return
+    return lines_out
