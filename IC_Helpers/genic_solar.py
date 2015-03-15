@@ -69,7 +69,8 @@ if args.solar2:
     plist = [ mercury, venus, earth, mars, \
               jupiter, saturn, uranus, neptune, pluto ]
 
-    # Fix velocity units
+    # Fix velocity units.
+    # Fix format for time, particle ID.
     for iplanet, planet in enumerate(plist):
         line = planet.strip().split()
         vx = float(line[7])
@@ -82,8 +83,10 @@ if args.solar2:
         vz *= 365.25/(2.0*np.pi)
         # t i m r x y z vx vy vz Sx Sy Sz
         # 0 1 2 3 4 5 6  7  8  9 10 11 12
-        line_new = "%s %s %s %s %s %s %s %.16e %.16e %.16e %s %s %s" % \
-            (line[0], line[1], line[2], line[3], line[4], line[5], line[6], vx, vy, vz, line[10], line[11], line[12])
+        line_new = "0.0 %05d %s %s " % (int(line[1]), line[2], line[3])
+        line_new += "%s %s %s " % (line[4], line[5], line[6])
+        line_new += "%+.16e %+.16e %+.16e " % (vx, vy, vz)
+        line_new += "0.0 0.0 0.0"
         # Spaghetti code ahead
         # I'm sure we can more be clever with lists, but meh...
         if iplanet == 0:
@@ -211,7 +214,10 @@ if args.cjs or args.ejs or \
                                      mnew[iplanet])
             mloc = mnew[iplanet]
         # <<< t i m r x y z vx vy vz Sx Sy Sz >>>
-        line = "0 %i %.19f %.19f %.19f %.19f %.19f %.19f %.19f %.19f 0.0 0.0 0.0" % (iloc, mloc, rloc, xnew[0], xnew[1], xnew[2], vnew[0], vnew[1], vnew[2])
+        line = "0.0 %05d %.16e %.16e " % (iloc, mloc, rloc)
+        line += "%+.16e %+.16e %+.16e " % (xnew[0], xnew[1], xnew[2])
+        line += "%+.16e %+.16e %+.16e " % (vnew[0], vnew[1], vnew[2])
+        line += "0.0 0.0 0.0"
         if iplanet == 0:
             jupiter = line
         elif iplanet == 1:
