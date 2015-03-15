@@ -50,12 +50,12 @@ def mass2radius(mass, rho=2.0):
     return r
 
 def param_file():
-    lines = "Time step in days = 6.0\n"
+    lines = "Time step in days = 0.6\n"
     lines += "Output name = _hitnrun_test\n"
-    lines += "Energy output intervall = 100\n"
-    lines += "Coordinates output intervall = 100\n"
+    lines += "Energy output intervall = 10000\n"
+    lines += "Coordinates output intervall = 10000\n"
     lines += "Number of outputs per intervall = 1\n"
-    lines += "Integration steps = 100\n"
+    lines += "Integration steps = 10000\n"
     lines += "Central Mass = 1.0\n"
     lines += "n1 = 3.0\n"
     lines += "n2 = 0.1\n"
@@ -239,7 +239,7 @@ while collision or niteration < 10:
 
     # Call Genga
     # sp.call(["rm", "lock.dat"], stdout=open("/dev/null", "w"), close_fds=True)
-    sp.call(["genga"], stdout=open("/dev/null", "w"), close_fds=True)
+    sp.call(["genga_hitnrun_iterate_ics"], stdout=open("/dev/null", "w"), close_fds=True)
 
     # Check Final Particle Number
     with open("Collisions_hitnrun_test.dat", "r") as f:
