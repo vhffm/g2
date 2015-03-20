@@ -3,7 +3,7 @@ Modify Genga Outputs. Retain Subset of Particles.
 """
 
 import sys
-import numpy
+import numpy as np
 
 # Read Lines from Stdin
 lines_in = sys.stdin.read().rstrip("\n").split("\n")
