@@ -4,6 +4,13 @@ Modify Genga Outputs. Retain Subset of Particles.
 
 import sys
 import numpy as np
+import argparse
+
+# Read Arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('--toic', action='store_true', \
+                    help="Convert to Genga IC Format.")
+args = parser.parse_args()
 
 # Read Lines from Stdin
 lines_in = sys.stdin.read().rstrip("\n").split("\n")
@@ -31,6 +38,10 @@ lines_out = []
 for line_in in lines_in:
     if int(line_in.strip().split(" ")[1]) in keep_ids:
         lines_out.append(line_in)
+
+# Convert to IC Format
+for iline, line in enumerate(lines_out):
+    lines_out[iline] = " ".join(line.strip().split(" ")[:13])
 
 # Output Lines
 for line_out in lines_out:
