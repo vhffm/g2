@@ -25,9 +25,9 @@ for line_in in lines_in:
     radius = float(line[3])
     if args.radius:
         radius *= args.factor
-        mass *= args.factor**(1./3.)
+        mass *= args.factor**(3.0)
     elif args.mass:
-        radius *= args.factor**3.0
+        radius *= args.factor**(1.0/3.0)
         mass *= args.factor
     line[2] = "%.16e" % mass
     line[3] = "%.16e" % radius
