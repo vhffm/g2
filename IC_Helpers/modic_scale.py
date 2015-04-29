@@ -29,8 +29,8 @@ for line_in in lines_in:
     elif args.mass:
         radius *= args.factor**3.0
         mass *= args.factor
-    line[2] = "%+.16e" % mass
-    line[3] = "%+.16e" % radius
+    line[2] = "%.16e" % mass
+    line[3] = "%.16e" % radius
     lines_out.append(" ".join(line))
 
 # Output Lines
