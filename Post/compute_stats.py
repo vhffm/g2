@@ -7,6 +7,7 @@ import argparse
 import sys
 from glob import glob
 from time import gmtime, strftime
+import io_helpers as ioh
 
 # Parse Arguments
 parser = argparse.ArgumentParser()
@@ -22,7 +23,7 @@ m_jupiter = 1.89e27
 
 # Cutoff Mass
 m_cutoff = 2.0e23 # kg
-m_cutoff = m_cutoff / m_sun
+m_cutoff = m_cutoff / m_earth
 
 # List of Directories
 # @todo Check for existence
@@ -39,17 +40,17 @@ else:
 # Build Snapshot Number Array (From First Dir)
 print "// Building Snapshot Array"
 if args.all:
-    globs = glob(dirs[0] + "/" + "Snapshot_*.npz")
+    globs = glob(dirs[0] + "/" + "Out_*.dat")
     globs = sorted(globs)
     nsteps = np.zeros(len(globs))
     for ii, gg in enumerate(globs):
-        nsteps[ii] = int(gg.split('.npz')[0].split('/')[-1].split('_')[1])
+        nsteps[ii] = int(gg.split('.dat')[0].split('/')[-1].split('_')[3])
         globs[ii] = gg.split("/")[-1]
 
 print "// Verifying Snapshots"
 if args.all:
     for dir_loc in dirs:
-        globs_loc = glob(dir_loc + "/" + "Snapshot_*.npz")
+        globs_loc = glob(dirs[0] + "/" + "Out_*.dat")
         globs_loc = sorted(globs_loc)
         for ii, gg in enumerate(globs_loc):
             globs_loc[ii] = gg.split("/")[-1]
@@ -71,21 +72,23 @@ for idir, dirchar in enumerate(dirs):
         (strftime("%H:%M:%S", gmtime()), dirchar, idir+1, len(dirs))
     for istep, nstep in enumerate(nsteps):
         try:
-            npz = np.load('%s/Snapshot_%012d.npz' % (dirchar, nstep))
-            snapshot = npz['snapshot'][()]
+            fname = "%s/Out_%s_%012d.dat" % (dirchar, \
+                                             dirchar.split("/")[-1], \
+                                             nstep)
+            df = ioh.read_output(fname, frame="heliocentric")
+            df = df[df.pid<2000]
             if idir == 0:
-                tout[istep] = snapshot.tout
-            npart[idir, istep] = snapshot.nparticles
-            for particle in snapshot.particles:
-                # Do not count Jupiter and Saturn
-                if particle.id != 2000 and particle.id != 2001:
-                    mass[idir,istep] += particle.m
-                    if particle.m >= m_cutoff:
-                        mass_above_cutoff[idir,istep] += particle.m
-                        npart_above_cutoff[idir,istep] += 1
-                    else:
-                        mass_below_cutoff[idir,istep] += particle.m
-                        npart_below_cutoff[idir,istep] += 1
+                tout[istep] = df.time.iloc[0]
+            # Number of Particles
+            npart[idir, istep] = len(df)
+            npart_above_cutoff[idir,istep] = np.sum(df.mass >= m_cutoff)
+            npart_below_cutoff[idir,istep] = np.sum(df.mass < m_cutoff)
+            # Count Mass
+            mass[idir,istep] = np.sum(df.mass)
+            mass_above_cutoff[idir,istep] = \
+                np.sum(df[df.mass >= m_cutoff].mass)
+            mass_below_cutoff[idir,istep] = \
+                np.sum(df[df.mass < m_cutoff].mass)
         except IOError:
             mass[idir,istep] = np.nan
 
