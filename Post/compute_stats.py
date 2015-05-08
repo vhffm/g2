@@ -49,11 +49,15 @@ if args.all:
 
 print "// Verifying Snapshots"
 if args.all:
+    xglobs = globs
+    for ii, gg in enumerate(xglobs):
+        xglobs[ii] = gg.split("/")[-1].split("_")[-1]
     for dir_loc in dirs:
-        globs_loc = glob(dirs[0] + "/" + "Out_*.dat")
+        globs_loc = glob(dir_loc + "/" + "Out_%s_*.dat" % \
+            dir_loc.split("/")[-1])
         globs_loc = sorted(globs_loc)
         for ii, gg in enumerate(globs_loc):
-            globs_loc[ii] = gg.split("/")[-1]
+            globs_loc[ii] = gg.split("/")[-1].split("_")[-1]
         if not (globs == globs_loc):
             print "!! Snapshots Differ. Terminating."
             print "!! %s" % dir_loc
