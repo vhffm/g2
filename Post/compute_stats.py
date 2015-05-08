@@ -14,6 +14,8 @@ parser = argparse.ArgumentParser()
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument('--all', action='store_true', \
                    help="Aggregative Full Set of Snapshots.")
+parser.add_argument('--maxout', type=int, \
+                    help="Maximum Output Step.")
 args = parser.parse_args()
 
 # Masses in kg
@@ -42,10 +44,15 @@ print "// Building Snapshot Array"
 if args.all:
     globs = glob(dirs[0] + "/" + "Out_*.dat")
     globs = sorted(globs)
-    nsteps = np.zeros(len(globs))
+    nsteps = np.zeros(len(globs), dtype=np.int64)
     for ii, gg in enumerate(globs):
         nsteps[ii] = int(gg.split('.dat')[0].split('/')[-1].split('_')[3])
         globs[ii] = gg.split("/")[-1]
+
+# Remove Outputs > Max Output
+if args.maxout:
+    nsteps = nsteps[nsteps<=args.maxout]
+    globs = globs[:len(nsteps)]
 
 print "// Verifying Snapshots"
 if args.all:
@@ -56,6 +63,9 @@ if args.all:
         globs_loc = glob(dir_loc + "/" + "Out_%s_*.dat" % \
             dir_loc.split("/")[-1])
         globs_loc = sorted(globs_loc)
+        # Remove Outputs > Max Output
+        if args.maxout:
+            globs_loc = globs_loc[:len(nsteps)]
         for ii, gg in enumerate(globs_loc):
             globs_loc[ii] = gg.split("/")[-1].split("_")[-1]
         if not (globs == globs_loc):
