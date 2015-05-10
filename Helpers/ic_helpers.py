@@ -133,7 +133,7 @@ def MainFragmentReufer12(sim_name, earth):
 
     # Compute Orbital Parameters
     a, e, i, Omega, omega, M = \
-        MainFragmentIC(alpha, velocity_sign, angle * C.d2r, \
+        MainFragmentIC(alpha, velocity_sign, angle, \
                        phase_offset, mass, earth)
 
     # Return
