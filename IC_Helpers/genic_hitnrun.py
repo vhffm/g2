@@ -34,6 +34,8 @@ parser.add_argument("--r12sim", type=str, required=True, \
                              "iA08p","iA08m","iA14p","iA14m",\
                              "iA27p","iA27m"], \
                     help="Select Reufer+ 2012 Simulation.")
+parser.add_argument('--flip_theta', action='store_true', \
+                    help="Flip Impact Angle.")
 group1 = parser.add_argument_group()
 group1.add_argument('--fragment', action='store_true', \
                     help="Primary Fragment.")
@@ -54,7 +56,8 @@ ss, _ = ih.Solar2()
 earth = ss[2]
 
 # Load Fragment Orbital Elements
-a, e, i, Omega, omega, M0, mass = ih.MainFragmentReufer12(args.r12sim, earth)
+a, e, i, Omega, omega, M0, mass = \
+    ih.MainFragmentReufer12(args.r12sim, earth, args.flip_theta)
 
 # Convert
 x, v = kh.kep2cart(a, e, i, Omega, omega, M0, mass * C.mearth / C.msun)

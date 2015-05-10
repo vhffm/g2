@@ -61,13 +61,14 @@ def Solar2():
     return plist, pnames
 
 
-def MainFragmentReufer12(sim_name, earth):
+def MainFragmentReufer12(sim_name, earth, flip_theta=False):
     """
     Generates Main Fragment for Collisions in Reufer+ 2012.
     Tabulated Collisions. Calls MainFragmentIC().
 
     @param sim_name: Simulation Name from Reufer+ 2012 Table - [String]
     @param earth: Genga IC Line for Target (Earth) - []
+    @param flip_theta: Flip impact angle (theta => -theta) - [True/False]
     @return: Fragment Orbital Elements - []
     """
 
@@ -130,6 +131,10 @@ def MainFragmentReufer12(sim_name, earth):
     # Debug
     else:
         raise Exception("Specified Simulation Not Found.")
+
+    # Flip Impact Angle?
+    if flip_theta:
+        angle *= -1.0
 
     # Compute Orbital Parameters
     a, e, i, Omega, omega, M = \
