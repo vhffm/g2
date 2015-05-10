@@ -71,59 +71,70 @@ def MainFragmentReufer12(sim_name, earth):
     @return: Fragment Orbital Elements - []
     """
 
+    # Plus/Minus Velocity
+    if sim_name[-1] == "p":
+        velocity_sign = "+"
+    elif sim_name[-1] == "m":
+        velocity_sign = "-"
+
     # cC03
-    if sim_name == "cC03p":
+    if sim_name[:-1] == "cC03":
+        alpha = 1.25
         mass = 0.112426
-        a, e, i, Omega, omega, M = \
-            MainFragmentIC(1.25, "+", 32.5 * C.d2r, 2.25e-6, mass, earth)
-    elif sim_name == "cC03m":
-        mass = 0.112426
-        a, e, i, Omega, omega, M = \
-            MainFragmentIC(1.25, "-", 32.5 * C.d2r, 1.9e-4, mass, earth)
+        angle = 32.5 * C.d2r
+        if velocity_sign == "+":
+            phase_offset = 2.25e-6
+        elif velocity_sign == "-":
+            phase_offset = 1.90e-4
 
     # fA01
-    elif sim_name == "fA01p":
+    elif sim_name[:-1] == "fA01":
+        alpha = 1.30
         mass = 0.111688
-        a, e, i, Omega, omega, M = \
-            MainFragmentIC(1.30, "+", 30.0 * C.d2r, 3.35e-6, mass, earth)
-    elif sim_name == "fA01m":
-        mass = 0.111688
-        a, e, i, Omega, omega, M = \
-            MainFragmentIC(1.30, "-", 30.0 * C.d2r, 1.98e-4, mass, earth)
+        angle = 30.0 * C.d2r
+        if velocity_sign == "+":
+            phase_offset = 3.35e-6
+        elif velocity_sign == "-":
+            phase_offset = 1.98e-4
 
     # iA08
-    elif sim_name == "iA08p":
+    elif sim_name[:-1] == "iA08":
+        alpha = 1.20
         mass = 0.111196
-        a, e, i, Omega, omega, M = \
-            MainFragmentIC(1.2, "+", 30.0 * C.d2r, 1.29e-6, mass, earth)
-    elif sim_name == "iA08m":
-        mass = 0.111196
-        a, e, i, Omega, omega, M = \
-            MainFragmentIC(1.2, "-", 30.0 * C.d2r, 1.8e-4, mass, earth)
+        angle = 30.0 * C.d2r
+        if velocity_sign == "+":
+            phase_offset = 1.29e-6
+        elif velocity_sign == "-":
+            phase_offset = 1.80e-4
 
     # iA14
-    elif sim_name == "iA14p":
+    elif sim_name[:-1] == "iA14":
+        alpha = 1.30
         mass = 0.11328
-        a, e, i, Omega, omega, M = \
-            MainFragmentIC(1.3, "+", 32.5 * C.d2r, 3.35e-6, mass, earth)
-    elif sim_name == "iA14m":
-        mass = 0.11328
-        a, e, i, Omega, omega, M = \
-            MainFragmentIC(1.3, "-", 32.5 * C.d2r, 2.0e-4, mass, earth)
+        angle = 32.5 * C.d2r
+        if velocity_sign == "+":
+            phase_offset = 3.35e-6
+        elif velocity_sign == "-":
+            phase_offset = 2.00e-4
 
     # iA27
-    elif sim_name == "iA27p":
+    elif sim_name[:-1] == "iA27":
+        alpha = 1.0
         mass = 0.111811
-        a, e, i, Omega, omega, M = \
-            MainFragmentIC(1.0, "+", 60.0 * C.d2r, 9.35e-7, mass, earth)
-    elif sim_name == "iA27m":
-        mass = 0.111811
-        a, e, i, Omega, omega, M = \
-            MainFragmentIC(1.0, "-", 60.0 * C.d2r, 1.45e-4, mass, earth)
+        angle = 60.0 * C.d2r
+        if velocity_sign == "+":
+            phase_offset = 9.35e-7
+        elif velocity_sign == "-":
+            phase_offset = 1.45e-4
 
     # Debug
     else:
         raise Exception("Specified Simulation Not Found.")
+
+    # Compute Orbital Parameters
+    a, e, i, Omega, omega, M = \
+        MainFragmentIC(alpha, velocity_sign, angle * C.d2r, \
+                       phase_offset, mass, earth)
 
     # Return
     return a, e, i, Omega, omega, M, mass
