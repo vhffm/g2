@@ -6,16 +6,16 @@ import numpy as np
 import constants as C
 
 
-def calibrate_craters_n83(dfc_all, tt0_all, blk_all, target_pid=2):
+def calibrate_craters_n83(dfc_all, t00_all, blk_all, pid_target=2):
     """
     Calibrate Collision Rate to Neukum (1983) Cratering Fits.
     Cf. Neukum+ 2001, Fig. 10 / Eqn. 5
     http://link.springer.com/article/10.1023/A:1011989004263
 
     @param: dfc_all - List of Collision Logs [List o/ Pandas Dataframe]
-    @param: tt0_all - List of Initial Times (Years) [Numpy Float Array]
+    @param: t00_all - List of Initial Times (Years) [Numpy Float Array]
     @param: blk_all - List of Blacklisted Particles [List o/ Numpy Arrays]
-    @param: target_pid - Particle ID of Earth (2 or 3) [Integer]
+    @param: pid_target - Particle ID of Earth (2 or 3) [Integer]
     @return: crc_all - Correction Factors [Numpy Float Array]
     """
 
