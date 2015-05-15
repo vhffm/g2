@@ -25,7 +25,7 @@ def calibrate_craters_n83(dfc_all, tt0_all, blk_all, target_pid=2):
 
         # Time
         time = dfc[~dfc.pidj.isin(blk_all[idfc]) & \
-                   (dfc.pidi==pid_target)].time[::-1] \
+                   (dfc.pidi==pid_target)].time[::-1]
         time += t00_all[idfc] # Beginning of Sim
         time /= 1.0e9         # Yr => Gyr
         time += 0.115         # Gyr
