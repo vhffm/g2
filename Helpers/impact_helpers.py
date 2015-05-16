@@ -35,7 +35,8 @@ def calibrate_craters_n83(dfc_all, t00_all, blk_all, pid_target=2):
         # Cummulative Collision Ccount
         coll = np.cumsum(np.ones(len(dfc[~dfc.pidj.isin(blk_all[idfc]) & \
                                          (dfc.pidi==pid_target)])))
-        coll /= C.Aearth
+        coll *= C.Amoon / C.Aearth
+        coll /= C.Smoon
 
         # Neukum Count
         time_n83 = np.linspace(time[0], time[-1], 512)
