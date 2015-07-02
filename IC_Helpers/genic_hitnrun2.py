@@ -50,6 +50,11 @@ parser.add_argument("--earth_group", type=int, default=2, \
                     help="Group ID of Earth (+ Moon)")
 parser.add_argument("--phi", type=float, default=0, \
                     help="Rotate Earth Velocity Vector (Degree)")
+group1 = parser.add_mutually_exclusive_group(required=True)
+group1.add_argument('--cgs', action='store_true', \
+                    help="CGS Units (Alexandre).")
+group1.add_argument('--g1', action='store_true', \
+                    help="G=1, Rearth Units (Christian).")
 args = parser.parse_args()
 
 # Info Output
@@ -61,6 +66,10 @@ if args.verbose:
     print "* Main Fragment Group : %i" % args.frag_group
     print "* Earth Group         : %s" % args.earth_group
     print "* Rotation Angle      : %.2f Degree" % args.phi
+    if args.cgs:
+        print "* Units               : CGS"
+    elif args.g1:
+        print "* Units               : G=1, Rearth, km/s, 9.5565e25 g"
     print ""
 
 # Convert Rotation
@@ -74,6 +83,17 @@ if args.verbose:
 
 # Load SPH Data
 s = pb.load("%s" % args.sph_file)
+
+# Units
+if args.cgs:
+    s["pos"] /= 1000.0 * 1000.0 * C.Rearth # Rearth
+    s["vel"] /= 1000.0 * 100.0             # km/s
+    s["mass"] /= 1000.0                    # kg
+    s["mass"] /= C.mearth                  # Earth masses
+elif args.g1:
+    s["mass"] *= 9.5565e25 # g
+    s["mass"] *= 1000.0    # kg
+    s["mass"] /= C.mearth  # Earth masses
 
 # Load Groups from Skid
 # >>> Tau should be a few times the softening <<<
@@ -95,7 +115,7 @@ data = { "x": s["x"].view(type=np.ndarray), \
          "vx": s["vx"].view(type=np.ndarray), \
          "vy": s["vy"].view(type=np.ndarray), \
          "vz": s["vz"].view(type=np.ndarray), \
-         "mass": s["mass"].in_units("kg").view(type=np.ndarray)/C.mearth, \
+         "mass": s["mass"].view(type=np.ndarray), \
          "particle_id": \
             np.asarray(range(len(s["x"].view(type=np.ndarray))), \
                        dtype=np.float64) + 100000, \
