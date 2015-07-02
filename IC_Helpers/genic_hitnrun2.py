@@ -74,7 +74,6 @@ if args.verbose:
 
 # Load SPH Data
 s = pb.load("%s" % args.sph_file)
-tout = s.properties["time"].in_units("s")/3600.0
 
 # Load Groups from Skid
 # >>> Tau should be a few times the softening <<<
