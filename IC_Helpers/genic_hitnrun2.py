@@ -275,7 +275,7 @@ lines_frag = []
 ii = 10
 for _, df_row in dfx.iterrows():
     line = ""
-    line += "0.0 %05d " % ii
+    line += "0.0 %06d " % ii
     line += "%.16e " % (df_row["group_mass"]*C.mearth/C.msun)
     line += "%.16e " % (ph.mass2radius(df_row["group_mass"]*C.mearth, \
                                        rho=4.5)/C.au2km)
@@ -329,7 +329,7 @@ lines_unbound = []
 ii = 10000
 for _, df_row in dfx.iterrows():
     line = ""
-    line += "0.0 %05d " % ii
+    line += "0.0 %06d " % ii
     line += "%.16e " % 0.0
     line += "%.16e " % (ph.mass2radius(df_row["mass"]*C.mearth, \
                                        rho=4.5)/C.au2km)
