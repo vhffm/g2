@@ -44,7 +44,7 @@ parser.add_argument("--rho", type=float, default=4.5, \
                     help="Fragment Density (Default: 4.5 g/cc).")
 parser.add_argument("--unbound_group", type=int, default=0, \
                     help="Group ID of Unbound Particles")
-parser.add_argument("--frag_group", type=int, default=1, \
+parser.add_argument("--frag_group", type=int, default=-1, \
                     help="Group ID of Main Fragment")
 parser.add_argument("--earth_group", type=int, default=2, \
                     help="Group ID of Earth (+ Moon)")
