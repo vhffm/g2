@@ -96,9 +96,8 @@ data = { "x": s["x"].view(type=np.ndarray), \
          "vy": s["vy"].view(type=np.ndarray), \
          "vz": s["vz"].view(type=np.ndarray), \
          "mass": s["mass"].in_units("kg").view(type=np.ndarray)/C.mearth, \
-         "group_id": group, \
-         "time": np.ones(len(s))*s.properties["time"].in_units("s")/3600.0 }
-cols = [ "group_id", "time", "mass", "x", "y", "z", "vx", "vy", "vz" ]
+         "group_id": group }
+cols = [ "group_id", "mass", "x", "y", "z", "vx", "vy", "vz" ]
 
 df = pd.DataFrame(data = data, columns = cols)
 
