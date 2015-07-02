@@ -47,7 +47,7 @@ def Solar2():
         vz *= 365.25/C.twopi
         # t i m r x y z vx vy vz Sx Sy Sz
         # 0 1 2 3 4 5 6  7  8  9 10 11 12
-        line_new = "0.0 %05d %s %s " % (int(line[1]), line[2], line[3])
+        line_new = "0.0 %06d %s %s " % (int(line[1]), line[2], line[3])
         line_new += "%s %s %s " % (line[4], line[5], line[6])
         line_new += "%+.16e %+.16e %+.16e " % (vx, vy, vz)
         line_new += "0.0 0.0 0.0"
