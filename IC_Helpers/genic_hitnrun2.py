@@ -78,7 +78,7 @@ s = pb.load("%s" % args.sph_file)
 # Load Groups from Skid
 # >>> Tau should be a few times the softening <<<
 # >>> Check softening with s["eps"] <<<
-# >>> Apparently, doing this with 100 times(!) the linking length produces 
+# >>> Apparently, doing this with 100 times(!) the softening produces 
 #     the best groups <<<
 # skid -tau 0.1 -msol 4.80443417e-8 -kpc 2.06470049e-13
 #      -hop -o skid-08870 < run1.08870
