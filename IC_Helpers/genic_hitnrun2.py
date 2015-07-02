@@ -50,6 +50,8 @@ parser.add_argument("--earth_group", type=int, default=2, \
                     help="Group ID of Earth (+ Moon)")
 parser.add_argument("--phi", type=float, default=0, \
                     help="Rotate Earth Velocity Vector (Degree)")
+parser.add_argument("--lump_groups", action="store_true", \
+                    help="Lump all Groups to Earth Group")
 group1 = parser.add_mutually_exclusive_group(required=True)
 group1.add_argument('--cgs', action='store_true', \
                     help="CGS Units (Alexandre).")
@@ -65,6 +67,7 @@ if args.verbose:
     print "* Unbound Group       : %i" % args.unbound_group
     print "* Main Fragment Group : %i" % args.frag_group
     print "* Earth Group         : %s" % args.earth_group
+    print "* Lumping Groups      : %s" % args.lump_groups
     print "* Rotation Angle      : %.2f Degree" % args.phi
     if args.cgs:
         print "* Units               : CGS"
@@ -103,6 +106,8 @@ elif args.g1:
 # skid -tau 0.1 -msol 4.80443417e-8 -kpc 2.06470049e-13
 #      -hop -o skid-08870 < run1.08870
 group = np.genfromtxt("%s" % args.group_file, skiprows=1, dtype=np.int64)
+if args.lump_groups:
+    group[group > 0] = args.earth_group
 unique_groups = np.unique(group)
 
 ###############################################################################
