@@ -107,7 +107,9 @@ elif args.g1:
 #      -hop -o skid-08870 < run1.08870
 group = np.genfromtxt("%s" % args.group_file, skiprows=1, dtype=np.int64)
 if args.lump_groups:
-    group[group > 0] = args.earth_group
+    mybool = np.logical_and(group != args.unbound_group, \
+                            group != args.earth_group)
+    group[mybool] = args.unbound_group
 unique_groups = np.unique(group)
 
 ###############################################################################
