@@ -195,6 +195,7 @@ def load(run):
     @param: run - Name of run to load [String]
     @return: dfc - Collisions [Pandas Dataframe]
     @return: dfe - Ejections  [Pandas Dataframe]
+    @return: dfo - Coordinate Outputs [Pandas Dataframe]
     @return: blacklist - Blacklisted Partilces [Numpy Integer Array]
     """
 
@@ -232,6 +233,14 @@ def load(run):
         run_name = 'impacts_morby_hd'
     else:
         raise Exception("Invalid Run %s" % run)
+
+    # Coordinate Output Steps
+    if run in [ 'morby', 'morby_hd', 'solar2', 'solar2_hd' ]:
+        nsteps = np.array([0,1,2,3,4,5], dtype=np.int64) * 1e9
+    elif run in [ 'blowup', 'blowup2', 'blowup2_hd' ]:
+        nsteps = np.array([5,6,7,8,9,10], dtype=np.int64) * 1e9
+    else:
+        raise Exception("Invalid Run %s" % run)
         
     # Debug
     print "// Loading %s" % run
@@ -243,14 +252,19 @@ def load(run):
 
     fnames_c = []
     fnames_e = []
+    fnames_o = []
     for nrun in nruns:
         fnames_c.append("%s/%02d/Collisions_%s_%02d.dat" % \
             (basedir, nrun, run_name, nrun))
         fnames_e.append("%s/%02d/Ejections_%s_%02d.dat" % \
             (basedir, nrun, run_name, nrun))
+        for _, nstep in enumerate(nsteps):
+            fnames_o.append("%s/%02d/Out_%s_%02d_%012d.dat" % \
+                (basedir, nrun, run_name, nrun, nstep))
 
     dfc = ioh.read_collisions_and_stack(fnames_c, return_xyz=True)
     dfe = ioh.read_ejections_and_stack(fnames_e)
+    dfo = ioh.read_output_and_stack(fnames_o, frame='heliocentric')
 
     dfc.sort(columns=["time"], inplace=True)
     dfe.sort(columns=["time"], inplace=True)
@@ -274,7 +288,7 @@ def load(run):
     # dfe = dfe[dfe.time>1.0e7]
 
     # Return
-    return dfc, dfe, blacklist
+    return dfc, dfe, dfo, blacklist
 
 
 def load_all():
@@ -284,6 +298,7 @@ def load_all():
 
     @return: dfc_all - Dataframes w/ Collisions [List of Dataframes]
     @return: dfe_all - Dataframes w/ Ejections  [List of Dataframes]
+    @return: dfo_all - Dataframes w/ Coordinate Outputs [List of Dataframes]
     @return: blk_all - Blacklisted Particle IDs [List of Numpy Arrays]
     @return: tag_all - Simulation Tags [List of Strings]
     @return: tlo_all - Lower Time Bound for Calibration [Numpy Float Array]
@@ -291,13 +306,20 @@ def load_all():
     """
     
     # Load
-    dfc_solar2, dfe_solar2, blacklist_solar2 = load('solar2')
-    dfc_solar2_hd, dfe_solar2_hd, blacklist_solar2_hd = load('solar2_hd')
-    dfc_morby, dfe_morby, blacklist_morby = load('morby')
-    dfc_morby_hd, dfe_morby_hd, blacklist_morby_hd = load('morby_hd')
-    dfc_blowup, dfe_blowup, _ = load('blowup')
-    dfc_blowup2, dfe_blowup2, _ = load('blowup2')
-    dfc_blowup2_hd, dfe_blowup2_hd, _ = load('blowup2_hd')
+    dfc_solar2, dfe_solar2, dfo_solar2, blacklist_solar2 = \
+        load('solar2')
+    dfc_solar2_hd, dfe_solar2_hd, dfo_solar2_hd, blacklist_solar2_hd = \
+        load('solar2_hd')
+    dfc_morby, dfe_morby, dfo_morby, blacklist_morby = \
+        load('morby')
+    dfc_morby_hd, dfe_morby_hd, dfo_morby_hd, blacklist_morby_hd = \
+        load('morby_hd')
+    dfc_blowup, dfe_blowup, dfo_blowup, _ = \
+        load('blowup')
+    dfc_blowup2, dfe_blowup2, dfo_blowup2, _ = \
+        load('blowup2')
+    dfc_blowup2_hd, dfe_blowup2_hd, dfo_blowup2_hd, _ = \
+        load('blowup2_hd')
     
     # Blowup Time
     tblowup = 5.0e9 * 36.0/365.25
@@ -306,6 +328,9 @@ def load_all():
     pid_target = 2
     
     # Master List
+    dfo_all = [ dfo_solar2, dfo_solar2_hd, \
+                dfo_morby, dfo_morby_hd, \
+                dfo_blowup, dfo_blowup2, dfo_blowup2_hd ]
     dfc_all = [ dfc_solar2, dfc_solar2_hd, \
                 dfc_morby, dfc_morby_hd, \
                 dfc_blowup, dfc_blowup2, dfc_blowup2_hd ]
@@ -324,7 +349,7 @@ def load_all():
     thi_all = np.ones_like(tlo_all) * np.nan
     
     assert len(dfc_all) == len(dfe_all) == len(blk_all) == \
-        len(tag_all) == len(tlo_all) == len(thi_all)
+        len(tag_all) == len(tlo_all) == len(thi_all) == len(dfo_all)
     
     ###########################################################################
 
@@ -337,10 +362,14 @@ def load_all():
     # dfc2x = dfc2[~dfc2.pidj.isin(dfc2.pidi==pid_target)] # blowup2
     # dfc2x.time += tblowup
     dfcxx = pd.concat([dfc1x, dfc2x])
+    dfoxx = pd.concat([dfo_all[2].copy(), dfo_all[5].copy()])
+    dfoxx.drop_duplicates(subset=["pid", "time", "nstep"], inplace=True)
+    dfoxx.reset_index(drop=True, inplace=True)
 
     # Append to Lists
     tlo_all = np.append(tlo_all, tblowup)
     thi_all = np.append(thi_all, np.nan)
+    dfo_all.append(dfoxx)
     dfc_all.append(dfcxx)
     dfe_all.append(pd.DataFrame())
     blk_all.append(blacklist_morby)
@@ -357,10 +386,14 @@ def load_all():
     # dfc2x = dfc2[~dfc2.pidj.isin(dfc2.pidi==pid_target)] # blowup2_hd
     # dfc2x.time += tblowup
     dfcxx = pd.concat([dfc1x, dfc2x])
+    dfoxx = pd.concat([dfo_all[3].copy(), dfo_all[6].copy()])
+    dfoxx.drop_duplicates(subset=["pid", "time", "nstep"], inplace=True)
+    dfoxx.reset_index(drop=True, inplace=True)
 
     # Append to Lists
     tlo_all = np.append(tlo_all, tblowup)
     thi_all = np.append(thi_all, np.nan)
+    dfo_all.append(dfoxx)
     dfc_all.append(dfcxx)
     dfe_all.append(pd.DataFrame())
     blk_all.append(blacklist_morby)
@@ -368,7 +401,7 @@ def load_all():
 
     ###########################################################################
 
-    return dfc_all, dfe_all, blk_all, tag_all, tlo_all, thi_all
+    return dfc_all, dfe_all, dfo_all, blk_all, tag_all, tlo_all, thi_all
 
 
 def calibrate_all(dfc_all, blk_all, tlo_all, thi_all):
