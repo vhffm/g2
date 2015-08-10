@@ -5,16 +5,23 @@ Impact Simulation Helpers.
 import numpy as np
 import constants as C
 import scipy as sp
+import io_helpers as ioh
+import pandas as pd
 
 
-def calibrate_craters_n83(dfc_all, t00_all, blk_all, pid_target=2):
+def calibrate_craters_n83(dfc_all, blk_all, tlo_all, thi_all, pid_target=2):
     """
     Calibrate Collision Rate to Neukum (1983) Cratering Fits.
+    Time Range: tlo_all =< time =< thi_all
+    
     Cf. Neukum+ 2001, Fig. 10 / Eqn. 5
     http://link.springer.com/article/10.1023/A:1011989004263
 
     @param: dfc_all - List of Collision Logs [List o/ Pandas Dataframe]
-    @param: t00_all - List of Initial Times (Years) [Numpy Float Array]
+    @param: tlo_all - List of Lower Time Limit to Calibrate Against (Years) 
+                      [Numpy Float Array]
+    @param: thi_all - List of Upper Time Limit to Calibrate Against (Years)
+                      [Numpy Float Array]
     @param: blk_all - List of Blacklisted Particles [List o/ Numpy Arrays]
     @param: pid_target - Particle ID of Earth (2 or 3) [Integer]
     @return: crc_all - Correction Factors [Numpy Float Array]
@@ -24,10 +31,18 @@ def calibrate_craters_n83(dfc_all, t00_all, blk_all, pid_target=2):
     for idfc, dfc in enumerate(dfc_all):
         dfc = dfc[dfc.pidi==pid_target]
 
+        # Only Consider Subset in Time
+        if not np.isnan(tlo_all[idfc]):
+            # print "Lower Limit - %i - %.2e" % (idfc, tlo_all[idfc])
+            dfc = dfc[dfc.time >= tlo_all[idfc]]
+
+        if not np.isnan(thi_all[idfc]):
+            # print "Upper Limit - %i - %.2e" % (idfc, thi_all[idfc])
+            dfc = dfc[dfc.time <= thi_all[idfc]]
+
         # Time
         time = dfc[~dfc.pidj.isin(blk_all[idfc]) & \
                    (dfc.pidi==pid_target)].time[::-1]
-        time += t00_all[idfc] # Beginning of Sim
         time /= 1.0e9         # Yr => Gyr
         time += 0.115         # Gyr
         time += C.t0ss        # Beginning of Solar System
@@ -171,3 +186,231 @@ def scale_production_function(crc_all):
 
     # Return Scaling
     return nscale, mscale
+
+
+def load(run):
+    """
+    Load a given simulation. Beware of hardcoded paths.
+
+    @param: run - Name of run to load [String]
+    @return: dfc - Collisions [Pandas Dataframe]
+    @return: dfe - Ejections  [Pandas Dataframe]
+    @return: blacklist - Blacklisted Partilces [Numpy Integer Array]
+    """
+
+    # Datadir
+    datadir = '/zbox/data/volker/Impacts'
+
+    # Which Simulation?
+    if run == 'morby':
+        basedir = "%s/Morby" % datadir
+        blckdir = basedir
+        run_name = 'impacts_morby'
+    elif run == 'morby_hd':
+        basedir = "%s/Morby_HighDispersion" % datadir
+        blckdir = basedir
+        run_name = 'impacts_morby_hd'
+    elif run == 'solar2':
+        basedir = "%s/Solar2" % datadir
+        blckdir = basedir
+        run_name = 'impacts_solar2_long'
+    elif run == 'solar2_hd':
+        basedir = "%s/Solar2_HighDispersion" % datadir
+        blckdir = basedir
+        run_name = 'impacts_solar2_hd'
+    elif run == 'blowup':
+        basedir = "%s/Blowup" % datadir
+        blckdir = "%s/Morby" % datadir
+        run_name = 'impacts_morby'
+    elif run == 'blowup2':
+        basedir = "%s/Blowup2" % datadir
+        blckdir = "%s/Morby" % datadir
+        run_name = 'impacts_morby'
+    elif run == 'blowup2_hd':
+        basedir = "%s/Blowup2_HighDispersion" % datadir
+        blckdir = "%s/Morby_HighDispersion" % datadir
+        run_name = 'impacts_morby_hd'
+    else:
+        raise Exception("Invalid Run %s" % run)
+        
+    # Debug
+    print "// Loading %s" % run
+
+    # Number of Runs?
+    # 1..16 are default
+    #    17 is 0.5 - 2.0 AU
+    nruns = range(1,16+1)
+
+    fnames_c = []
+    fnames_e = []
+    for nrun in nruns:
+        fnames_c.append("%s/%02d/Collisions_%s_%02d.dat" % \
+            (basedir, nrun, run_name, nrun))
+        fnames_e.append("%s/%02d/Ejections_%s_%02d.dat" % \
+            (basedir, nrun, run_name, nrun))
+
+    dfc = ioh.read_collisions_and_stack(fnames_c, return_xyz=True)
+    dfe = ioh.read_ejections_and_stack(fnames_e)
+
+    dfc.sort(columns=["time"], inplace=True)
+    dfe.sort(columns=["time"], inplace=True)
+    
+    # Chop, Rewind?
+    if run in [ 'blowup', 'blowup2', 'blowup2_hd' ]:
+        tblowup = 5.0e9 * 36.0/365.25
+        dfc = dfc[dfc.time>tblowup]
+        dfe = dfe[dfe.time>tblowup]
+        # dfc["time"] -= tblowup
+        # dfe["time"] -= tblowup
+
+    # Units
+    dfc["theta"] *= C.r2d
+
+    # Blacklist
+    blacklist = np.load("%s/Blacklist_1Rhill.npz" % blckdir)["blacklist"]
+    
+    # Time Filter
+    # dfc = dfc[dfc.time>1.0e7]
+    # dfe = dfe[dfe.time>1.0e7]
+
+    # Return
+    return dfc, dfe, blacklist
+
+
+def load_all():
+    """
+    Load all simulations. Also join Morby/Blowup2, Morby_HD/Blowup2_HD.
+    Hardcoding is bad, but so are 10 monstrous cells in IPython just to load.
+
+    @return: dfc_all - Dataframes w/ Collisions [List of Dataframes]
+    @return: dfe_all - Dataframes w/ Ejections  [List of Dataframes]
+    @return: blk_all - Blacklisted Particle IDs [List of Numpy Arrays]
+    @return: tag_all - Simulation Tags [List of Strings]
+    @return: tlo_all - Lower Time Bound for Calibration [Numpy Float Array]
+    @return: thi_all - Upper Time Bound for Calibration [Numpy Float Array]
+    """
+    
+    # Load
+    dfc_solar2, dfe_solar2, blacklist_solar2 = load('solar2')
+    dfc_solar2_hd, dfe_solar2_hd, blacklist_solar2_hd = load('solar2_hd')
+    dfc_morby, dfe_morby, blacklist_morby = load('morby')
+    dfc_morby_hd, dfe_morby_hd, blacklist_morby_hd = load('morby_hd')
+    dfc_blowup, dfe_blowup, _ = load('blowup')
+    dfc_blowup2, dfe_blowup2, _ = load('blowup2')
+    dfc_blowup2_hd, dfe_blowup2_hd, _ = load('blowup2_hd')
+    
+    # Blowup Time
+    tblowup = 5.0e9 * 36.0/365.25
+    
+    # Calibration Target (Earth)
+    pid_target = 2
+    
+    # Master List
+    dfc_all = [ dfc_solar2, dfc_solar2_hd, \
+                dfc_morby, dfc_morby_hd, \
+                dfc_blowup, dfc_blowup2, dfc_blowup2_hd ]
+    dfe_all = [ dfe_solar2, dfe_solar2_hd, \
+                dfe_morby, dfe_morby_hd, \
+                dfe_blowup, dfe_blowup2, dfe_blowup2_hd ]
+    blk_all = [ blacklist_solar2, blacklist_solar2_hd, \
+                blacklist_morby, blacklist_morby_hd, \
+                np.array([]), np.array([]), np.array([]) ]
+    tag_all = [ "Solar2", "Solar2/HD", \
+                "Morby", "Morby/HD", \
+                "Blowup", "Blowup2", "Blowup2/HD" ]
+    tlo_all = np.array([0.0, 0.0, \
+                        0.0, 0.0, \
+                        tblowup, tblowup, tblowup ])
+    thi_all = np.ones_like(tlo_all) * np.nan
+    
+    assert len(dfc_all) == len(dfe_all) == len(blk_all) == \
+        len(tag_all) == len(tlo_all) == len(thi_all)
+    
+    ###########################################################################
+
+    # A - Tack Together Morby + Blowup2
+    dfc1 = dfc_all[2].copy()
+    dfc2 = dfc_all[5].copy()
+    dfc1x = dfc1
+    dfc2x = dfc2
+    # dfc1x = dfc1[~dfc1.pidj.isin(dfc1.pidi==pid_target)] # morby
+    # dfc2x = dfc2[~dfc2.pidj.isin(dfc2.pidi==pid_target)] # blowup2
+    # dfc2x.time += tblowup
+    dfcxx = pd.concat([dfc1x, dfc2x])
+
+    # Append to Lists
+    tlo_all = np.append(tlo_all, tblowup)
+    thi_all = np.append(thi_all, np.nan)
+    dfc_all.append(dfcxx)
+    dfe_all.append(pd.DataFrame())
+    blk_all.append(blacklist_morby)
+    tag_all.append("Morby + Blowup2")
+
+    ###########################################################################
+
+    # B - Tack Together Morby_HD + Blowup2_HD
+    dfc1 = dfc_all[3].copy()
+    dfc2 = dfc_all[6].copy()
+    dfc1x = dfc1
+    dfc2x = dfc2
+    # dfc1x = dfc1[~dfc1.pidj.isin(dfc1.pidi==pid_target)] # morby_hd
+    # dfc2x = dfc2[~dfc2.pidj.isin(dfc2.pidi==pid_target)] # blowup2_hd
+    # dfc2x.time += tblowup
+    dfcxx = pd.concat([dfc1x, dfc2x])
+
+    # Append to Lists
+    tlo_all = np.append(tlo_all, tblowup)
+    thi_all = np.append(thi_all, np.nan)
+    dfc_all.append(dfcxx)
+    dfe_all.append(pd.DataFrame())
+    blk_all.append(blacklist_morby)
+    tag_all.append("Morby/HD + Blowup2/HD")
+
+    ###########################################################################
+
+    return dfc_all, dfe_all, blk_all, tag_all, tlo_all, thi_all
+
+
+def calibrate_all(dfc_all, blk_all, tlo_all, thi_all):
+    """
+    Calibrate simulations against Neukum+ 1983 cummulative crater count.
+    Note that Morby(_HD) uses Blowup2(_HD) calibration.
+
+    The number count correction (crc_all) gives the number of actual particles
+    (in some diameter range) that one simulation particle corresponds to.
+
+    The mass correction (mscale) gives the total mass each simulation particle
+    corresponds to.
+
+    Both assume a power-law-ish size-frequency distribution of particles. 
+    Cf. calibrate_craters_n83() and scale_production_function() for refs.
+
+    @param: dfc_all - Dataframes w/ Collisions [List of Dataframes]
+    @param: blk_all - Blacklisted Particle IDs [List of Numpy Arrays]
+    @param: tlo_all - Lower Time Bound for Calibration [Numpy Float Array]
+    @param: thi_all - Upper Time Bound for Calibration [Numpy Float Array]
+    @return: crc_all - Number Count Correction Factors [Numpy Float Array]
+    @return: mscale  - Mass Correction Factors [Numpy Float Array]
+    """
+    
+    # Compute Offsets
+    crc_all = calibrate_craters_n83(dfc_all, blk_all, tlo_all, thi_all)
+
+    # Blowup2 => Morby
+    crc_all[2] = crc_all[5]
+
+    # Blowup2_HD => Morby_HD
+    crc_all[3] = crc_all[6]
+
+    # Blowup2 => XXX
+    # crc_all = np.append(crc_all, crc_all[2])
+    # crc_all = np.append(crc_all, crc_all[3])
+
+    ###########################################################################
+
+    # Compute Mass Scale
+    _, mscale = scale_production_function(crc_all)
+    
+    ###########################################################################
+    
+    return crc_all, mscale
