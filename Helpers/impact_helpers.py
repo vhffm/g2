@@ -73,12 +73,19 @@ def calibrate_craters_n83(dfc_all, blk_all, tlo_all, thi_all, pid_target=2):
     return crc_all
 
 
-def neukum_production_function():
+def neukum_production_function(Dmin=0.01, Dmax=300.0):
     """
     Neukum Crater Production Distribution. Based on Neukum 1983.
     Cf. Neukum+ 2001, Eqn. 2, Eqn. 3, Table 1
     http://link.springer.com/article/10.1023/A:1011989004263
 
+    *** WARNING ***
+    Valid in the range 0.01 - 300.0 km diameter. Extrapolate carefully.
+    Cummulative crater count in calibrate_craters_n83() valid D > 1km only!
+    For details, see Neukum+ 2001, Page 15, Text Below Eqn. 5
+
+    @param: Dmin - Lower End of Crater Mass Function [Numpy Float]
+    @param: Dmax - Upper End of Crater Mass Function [Numpy Float]
     @return: N - Numnber of Craters @ Diameter [Numpy Float Array]
     @return: dNdR - Diff. Number of Craters @ Diameter [Numpy Float Array]
     @return: R - R-Distribution [Numpy Float Array]
@@ -91,7 +98,7 @@ def neukum_production_function():
 
     a = np.array([a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11])
     # D = np.logspace(-2, 3, 4096) # km
-    D = np.logspace(-2, np.log10(300.0), 4096) # km
+    D = np.logspace(np.log10(Dmin), np.log10(Dmax), 4096) # km
 
     # N(D) -- Absolute Distribution
     logN = np.zeros_like(D)
@@ -151,11 +158,16 @@ def impactor_mass(D, v_i, theta, rho_t=3.34, rho_i=2.00, grav=1.622):
     return M, L
 
 
-def scale_production_function(crc_all):
+def scale_production_function(crc_all, Dmin=1.0, Dmax=300.0):
     """
     Computes Number Scaling from Production Functions.
 
+    The cummulative crater count we scale to is valid only for D > 1 km.
+    Cf. calibrate_craters_n83() and neukum_production_function() for comments.
+
     @param: crc_all - N of Real Impacts per Sim Impact [Numpy Float Array]
+    @param: Dmin - Lower End of Crater Mass Function [Numpy Float]
+    @param: Dmax - Upper End of Crater Mass Function [Numpy Float]
     @return: nscale - Resulting Production Function Scaling [Numpy Float Array]
     @return: mscale - Resulting Mass Function Scaling [Numpy Float Array]
 
@@ -169,8 +181,8 @@ def scale_production_function(crc_all):
 
     # We integrate the differential Production Function to obtain the number
     # of expected impacts in the relevant mass ranges (1km < D < 300km).
-    _, dNdD, _, D = neukum_production_function()
-    actual = sp.integrate.simps(dNdD[D>1.0], x=D[D>1.0])
+    _, dNdD, _, D = neukum_production_function(Dmin, Dmax)
+    actual = sp.integrate.simps(dNdD, x=D)
 
     # We calibrate our counted impacts to the expected impacts.
     nscale = counted / actual
@@ -180,7 +192,7 @@ def scale_production_function(crc_all):
     # simulation particles. Impact velocity and angle are median values
     # taken from Test Particle simulations.
     M, _ = impactor_mass(D, 12.0, 18.5 * C.d2r)
-    mscale = sp.integrate.simps((dNdD*M)[D>1.0], x=D[D>1.0])
+    mscale = sp.integrate.simps((dNdD*M), x=D)
     mscale *= nscale
     mscale *= C.Smoon * (C.Aearth/C.Amoon)
 
@@ -404,7 +416,7 @@ def load_all():
     return dfc_all, dfe_all, dfo_all, blk_all, tag_all, tlo_all, thi_all
 
 
-def calibrate_all(dfc_all, blk_all, tlo_all, thi_all):
+def calibrate_all(dfc_all, blk_all, tlo_all, thi_all, Dmin=1.0, Dmax=300.0):
     """
     Calibrate simulations against Neukum+ 1983 cummulative crater count.
     Note that Morby(_HD) uses Blowup2(_HD) calibration.
@@ -418,10 +430,15 @@ def calibrate_all(dfc_all, blk_all, tlo_all, thi_all):
     Both assume a power-law-ish size-frequency distribution of particles. 
     Cf. calibrate_craters_n83() and scale_production_function() for refs.
 
+    The cummulative crater count is valid only for D > 1 km.
+    Cf. calibrate_craters_n83() and neukum_production_function() for comments.
+
     @param: dfc_all - Dataframes w/ Collisions [List of Dataframes]
     @param: blk_all - Blacklisted Particle IDs [List of Numpy Arrays]
     @param: tlo_all - Lower Time Bound for Calibration [Numpy Float Array]
     @param: thi_all - Upper Time Bound for Calibration [Numpy Float Array]
+    @param: Dmin - Lower End of Crater Mass Function [Numpy Float]
+    @param: Dmax - Upper End of Crater Mass Function [Numpy Float]
     @return: crc_all - Number Count Correction Factors [Numpy Float Array]
     @return: mscale  - Mass Correction Factors [Numpy Float Array]
     """
@@ -442,7 +459,7 @@ def calibrate_all(dfc_all, blk_all, tlo_all, thi_all):
     ###########################################################################
 
     # Compute Mass Scale
-    _, mscale = scale_production_function(crc_all)
+    _, mscale = scale_production_function(crc_all, Dmin, Dmax)
     
     ###########################################################################
     
