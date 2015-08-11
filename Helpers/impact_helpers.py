@@ -355,6 +355,8 @@ def load_all():
     tag_all = [ "Solar2", "Solar2/HD", \
                 "Morby", "Morby/HD", \
                 "Blowup", "Blowup2", "Blowup2/HD" ]
+
+    # Time Range for Calibration
     tlo_all = np.array([0.0, 0.0, \
                         0.0, 0.0, \
                         tblowup, tblowup, tblowup ])
