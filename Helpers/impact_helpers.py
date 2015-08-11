@@ -368,10 +368,13 @@ def load_all():
     # For Morby/Morby_HD runs, the lower time limit is a dummy values. All
     # calibrations for these are obtained from Blowup2/Blowup2_HD runs
     #
+    # For the upper time limit, we chop off the last 100 Myr because our
+    # cummulative impact count drops steeply. Courtesy of being logarithmic.
+    #
     tlo_all = np.array([tblowup, tblowup, \
                         0.0, 0.0, \
                         tblowup, tblowup, tblowup ])
-    thi_all = np.ones_like(tlo_all) * np.nan
+    thi_all = np.ones_like(tlo_all) * 9.0e9 * 36.0 / 365.25
     
     assert len(dfc_all) == len(dfe_all) == len(blk_all) == \
         len(tag_all) == len(tlo_all) == len(thi_all) == len(dfo_all)
