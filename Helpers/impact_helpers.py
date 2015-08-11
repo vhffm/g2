@@ -356,8 +356,19 @@ def load_all():
                 "Morby", "Morby/HD", \
                 "Blowup", "Blowup2", "Blowup2/HD" ]
 
+    #
     # Time Range for Calibration
-    tlo_all = np.array([0.0, 0.0, \
+    #
+    # NB:
+    # For Solar2/Solar2_HD runs, the lower time limit for calibration is the 
+    # time after the blow up of the model. ALthough there is no blow-up in
+    # this model, we only have actual evidence for the time after this. So 
+    # there's no point in calibrating to the time before.
+    #
+    # For Morby/Morby_HD runs, the lower time limit is a dummy values. All
+    # calibrations for these are obtained from Blowup2/Blowup2_HD runs
+    #
+    tlo_all = np.array([tblowup, tblowup, \
                         0.0, 0.0, \
                         tblowup, tblowup, tblowup ])
     thi_all = np.ones_like(tlo_all) * np.nan
