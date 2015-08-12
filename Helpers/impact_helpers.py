@@ -247,8 +247,12 @@ def load(run):
         raise Exception("Invalid Run %s" % run)
 
     # Coordinate Output Steps
-    if run in [ 'morby', 'morby_hd', 'solar2', 'solar2_hd' ]:
+    if run in [ 'morby', 'morby_hd' ]:
         nsteps = np.array([0,1,2,3,4,5], dtype=np.int64) * 1e9
+    elif run in [ 'solar2' ]:
+        nsteps = np.array([0,1,2,3,4,5,6,7], dtype=np.int64) * 1e9
+    elif run in [ 'solar2_hd' ]:
+        nsteps = np.array([0,1,2,3,4,5,6,7,8,9,10], dtype=np.int64) * 1e9
     elif run in [ 'blowup', 'blowup2', 'blowup2_hd' ]:
         nsteps = np.array([5,6,7,8,9,10], dtype=np.int64) * 1e9
     else:
