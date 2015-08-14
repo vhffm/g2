@@ -282,7 +282,9 @@ def load(run):
             fnames_o.append("%s/%02d/Out_%s_%02d_%012d.dat" % \
                 (basedir, nrun, run_name, nrun, nstep))
 
-    dfc = ioh.read_collisions_and_stack(fnames_c, return_xyz=True)
+    dfc = ioh.read_collisions_and_stack(fnames_c, \
+                                        return_xyz=True, \
+                                        return_geometry=False)
     dfe = ioh.read_ejections_and_stack(fnames_e)
     dfo = ioh.read_output_and_stack(fnames_o, frame='heliocentric')
 
