@@ -297,9 +297,6 @@ def load(run):
         # dfc["time"] -= tblowup
         # dfe["time"] -= tblowup
 
-    # Units
-    dfc["theta"] *= C.r2d
-
     # Blacklist
     blacklist = np.load("%s/Blacklist_1Rhill.npz" % blckdir)["blacklist"]
     
