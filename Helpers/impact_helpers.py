@@ -246,15 +246,19 @@ def load(run):
     else:
         raise Exception("Invalid Run %s" % run)
 
-    # Coordinate Output Steps
+    # Coordinate Output Steps & Number of Runs
     if run in [ 'morby', 'morby_hd' ]:
         nsteps = np.array([0,1,2,3,4,5], dtype=np.int64) * 1e9
+        nrun_hi = 16
     elif run in [ 'solar2' ]:
         nsteps = np.array([0,1,2,3,4,5,6,7], dtype=np.int64) * 1e9
+        nrun_hi = 16
     elif run in [ 'solar2_hd' ]:
         nsteps = np.array([0,1,2,3,4,5,6,7,8,9,10], dtype=np.int64) * 1e9
+        nrun_hi = 16
     elif run in [ 'blowup', 'blowup2', 'blowup2_hd' ]:
         nsteps = np.array([5,6,7,8,9,10], dtype=np.int64) * 1e9
+        nrun_hi = 16
     else:
         raise Exception("Invalid Run %s" % run)
         
@@ -264,7 +268,7 @@ def load(run):
     # Number of Runs?
     # 1..16 are default
     #    17 is 0.5 - 2.0 AU
-    nruns = range(1,16+1)
+    nruns = range(1,nrun_hi+1)
 
     fnames_c = []
     fnames_e = []
