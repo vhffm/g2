@@ -144,7 +144,7 @@ def impactor_mass(D, v_i, theta, rho_t=3.34, rho_i=2.00, grav=1.622):
     # Fix Units
     grav /= 1000.0 # m/s2 => km/s2
 
-    # Compute Impactor Diameter
+    # Compute Impactor Diameter (km)
     L = D
     L /= 1.161 * (rho_i/rho_t)**(1.0/3.0) * \
          v_i**0.44 * \
@@ -152,7 +152,7 @@ def impactor_mass(D, v_i, theta, rho_t=3.34, rho_i=2.00, grav=1.622):
          np.sin(theta)**(1.0/3.0)
     L = L**(1.0/0.78)
 
-    # Compute (Spherical) Impactor Mass
+    # Compute (Spherical) Impactor Mass (kg)
     M = 4.0/3.0 * np.pi * (L/2.0)**3.0 * rho_i/1000.0*(1000.0*100.0)**(3.0)
 
     # Return [Float or Numpy Float Array; Same as D]
