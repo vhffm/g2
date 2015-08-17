@@ -138,6 +138,7 @@ def impactor_mass(D, v_i, theta, rho_t=3.34, rho_i=2.00, grav=1.622):
     @param: rho_i - Impactor density (g/cc) [Float]
     @param: grav - Target surface gravity (m/s2) [Float]
     @return: M - Impactor mass (kg) [Float or Numpy Float Array]
+    @return: L - Impactor diameter (km) [Float or Numpy Float Array]
     """
 
     # Fix Units
