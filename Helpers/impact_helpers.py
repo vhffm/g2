@@ -192,7 +192,7 @@ def scale_production_function(crc_all, Dmin=1.0, Dmax=300.0):
     # the total mass delivered over these impacts. This sets the mass of our 
     # simulation particles. Impact velocity and angle are median values
     # taken from Test Particle simulations.
-    M, _ = impactor_mass(D, 12.0, 18.5 * C.d2r)
+    M, _ = impactor_mass(D, 11.8, 48.0 * C.d2r)
     mscale = sp.integrate.simps((dNdD*M), x=D)
     mscale *= nscale
     mscale *= C.Smoon * (C.Aearth/C.Amoon)
