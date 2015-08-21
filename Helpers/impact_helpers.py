@@ -201,7 +201,7 @@ def scale_production_function(crc_all, Dmin=1.0, Dmax=300.0):
     return nscale, mscale
 
 
-def load(run):
+def load(run, return_blacklist=False):
     """
     Load a given simulation. Beware of hardcoded paths.
 
@@ -301,7 +301,10 @@ def load(run):
         # dfe["time"] -= tblowup
 
     # Blacklist
-    blacklist = np.load("%s/Blacklist_1Rhill.npz" % blckdir)["blacklist"]
+    if return_blacklist:
+        blacklist = np.load("%s/Blacklist_1Rhill.npz" % blckdir)["blacklist"]
+    else:
+        blacklist = np.atleast_1d([])
     
     # Time Filter
     # dfc = dfc[dfc.time>1.0e7]
