@@ -258,7 +258,10 @@ def load(run, return_blacklist=False):
     elif run in [ 'solar2_hd' ]:
         nsteps = np.array([0,1,2,3,4,5,6,7,8,9,10], dtype=np.int64) * 1e9
         nrun_hi = 17
-    elif run in [ 'blowup', 'blowup2', 'blowup2_hd' ]:
+    elif run in [ 'blowup' ]:
+        nsteps = np.array([5,6,7,8,9,10], dtype=np.int64) * 1e9
+        nrun_hi = 16
+    elif run in [ 'blowup2', 'blowup2_hd' ]:
         nsteps = np.array([5,6,7,8,9,10], dtype=np.int64) * 1e9
         nrun_hi = 17
     else:
