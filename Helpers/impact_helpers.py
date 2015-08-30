@@ -7,6 +7,7 @@ import constants as C
 import scipy as sp
 import io_helpers as ioh
 import pandas as pd
+import fit_helpers as fh
 
 
 def calibrate_craters_n83(dfc_all, blk_all, tlo_all, thi_all, pid_target=2):
@@ -491,3 +492,57 @@ def calibrate_all(dfc_all, blk_all, tlo_all, thi_all, Dmin=1.0, Dmax=300.0):
     ###########################################################################
     
     return crc_all, mscale
+
+
+def compute_collision_rate(dfc, pidi=2, tlo=1.0e6, retraw=False, retfit=False):
+    """
+    Compute Collision Rate on Log10 Spaced Grid.
+
+    @param: dfc - Collision List - [Pandas Dataframe]
+    @param: pidi - PID of Target (Usually Earth) - [Integer]
+    @param: tlo - Time after which collisions counts (Years) - [Float]
+    @param: retraw - Return Raw dDta [Bool]
+    @param: retfit - Return Power Law Fitting Coefficients [Bool]
+
+    @return: dcdt_grid - Collision Rate (dC/dt) on Grid [Numpy Float Array]
+    @return: tx_grid - Time Grid for Collision Rate [Numpy Float Array]
+    @return: dcdt_raw - Raw Collision Rate [Numpy Float Array] (Opt)
+    @return: tx_raw - Times for Raw Collision Rate [Numpy Float Array] (Opt)
+    @return: A, B - Power Law Fit Coefficients (dCdt = A * t**B) [Floats]
+    """
+
+    dfc = dfc[(dfc.time > tlo) & (dfc.pidi == pidi)]
+
+    # Extract Time [tt] & Cummulative Collision Count [cc]
+    tt = np.asarray(dfc.time)
+    cc = np.asarray(np.cumsum(np.ones_like(dfc.time)))
+
+    # Grid
+    tt_grid = np.logspace(np.log10(dfc.time.min()), \
+                          np.log10(dfc.time.max()), \
+                          24)
+    cc_grid = np.interp(tt_grid, tt, cc)
+
+    # Gridded: Remap Time, Compute Derivative
+    tx_grid = (tt_grid[1:] + tt_grid[:-1]) / 2.0
+    dcdt_grid = np.diff(cc_grid) / np.diff(tt_grid)
+
+    # Raw: Remap Time, Compute Derivative
+    if retraw:
+        tx_raw = (tt[1:] + tt[:-1]) / 2.0
+        dcdt_raw = np.ones_like(tx) / np.diff(tt)
+
+    # Fit Power Law, May Fail, Always Double Check
+    # dcdt = A * time**B
+    if retfit:
+        A, B = fh.fit_pow(tx_grid, dcdt_grid)
+
+    # Return
+    if retraw and not retfit:
+        return dcdt_grid, tx_grid, dcdt_raw, tx_raw
+    elif not retraw and retfit:
+        return dcdt_grid, tx_grid, A, B
+    elif retraw and retfit:
+        return dcdt_grid, tx_grid, dcdt_raw, tx_raw, A, B
+    else:
+        return dcdt_grid, tx_grid
