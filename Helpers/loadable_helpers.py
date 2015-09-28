@@ -29,3 +29,24 @@ def formation_sims():
 
     # Return
     return basedir, sims, nruns
+
+
+def chaos_sims():
+    """
+    Tracks what Chaos runs are loadable (finished).
+    Updated 28 Sep 2015.
+    """
+    
+    # Set Directories
+    basedir = "/zbox/data/volker/Debris/Runs"
+    sims = [ "Chaos-VAN/gas_01", \
+             "Chaos-EJS/gas_01", \
+             "Chaos-CJS/gas_01" ]
+
+    # Valid Runs
+    nruns = [ range(1,12+1),\
+              range(1,12+1), \
+              range(1,12+1) ]
+
+    # Return
+    return basedir, sims, nruns
