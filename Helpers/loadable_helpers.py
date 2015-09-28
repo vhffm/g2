@@ -5,8 +5,8 @@ Helpers to define what runs are loadable.
 def formation_sims():
     """
     Tracks what Formation runs are loadable (finished).
-    Updated 28 Sep 2015
-    """"
+    Updated 28 Sep 2015.
+    """
     
     # Set Directories
     basedir = "/zbox/data/volker/Debris/Runs"
