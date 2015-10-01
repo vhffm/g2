@@ -17,7 +17,7 @@ def formation_sims():
              "Chaos-VAN_Heavy/gas_01", \
              "Chaos-VAN_Heavy_4k/gas_01", \
              "Chaos-VAN_Steep/gas_01", \
-             "Chaos-VAN_8192/gas_01" ]
+             "Chaos-VAN_8192/gas_01_too_much_drag" ]
 
     # Valid Runs
     nruns = [ range(1,6+1),\
