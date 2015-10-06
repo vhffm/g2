@@ -5,7 +5,7 @@ Helpers to define what runs are loadable.
 def formation_sims():
     """
     Tracks what Formation runs are loadable (finished).
-    Updated 28 Sep 2015.
+    Updated 06 Oct 2015.
     """
     
     # Set Directories
@@ -25,7 +25,7 @@ def formation_sims():
               range(1,9+1), \
               range(1,5+1), \
               range(1,9+1),\
-              [ 1, 2, 3, 4, 5, 7, 8, 10, 11, 12 ] ]
+              range(1,12+1) ]
 
     # Return
     return basedir, sims, nruns
