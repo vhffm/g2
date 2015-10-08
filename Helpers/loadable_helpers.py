@@ -43,18 +43,18 @@ def chaos_sims():
              "Chaos-VAN_Steep/gas_01", \
              "Chaos-VAN_Heavy/gas_01", \
              "Chaos-EJS/gas_01", \
-             "Chaos-CJS/gas_01", \
              "Chaos-EJS_Steep/gas_01", \
-             "Chaos-EJS_Heavy/gas_01" ]
+             "Chaos-EJS_Heavy/gas_01"
+             "Chaos-CJS/gas_01" ]
 
     # Valid Runs
     nruns = [ range(1,12+1),\
               range(1,12+1),\
               range(1,9+1),\
               range(1,12+1), \
-              range(1,12+1), \
               range(1,6+1), \
-              range(1,5+1) ]
+              range(1,5+1), \
+              range(1,12+1) ]
 
     # Return
     return basedir, sims, nruns
