@@ -34,7 +34,7 @@ def formation_sims():
 def chaos_sims():
     """
     Tracks what Chaos runs are loadable (finished).
-    Updated 08 Oct 2015.
+    Updated 13 Oct 2015.
     """
     
     # Set Directories
@@ -45,7 +45,9 @@ def chaos_sims():
              "Chaos-EJS/gas_01", \
              "Chaos-EJS_Steep/gas_01", \
              "Chaos-EJS_Heavy/gas_01", \
-             "Chaos-CJS/gas_01" ]
+             "Chaos-CJS/gas_01", \
+             "Chaos-CJS_Steep/gas_01", \
+             "Chaos-CJS_Heavy/gas_01" ]
 
     # Valid Runs
     nruns = [ range(1,12+1),\
@@ -54,7 +56,9 @@ def chaos_sims():
               range(1,12+1), \
               range(1,6+1), \
               range(1,5+1), \
-              range(1,12+1) ]
+              range(1,12+1), \
+              [ 1, 3 ], \
+              [ 1, 2, 3 ] ]
 
     # Return
     return basedir, sims, nruns
