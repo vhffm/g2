@@ -5,7 +5,7 @@ Helpers to define what runs are loadable.
 def formation_sims():
     """
     Tracks what Formation runs are loadable (finished).
-    Updated 06 Oct 2015.
+    Updated 09 Dec 2015.
     """
     
     # Set Directories
@@ -17,7 +17,7 @@ def formation_sims():
              "Chaos-VAN_Heavy/gas_01", \
              "Chaos-VAN_Heavy_4k/gas_01", \
              "Chaos-VAN_Steep/gas_01", \
-             "Chaos-VAN_8192/gas_01_too_much_drag" ]
+             "Chaos-VAN_8192/gas_01" ]
 
     # Valid Runs
     nruns = [ range(1,6+1),\
@@ -25,7 +25,7 @@ def formation_sims():
               range(1,9+1), \
               range(1,5+1), \
               range(1,9+1),\
-              range(1,12+1) ]
+              [ 1, 2, 3, 4, 5, 6 ] ]
 
     # Return
     return basedir, sims, nruns
