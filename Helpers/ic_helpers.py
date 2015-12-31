@@ -67,9 +67,9 @@ def Solar2_Kepler():
     Return Solar System ICs as Keplerian Elements.
     Usess Data from Solar2() Function.
 
-    @return: a - Semi-Major Axis (AU)  [Numpy Float Array]
-    @return: e - Eccentricity          [Numpy Float Array]
-    @return: i - Inclination (Radians) [Numpy Float Array]
+    @return: a      - Semi-Major Axis (AU)      [Numpy Float Array]
+    @return: e      - Eccentricity              [Numpy Float Array]
+    @return: i      - Inclination     (Radians) [Numpy Float Array]
     """
 
     # Load NASA/JPL Horizons Data in Genga IC Format
