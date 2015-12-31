@@ -70,6 +70,8 @@ def Solar2_Kepler():
     @return: a      - Semi-Major Axis (AU)      [Numpy Float Array]
     @return: e      - Eccentricity              [Numpy Float Array]
     @return: i      - Inclination     (Radians) [Numpy Float Array]
+    @return: mass   - Planet Mass     (Msun)    [Numpy Float Array]
+    @return: radius - Planet Radius   (AU)      [Numpy Float Array]
     """
 
     # Load NASA/JPL Horizons Data in Genga IC Format
@@ -101,7 +103,7 @@ def Solar2_Kepler():
     a, e, i, _, _, _ = kh.cart2kepX(x, y, z, vx, vy, vz, mass)
 
     # Return
-    return a, e, i
+    return a, e, i, mass, radius
 
 
 def MainFragmentReufer12(sim_name, earth, flip_theta=False):
