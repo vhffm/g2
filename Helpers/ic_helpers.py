@@ -11,12 +11,13 @@ import vector_helpers as vh
 
 def Solar2():
     """
-    NASA Horizon Query
-    Origin = Sun, Body Center
-    Epoch = 01-01-2014, 00:00 (Central Time)
-    Earth = Earth (No Moon)
+    NASA/JPL Horizon Query for Solar System.
+    Origin = Sun, Body Center, Ecliptic (J2000.0)
+    Epoch  = 01-01-2014, 00:00 (Central Time)
+    Earth  = Earth (No Moon)
 
-    @returns plist - array of IC lines for planets - [various]
+    @return: pnames - List of Planet Names [List of Strings]
+    @return: plist - List of IC Lines for Planets [List of Strings]
     """
 
     mercury = "0 1 1.6515006786989092e-07 1.6310392545626536e-05 +1.1972692892595370e-01 -4.3426096069639630e-01 -4.6466929699041107e-02 +2.1482009903780699e-02 +8.9119212513564267e-03 -1.2427988748894680e-03 0 0 0"
