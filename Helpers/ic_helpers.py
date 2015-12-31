@@ -62,6 +62,48 @@ def Solar2():
     return plist, pnames
 
 
+def Solar2_Kepler():
+    """
+    Return Solar System ICs as Keplerian Elements.
+    Usess Data from Solar2() Function.
+
+    @return: a - Semi-Major Axis (AU)  [Numpy Float Array]
+    @return: e - Eccentricity          [Numpy Float Array]
+    @return: i - Inclination (Radians) [Numpy Float Array]
+    """
+
+    # Load NASA/JPL Horizons Data in Genga IC Format
+    plist, pnames = Solar2()
+
+    # Allocate Arrays
+    mass = np.zeros(len(plist))
+    radius = np.zeros(len(plist))
+    x = np.zeros(len(plist))
+    y = np.zeros(len(plist))
+    z = np.zeros(len(plist))
+    vx = np.zeros(len(plist))
+    vy = np.zeros(len(plist))
+    vz = np.zeros(len(plist))
+
+    # Extract Cartesian Coordinates
+    for irow, row in enumerate(plist):
+        row = row.split(' ')
+        mass[irow] = float(row[2])
+        radius[irow] = float(row[3])
+        x[irow] = float(row[4])
+        y[irow] = float(row[5])
+        z[irow] = float(row[6])
+        vx[irow] = float(row[7])
+        vy[irow] = float(row[8])
+        vz[irow] = float(row[9])
+
+    # Convert to Kepler Elements
+    a, e, i, _, _, _ = kh.cart2kepX(x, y, z, vx, vy, vz, mass)
+
+    # Return
+    return a, e, i
+
+
 def MainFragmentReufer12(sim_name, earth, flip_theta=False):
     """
     Generates Main Fragment for Collisions in Reufer+ 2012.
