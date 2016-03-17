@@ -31,7 +31,7 @@ def formation_sims():
     return basedir, sims, nruns
 
 
-def chaos_sims():
+def chaos_sims(return_tags=False):
     """
     Tracks what Chaos runs are loadable (finished).
     Updated 29 Nov 2015.
@@ -49,6 +49,11 @@ def chaos_sims():
              "Chaos-CJS_Steep/gas_01", \
              "Chaos-CJS_Heavy/gas_01" ]
 
+    # Tags
+    tags = [ 'NJS', 'NJS/Steep', 'NJS/Heavy', \
+             'EJS', 'EJS/Steep', 'EJS/Heavy', \
+             'CJS', 'CJS/Steep', 'CJS/Heavy' ]
+
     # Valid Runs
     nruns = [ range(1,12+1),\
               range(1,12+1),\
@@ -61,4 +66,7 @@ def chaos_sims():
               range(1,12+1) ]
 
     # Return
-    return basedir, sims, nruns
+    if return_tags:
+        return basedir, sims, nruns, tags
+    else:
+        return basedir, sims, nruns
