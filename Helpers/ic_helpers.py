@@ -13,7 +13,7 @@ def Solar2(epoch='2014-01-01'):
     """
     NASA/JPL Horizon Query for Solar System.
     Origin = Sun, Body Center, Ecliptic (J2000.0)
-    Epoch  = 01-01-2014, 00:00 (Central Time)
+    Epoch  = 01-01-2014, 00:00 (Coordinate Time)
     Earth  = Earth (No Moon)
 
     @param: epoch - Ephemeris Epoch (Date) [String]
