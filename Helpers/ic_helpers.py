@@ -16,6 +16,10 @@ def Solar2(epoch='2014-01-01'):
     Epoch  = 01-01-2014, 00:00 (Coordinate Time)
     Earth  = Earth (No Moon)
 
+    Format of IC (Initial Conditions) Lines:
+    Time | ID | Mass | Radius | X Y Z | VX VY VZ | SX SY SZ
+    Year |  - | Msun |     AU |    AU |   AU/Day |        -
+
     @param: epoch - Ephemeris Epoch (Date) [String]
     @return: pnames - List of Planet Names [List of Strings]
     @return: plist - List of IC Lines for Planets [List of Strings]
