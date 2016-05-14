@@ -57,27 +57,28 @@ if args.solar1:
 # Epoch = 01-01-2014, 00:00 (Central Time)
 # Earth = Earth (No Moon)
 if args.solar2:
-        plist, _ = ih.Solar2()
-        # Spaghetti code ahead
-        for iplanet, planet in enumerate(plist):
-            if iplanet == 0:
-                mercury = planet
-            elif iplanet == 1:
-                venus = planet
-            elif iplanet == 2:
-                earth = planet
-            elif iplanet == 3:
-                mars = planet
-            elif iplanet == 4:
-                jupiter = planet
-            elif iplanet == 5:
-                saturn = planet
-            elif iplanet == 6:
-                uranus = planet
-            elif iplanet == 7:
-                neptune = planet
-            elif iplanet == 8:
-                pluto = planet
+    plist, _ = ih.Solar2()
+    # Spaghetti code ahead
+    for iplanet, planet in enumerate(plist):
+        if iplanet == 0:
+            mercury = planet
+        elif iplanet == 1:
+            venus = planet
+        elif iplanet == 2:
+            earth = planet
+        elif iplanet == 3:
+            mars = planet
+        elif iplanet == 4:
+            jupiter = planet
+        elif iplanet == 5:
+            saturn = planet
+        elif iplanet == 6:
+            uranus = planet
+        elif iplanet == 7:
+            neptune = planet
+        elif iplanet == 8:
+            pluto = planet
+
 
 # Adjust Orbital Parameters
 if args.cjs or args.ejs or \
