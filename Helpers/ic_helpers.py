@@ -9,16 +9,20 @@ import physics_helpers as ph
 import vector_helpers as vh
 
 
-def Solar2():
+def Solar2(epoch='2014-01-01'):
     """
     NASA/JPL Horizon Query for Solar System.
     Origin = Sun, Body Center, Ecliptic (J2000.0)
     Epoch  = 01-01-2014, 00:00 (Central Time)
     Earth  = Earth (No Moon)
 
+    @param: epoch - Ephemeris Epoch (Date) [String]
     @return: pnames - List of Planet Names [List of Strings]
     @return: plist - List of IC Lines for Planets [List of Strings]
     """
+
+    if not epoch in [ '2014-01-01' ]:
+        raise Exception('Unsupport Epoch/Date for Horizons Ephemeris.')
 
     mercury = "0 1 1.6515006786989092e-07 1.6310392545626536e-05 +1.1972692892595370e-01 -4.3426096069639630e-01 -4.6466929699041107e-02 +2.1482009903780699e-02 +8.9119212513564267e-03 -1.2427988748894680e-03 0 0 0"
     venus = "0 2 2.4468352521240763e-06 4.0455121182840900e-05 -4.9881994854843653e-02 +7.1760434138711926e-01 +1.2711854910906791e-02 -2.0246486048184902e-02 -1.5114700566799760e-03 +1.1477577544001651e-03 0 0 0"
@@ -62,11 +66,12 @@ def Solar2():
     return plist, pnames
 
 
-def Solar2_Kepler():
+def Solar2_Kepler(epoch='2014-01-01'):
     """
     Return Solar System ICs as Keplerian Elements.
     Usess Data from Solar2() Function.
 
+    @param: epoch   - Ephemeris Epoch (Date)    [String]
     @return: a      - Semi-Major Axis (AU)      [Numpy Float Array]
     @return: e      - Eccentricity              [Numpy Float Array]
     @return: i      - Inclination     (Radians) [Numpy Float Array]
@@ -75,7 +80,7 @@ def Solar2_Kepler():
     """
 
     # Load NASA/JPL Horizons Data in Genga IC Format
-    plist, pnames = Solar2()
+    plist, pnames = Solar2(epoch)
 
     # Allocate Arrays
     mass = np.zeros(len(plist))
