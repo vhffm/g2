@@ -35,6 +35,8 @@ group3.add_argument('--solar1', action='store_true', \
                     help="Base Solar System: Joachim")
 group3.add_argument('--solar2', action='store_true', \
                     help="Base Solar System: NASA Horizron Query 2014-01-01.")
+group3.add_argument('--solar3', action='store_true', \
+                    help="Base Solar System: NASA Horizron Query 2015-03-19.")
 args = parser.parse_args()
 
 # Joachim's ICs
@@ -54,10 +56,10 @@ if args.solar1:
 
 # NASA Horizon Query
 # Origin = Sun, Body Center
-# Epoch = 01-01-2014, 00:00 (Central Time)
+# Epoch = 01-01-2014, 00:00 (Coordinate Time)
 # Earth = Earth (No Moon)
 if args.solar2:
-    plist, _ = ih.Solar2()
+    plist, _ = ih.Solar2(epoch='2014-01-01')
     # Spaghetti code ahead
     for iplanet, planet in enumerate(plist):
         if iplanet == 0:
@@ -79,6 +81,32 @@ if args.solar2:
         elif iplanet == 8:
             pluto = planet
 
+# NASA Horizon Query
+# Origin = Sun, Body Center
+# Epoch = 19-03-2015, 00:00 (Barycentric Dynamical Time)
+# Earth = Earth (No Moon)
+if args.solar3:
+    plist, _ = ih.Solar2(epoch='2015-03-19')
+    # Spaghetti code ahead
+    for iplanet, planet in enumerate(plist):
+        if iplanet == 0:
+            mercury = planet
+        elif iplanet == 1:
+            venus = planet
+        elif iplanet == 2:
+            earth = planet
+        elif iplanet == 3:
+            mars = planet
+        elif iplanet == 4:
+            jupiter = planet
+        elif iplanet == 5:
+            saturn = planet
+        elif iplanet == 6:
+            uranus = planet
+        elif iplanet == 7:
+            neptune = planet
+        elif iplanet == 8:
+            pluto = planet
 
 # Adjust Orbital Parameters
 if args.cjs or args.ejs or \
