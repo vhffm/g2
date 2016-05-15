@@ -58,7 +58,13 @@ def Solar2(epoch='2014-01-01'):
     # Fix velocity units.
     # Fix format for time, particle ID.
     for iplanet, planet in enumerate(plist):
+        # Extract Mass, Radius, State Vector
         line = planet.strip().split()
+        mass = float(line[2])
+        radius = float(line[3])
+        x = float(line[4])
+        y = float(line[5])
+        z = float(line[6])
         vx = float(line[7])
         vy = float(line[8])
         vz = float(line[9])
@@ -69,8 +75,8 @@ def Solar2(epoch='2014-01-01'):
         vz *= 365.25/C.twopi
         # t i m r x y z vx vy vz Sx Sy Sz
         # 0 1 2 3 4 5 6  7  8  9 10 11 12
-        line_new = "0.0 %06d %s %s " % (int(line[1]), line[2], line[3])
-        line_new += "%s %s %s " % (line[4], line[5], line[6])
+        line_new = "0.0 %06d %.16e %.16e " % (int(line[1]), mass, radius)
+        line_new += "%+.16e %+.16e %+.16e " % (x, y, z)
         line_new += "%+.16e %+.16e %+.16e " % (vx, vy, vz)
         line_new += "0.0 0.0 0.0"
         # Reinsert
