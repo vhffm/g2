@@ -1,6 +1,8 @@
 """
 Remove moons from stdin (requires default Genga column ordering).
-python killmoons2.py --ce 95000 < $output_to_change > $changed_output
+
+Call Signature:
+$ python modic_cutmoons.py --ce 95000 < $output_to_change > $changed_output
 """
 
 import numpy as np
